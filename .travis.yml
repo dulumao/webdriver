@@ -1,0 +1,16 @@
+language: go
+go: 
+# - 1.4
+ - release
+# - tip
+
+script:
+ - go test -v -cover ./...
+
+addons:
+  firefox: "36.0"
+
+before_install:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+
