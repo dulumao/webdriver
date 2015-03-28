@@ -33,7 +33,8 @@ func startChrome() {
 
   clientChrome = &Chrome{
                       LogPath: "support/drivers/chromedriver.log",
-                      PathExec: "support/drivers/chromedriver",
+                      // PathExec: "support/drivers/chromedriver",
+                      PathExec: "/usr/local/bin/chromedriver23",
                       Verbose: true,
                     }
 
