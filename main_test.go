@@ -46,8 +46,8 @@ func startChrome() {
     if sessionChrome, err = clientChrome.NewSession(); err != nil {
       log.Println("chrome", err)
     } else {
-      // sessions = append(sessions, sessionChrome)
-      // log.Println("added chrome to list:", len(sessions), sessionChrome)
+      sessions = append(sessions, sessionChrome)
+      log.Println("added chrome to list:", len(sessions), sessionChrome)
     }
 
   }
@@ -96,12 +96,12 @@ func TestMain(m *testing.M) {
     startChrome()
   }
 
-// no_firefox = true
-  if os.Getenv("NOFIREFOX") != "" {
-    no_firefox = true
-  } else {
-    startFirefox()
-  }
+no_firefox = true
+  // if os.Getenv("NOFIREFOX") != "" {
+  //   no_firefox = true
+  // } else {
+  //   startFirefox()
+  // }
 
   log.Println("total number of sessions: ", len(sessions))
 

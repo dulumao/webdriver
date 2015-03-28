@@ -72,39 +72,41 @@ func TestBuildOptions(t *testing.T) {
 // to call Close() and Delete() on All of it's sessions.
 func TestCloseRestartChrome(t *testing.T) {
 
-  if !no_chrome {
-    client := &Chrome{
-                        LogPath: "support/drivers/chromedriver.log",
-                        PathExec: "support/drivers/chromedriver",
-                        Verbose: true,
-                        Port: 9516,
-                      }
+  // if !no_chrome {
+  //   client := &Chrome{
+  //                       LogPath: "support/drivers/chromedriver.log",
+  //                       PathExec: "support/drivers/chromedriver",
+  //                       Verbose: true,
+  //                       Port: 9516,
+  //                     }
 
-    if err := client.Run(); err == nil {
+  //   if err := client.Run(); err == nil {
 
-      if _, err := client.NewSession(); err != nil {
-        t.Error(err)
-      }
+  //     if _, err := client.NewSession(); err != nil {
+  //       t.Error(err)
+  //     }
 
-      client.Close()
+  //     client.Close()
 
-    }
-  }
+  //   }
+  // }
+
 }
 
 ////////////////////////////////////////////////////////////////
 func TestDeleteSessionWithCapabilities(t *testing.T) {
 
-  if !no_chrome {
-    if s, err := clientChrome.NewSession(
-                                  &Capabilities{"Platform": "Linux"},
-                                  &Capabilities{"Platform": "Linux"},
-                              ); err == nil {
-      s.Delete()
-    } else {
-      t.Error("Couldn't create new session")
-    }
-  }
+  // if !no_chrome {
+  //   if s, err := clientChrome.NewSession(
+  //                                 &Capabilities{"Platform": "Linux"},
+  //                                 &Capabilities{"Platform": "Linux"},
+  //                             ); err == nil {
+  //     s.Delete()
+  //   } else {
+  //     t.Error("Couldn't create new session")
+  //   }
+  // }
+
 }
 
 
