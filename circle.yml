@@ -1,0 +1,3 @@
+general:
+  artifacts:
+    - "support/drivers/chromedriver.log"
