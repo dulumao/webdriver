@@ -1,10 +1,10 @@
 package webdriver
 
 import (
-  "fmt"
-  // "encoding/json"
-  // "net/http"
-  // "net/http/httptest"
+  // "fmt"
+  "log"
+  "encoding/json"
+  "strings"
   "testing"
 )
 
@@ -12,608 +12,194 @@ import (
 func TestStringValue(t *testing.T) {
 
   for _, v := range sessions {
-    fmt.Println("================================= session", v)
-    if wireResponse, err := v.GetCapabilities(); err == nil {
-      fmt.Println("wtf?", wireResponse.StringValue())
+    if wireResponse, err := v.GetSession(); err == nil {
+
+      var value map[string]interface{}
+      if err = json.Unmarshal(wireResponse.Value, &value); err != nil {
+        t.Error(err)
+      } else {
+
+        if _, ok := value["platform"]; ok {
+          x := strings.ToLower(value["platform"].(string))
+          if x != "linux" {
+            t.Error("result should have contained platform: Linux")
+          }
+        } else {
+          t.Error("result should have contained platform: Linux")
+        }
+      }
+
     }
   }
 
 }
 
-// ////////////////////////////////////////////////////////////////
-// func TestStringValue(t *testing.T) {
+////////////////////////////////////////////////////////////////
+func TestUrlSourceTitle(t *testing.T) {
 
-//   wireResponse := &WireResponse{Value: []byte("\"this is a test\"")}
+  for _, v := range sessions {
+    if _, err := v.Url("http://localhost:8080/source.html"); err == nil {
 
-//   if wireResponse.StringValue() != "this is a test" {
-//     t.Error("wtf?: StringValue() should have returned: this is a test  => ", wireResponse.StringValue())
-//   }
+      sleepForSeconds(1)
 
-//   wireResponse = &WireResponse{Value: []byte("this is a another test")}
+      if wireResponse, err := v.Source(); err == nil {
+        value, _ := wireResponse.UnmarshalValue()
+        if !strings.Contains(value, "<div>verify source is working</div>") {
+          t.Error("should contain: <div>verify source is working</div> => ", value)
+        }
+      }
 
-//   if wireResponse.StringValue() != "this is a another test" {
-//     t.Error("wtf?: StringValue() should have returned: this is a another test  => ", wireResponse.StringValue())
-//   }
+      if wireResponse, err := v.Title(); err == nil {
+        if wireResponse.StringValue() != "title check" {
+          t.Error("<title> tag should be title check =>", wireResponse.StringValue())
+        }
+      }
 
-// }
+    }
+  }
 
-// ////////////////////////////////////////////////////////////////
-// func TestSource(t *testing.T) {
+}
 
-//   ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+////////////////////////////////////////////////////////////////
+func TestSessions(t *testing.T) {
 
-//     if r.URL.Path != "/session/my-session-id/source" {
-//       t.Error("url path should be /session/my-session-id/source =>", r.URL.Path)
-//     }
+  for _, v := range sessions {
 
-//     body, _ := json.Marshal(&WireResponse{
-//                                 Name: "test",
-//                                 Status: 0,
-//                                 Value: []byte("\"ok\""),
-//                                 })
+    sleepForSeconds(1)
 
-//     w.Write(body)
-//   }))
+    // TODO revisit this test later
+    // should respond with an array of sessions
+    if _, err := v.Sessions(); err == nil {
+    // if wireResponse, err := v.Sessions(); err == nil {
+      // if wireResponse != nil {
+      // }
+    }
 
-//   defer ts.Close()
+    // status is another tough one.
+    // not all webdrivers will respond the same
+    // revisit later
+    if wireResponse, err := v.Status(); err == nil {
+      if wireResponse != nil {
 
-//   s := &Wire{}
-//   s.BaseUrl = ts.URL
-//   s.SessionID = "my-session-id"
+        var value map[string]interface{}
+        if err = json.Unmarshal(wireResponse.Value, &value); err != nil {
+          t.Error(err)
+        } else {
+          if value == nil {
+            t.Error("Status should have at least repsonded with something.")
+          }
+        }
 
-//   if wireResponse, err := s.Source(); err == nil {
-//     if wireResponse.StringValue() != "ok" {
-//       t.Error("should have responded with ok", len(wireResponse.StringValue()))
-//     }
-//   }
+      }
+    }
 
-// }
+  }
 
-// ////////////////////////////////////////////////////////////////
-// func TestTitle(t *testing.T) {
+}
 
-//   ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+////////////////////////////////////////////////////////////////
+func TestNav01(t *testing.T) {
 
-//     if r.URL.Path != "/session/my-session-id/title" {
-//       t.Error("url path should be /session/my-session-id/title =>", r.URL.Path)
-//     }
+  for _, v := range sessions {
 
-//     body, _ := json.Marshal(&WireResponse{
-//                                 Name: "test",
-//                                 Status: 0,
-//                                 Value: []byte("\"my title\""),
-//                                 })
+    log.Println("session id", v.SessionID)
 
-//     w.Write(body)
-//   }))
+    if _, err := v.Url("http://localhost:8080/step01.html"); err == nil {
 
-//   defer ts.Close()
+      sleepForSeconds(2)
 
-//   s := &Wire{}
-//   s.BaseUrl = ts.URL
-//   s.SessionID = "my-session-id"
+      if wireResponse, err := v.Title(); err == nil {
+        sleepForSeconds(2)
+        if wireResponse.StringValue() != "step 01" {
+          t.Error("<title> tag should be step 01 =>", wireResponse.StringValue())
+        }
+      }
 
-//   if wireResponse, err := s.Title(); err == nil {
-//     if wireResponse.StringValue() != "my title" {
-//       t.Error("should have responded with my title", len(wireResponse.StringValue()))
-//     }
-//   }
+    }
 
-// }
+    if _, err := v.Url("http://localhost:8080/step02.html"); err == nil {
 
-// ////////////////////////////////////////////////////////////////
-// func TestStatus(t *testing.T) {
+      sleepForSeconds(2)
 
-//   ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+      if wireResponse, err := v.Title(); err == nil {
+        if wireResponse.StringValue() != "step 02" {
+          t.Error("<title> tag should be step 02 =>", wireResponse.StringValue())
+        }
+      }
 
-//     if r.URL.Path != "/status" {
-//       t.Error("url path should be /status =>", r.URL.Path)
-//     }
+    }
 
-//     body, _ := json.Marshal(&WireResponse{
-//                                 Name: "test",
-//                                 Status: 0,
-//                                 Value: []byte("\"ok\""),
-//                                 })
+    if _, err := v.Url("http://localhost:8080/step03.html"); err == nil {
 
-//     w.Write(body)
-//   }))
+      sleepForSeconds(2)
 
-//   defer ts.Close()
-
-//   s := &Wire{}
-//   s.BaseUrl = ts.URL
-
-//   if wireResponse, err := s.Status(); err == nil {
-//     if wireResponse.StringValue() != "ok" {
-//       t.Error("should have responded with ok", len(wireResponse.StringValue()))
-//     }
-//   }
-
-// }
-
-// ////////////////////////////////////////////////////////////////
-// func TestSessions(t *testing.T) {
-
-//   ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-//     if r.URL.Path != "/sessions" {
-//       t.Error("url path should be /sessions =>", r.URL.Path)
-//     }
-
-//     body, _ := json.Marshal(&WireResponse{
-//                                 Name: "test",
-//                                 Status: 0,
-//                                 Value: []byte("\"ok\""),
-//                                 })
-
-//     w.Write(body)
-//   }))
-
-//   defer ts.Close()
-
-//   s := &Wire{}
-//   s.BaseUrl = ts.URL
-
-//   if wireResponse, err := s.Sessions(); err == nil {
-//     if wireResponse.StringValue() != "ok" {
-//       t.Error("should have responded with ok", len(wireResponse.StringValue()))
-//     }
-//   }
-
-// }
-
-// ////////////////////////////////////////////////////////////////
-// func TestGetSession(t *testing.T) {
-
-//   ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-//     if r.URL.Path != "/session/my-session-id" {
-//       t.Error("url path should be /session/my-session-id =>", r.URL.Path)
-//     }
-
-//     body, _ := json.Marshal(&WireResponse{
-//                                 Name: "test",
-//                                 Status: 0,
-//                                 Value: []byte("\"ok\""),
-//                                 })
-
-//     w.Write(body)
-//   }))
-
-//   defer ts.Close()
-
-//   s := &Wire{}
-//   s.BaseUrl = ts.URL
-//   s.SessionID = "my-session-id"
-
-//   if wireResponse, err := s.GetSession(); err == nil {
-//     if wireResponse.StringValue() != "ok" {
-//       t.Error("should have responded with ok", len(wireResponse.StringValue()))
-//     }
-//   }
-
-// }
-
-// ////////////////////////////////////////////////////////////////
-// func TestDeleteSession(t *testing.T) {
-
-//   ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-//     if r.URL.Path != "/session/my-session-id" {
-//       t.Error("url path should be /session/my-session-id =>", r.URL.Path)
-//     }
-
-//     body, _ := json.Marshal(&WireResponse{
-//                                 Name: "test",
-//                                 Status: 0,
-//                                 Value: []byte("\"ok\""),
-//                                 })
-
-//     w.Write(body)
-//   }))
-
-//   defer ts.Close()
-
-//   s := &Wire{}
-//   s.BaseUrl = ts.URL
-//   s.SessionID = "my-session-id"
-
-//   if wireResponse, err := s.DeleteSession(); err == nil {
-//     if wireResponse.StringValue() != "ok" {
-//       t.Error("should have responded with ok", len(wireResponse.StringValue()))
-//     }
-//   }
-
-// }
-
-// ////////////////////////////////////////////////////////////////
-// func TestTimeouts(t *testing.T) {
-
-//   ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-//     if r.URL.Path != "/session/my-session-id/timeouts" {
-//       t.Error("url path should be /session/my-session-id/timeouts =>", r.URL.Path)
-//     }
-
-//     body, _ := json.Marshal(&WireResponse{
-//                                 Name: "test",
-//                                 Status: 0,
-//                                 Value: []byte("\"ok\""),
-//                                 })
-
-//     w.Write(body)
-//   }))
-
-//   defer ts.Close()
-
-//   s := &Wire{}
-//   s.BaseUrl = ts.URL
-//   s.SessionID = "my-session-id"
-
-//   if wireResponse, err := s.Timeouts("script", 10000); err == nil {
-//     if wireResponse.StringValue() != "ok" {
-//       t.Error("should have responded with ok", len(wireResponse.StringValue()))
-//     }
-//   }
-
-// }
-
-// ////////////////////////////////////////////////////////////////
-// func TestTimeoutsAsyncScript(t *testing.T) {
-
-//   ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-//     if r.URL.Path != "/session/my-session-id/timeouts/async_script" {
-//       t.Error("url path should be /session/my-session-id/timeouts/async_script =>", r.URL.Path)
-//     }
-
-//     body, _ := json.Marshal(&WireResponse{
-//                                 Name: "test",
-//                                 Status: 0,
-//                                 Value: []byte("\"ok\""),
-//                                 })
-
-//     w.Write(body)
-//   }))
-
-//   defer ts.Close()
-
-//   s := &Wire{}
-//   s.BaseUrl = ts.URL
-//   s.SessionID = "my-session-id"
-
-//   if wireResponse, err := s.TimeoutsAsyncScript(10000); err == nil {
-//     if wireResponse.StringValue() != "ok" {
-//       t.Error("should have responded with ok", len(wireResponse.StringValue()))
-//     }
-//   }
-
-// }
-
-// ////////////////////////////////////////////////////////////////
-// func TestTimeoutsImplicitWait(t *testing.T) {
-
-//   ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-//     if r.URL.Path != "/session/my-session-id/timeouts/implicit_wait" {
-//       t.Error("url path should be /session/my-session-id/timeouts/implicit_wait =>", r.URL.Path)
-//     }
-
-//     body, _ := json.Marshal(&WireResponse{
-//                                 Name: "test",
-//                                 Status: 0,
-//                                 Value: []byte("\"ok\""),
-//                                 })
-
-//     w.Write(body)
-//   }))
-
-//   defer ts.Close()
-
-//   s := &Wire{}
-//   s.BaseUrl = ts.URL
-//   s.SessionID = "my-session-id"
-
-//   if wireResponse, err := s.TimeoutsImplicitWait(10000); err == nil {
-//     if wireResponse.StringValue() != "ok" {
-//       t.Error("should have responded with ok", len(wireResponse.StringValue()))
-//     }
-//   }
-
-// }
-
-// ////////////////////////////////////////////////////////////////
-// func TestWindowHandle(t *testing.T) {
-
-//   ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-//     if r.URL.Path != "/session/my-session-id/window_handle" {
-//       t.Error("url path should be /session/my-session-id/window_handle =>", r.URL.Path)
-//     }
-
-//     body, _ := json.Marshal(&WireResponse{
-//                                 Name: "test",
-//                                 Status: 0,
-//                                 Value: []byte("\"ok\""),
-//                                 })
-
-//     w.Write(body)
-//   }))
-
-//   defer ts.Close()
-
-//   s := &Wire{}
-//   s.BaseUrl = ts.URL
-//   s.SessionID = "my-session-id"
-
-//   if wireResponse, err := s.WindowHandle(); err == nil {
-//     if wireResponse.StringValue() != "ok" {
-//       t.Error("should have responded with ok", wireResponse.StringValue())
-//     }
-//   }
-
-// }
-
-// ////////////////////////////////////////////////////////////////
-// func TestWindowHandles(t *testing.T) {
-
-//   ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-//     if r.URL.Path != "/session/my-session-id/window_handles" {
-//       t.Error("url path should be /session/my-session-id/window_handles =>", r.URL.Path)
-//     }
-
-//     body, _ := json.Marshal(&WireResponse{
-//                                 Name: "test",
-//                                 Status: 0,
-//                                 Value: []byte("\"ok\""),
-//                                 })
-
-//     w.Write(body)
-//   }))
-
-//   defer ts.Close()
-
-//   s := &Wire{}
-//   s.BaseUrl = ts.URL
-//   s.SessionID = "my-session-id"
-
-//   if wireResponse, err := s.WindowHandles(); err == nil {
-//     if wireResponse.StringValue() != "ok" {
-//       t.Error("should have responded with ok", wireResponse.StringValue())
-//     }
-//   }
-
-// }
-
-// ////////////////////////////////////////////////////////////////
-// func TestUrl(t *testing.T) {
-
-//   ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-//     if r.URL.Path != "/session/my-session-id/url" {
-//       t.Error("url path should be /session/my-session-id/url =>", r.URL.Path)
-//     }
-
-//     body, _ := json.Marshal(&WireResponse{
-//                                 Name: "test",
-//                                 Status: 0,
-//                                 Value: []byte("\"ok\""),
-//                                 })
-
-//     w.Write(body)
-//   }))
-
-//   defer ts.Close()
-
-//   s := &Wire{}
-//   s.BaseUrl = ts.URL
-//   s.SessionID = "my-session-id"
-
-//   if wireResponse, err := s.Url("http://www.example.com/"); err == nil {
-//     if wireResponse.StringValue() != "ok" {
-//       t.Error("should have responded with ok", wireResponse.StringValue())
-//     }
-//   }
-
-// }
-
-// ////////////////////////////////////////////////////////////////
-// func TestGetUrl(t *testing.T) {
-
-//   ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-//     if r.URL.Path != "/session/my-session-id/url" {
-//       t.Error("url path should be /session/my-session-id/url =>", r.URL.Path)
-//     }
-
-//     body, _ := json.Marshal(&WireResponse{
-//                                 Name: "test",
-//                                 Status: 0,
-//                                 Value: []byte("\"ok\""),
-//                                 })
-
-//     w.Write(body)
-//   }))
-
-//   defer ts.Close()
-
-//   s := &Wire{}
-//   s.BaseUrl = ts.URL
-//   s.SessionID = "my-session-id"
-
-//   if wireResponse, err := s.GetUrl(); err == nil {
-//     if wireResponse.StringValue() != "ok" {
-//       t.Error("should have responded with ok", wireResponse.StringValue())
-//     }
-//   }
-
-// }
-
-// ////////////////////////////////////////////////////////////////
-// func TestForward(t *testing.T) {
-
-//   ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-//     if r.URL.Path != "/session/my-session-id/forward" {
-//       t.Error("url path should be /session/my-session-id/forward =>", r.URL.Path)
-//     }
-
-//     body, _ := json.Marshal(&WireResponse{
-//                                 Name: "test",
-//                                 Status: 0,
-//                                 Value: []byte("\"ok\""),
-//                                 })
-
-//     w.Write(body)
-//   }))
-
-//   defer ts.Close()
-
-//   s := &Wire{}
-//   s.BaseUrl = ts.URL
-//   s.SessionID = "my-session-id"
-
-//   if wireResponse, err := s.Forward(); err == nil {
-//     if wireResponse.StringValue() != "ok" {
-//       t.Error("should have responded with ok", wireResponse.StringValue())
-//     }
-//   }
-
-// }
-
-// ////////////////////////////////////////////////////////////////
-// func TestBack(t *testing.T) {
-
-//   ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-//     if r.URL.Path != "/session/my-session-id/back" {
-//       t.Error("url path should be /session/my-session-id/back =>", r.URL.Path)
-//     }
-
-//     body, _ := json.Marshal(&WireResponse{
-//                                 Name: "test",
-//                                 Status: 0,
-//                                 Value: []byte("\"ok\""),
-//                                 })
-
-//     w.Write(body)
-//   }))
-
-//   defer ts.Close()
-
-//   s := &Wire{}
-//   s.BaseUrl = ts.URL
-//   s.SessionID = "my-session-id"
-
-//   if wireResponse, err := s.Back(); err == nil {
-//     if wireResponse.StringValue() != "ok" {
-//       t.Error("should have responded with ok", wireResponse.StringValue())
-//     }
-//   }
-
-// }
-
-// ////////////////////////////////////////////////////////////////
-// func TestRefresh(t *testing.T) {
-
-//   ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-//     if r.URL.Path != "/session/my-session-id/refresh" {
-//       t.Error("url path should be /session/my-session-id/refresh =>", r.URL.Path)
-//     }
-
-//     body, _ := json.Marshal(&WireResponse{
-//                                 Name: "test",
-//                                 Status: 0,
-//                                 Value: []byte("\"ok\""),
-//                                 })
-
-//     w.Write(body)
-//   }))
-
-//   defer ts.Close()
-
-//   s := &Wire{}
-//   s.BaseUrl = ts.URL
-//   s.SessionID = "my-session-id"
-
-//   if wireResponse, err := s.Refresh(); err == nil {
-//     if wireResponse.StringValue() != "ok" {
-//       t.Error("should have responded with ok", wireResponse.StringValue())
-//     }
-//   }
-
-// }
-
-// ////////////////////////////////////////////////////////////////
-// func TestExecute(t *testing.T) {
-
-//   ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-//     if r.URL.Path != "/session/my-session-id/execute" {
-//       t.Error("url path should be /session/my-session-id/execute =>", r.URL.Path)
-//     }
-
-//     body, _ := json.Marshal(&WireResponse{
-//                                 Name: "test",
-//                                 Status: 0,
-//                                 Value: []byte("\"ok\""),
-//                                 })
-
-//     w.Write(body)
-//   }))
-
-//   defer ts.Close()
-
-//   s := &Wire{}
-//   s.BaseUrl = ts.URL
-//   s.SessionID = "my-session-id"
-
-//   if wireResponse, err := s.Execute("alert('dude')", ""); err == nil {
-//     if wireResponse.StringValue() != "ok" {
-//       t.Error("should have responded with ok", wireResponse.StringValue())
-//     }
-//   }
-
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      if wireResponse, err := v.Title(); err == nil {
+        if wireResponse.StringValue() != "step 03" {
+          t.Error("<title> tag should be step 03 =>", wireResponse.StringValue())
+        }
+      }
+
+    }
+
+    sleepForSeconds(2)
+
+    if _, err := v.Back(); err == nil {
+      sleepForSeconds(2)
+      if wireResponse, err := v.Title(); err == nil {
+        if wireResponse.StringValue() != "step 02" {
+          t.Error("<title> tag should be step 02 =>", wireResponse.StringValue())
+        }
+      }
+    }
+
+    sleepForSeconds(2)
+
+    if _, err := v.Back(); err == nil {
+      sleepForSeconds(2)
+      if wireResponse, err := v.Title(); err == nil {
+        if wireResponse.StringValue() != "step 01" {
+          t.Error("<title> tag should be step 01 =>", wireResponse.StringValue())
+        }
+      }
+    }
+
+    sleepForSeconds(2)
+
+    if _, err := v.Forward(); err == nil {
+      sleepForSeconds(2)
+      if wireResponse, err := v.Title(); err == nil {
+        if wireResponse.StringValue() != "step 02" {
+          t.Error("<title> tag should be step 02 =>", wireResponse.StringValue())
+        }
+      }
+    }
+
+    sleepForSeconds(2)
+
+    if _, err := v.Forward(); err == nil {
+      sleepForSeconds(2)
+      if wireResponse, err := v.Title(); err == nil {
+        if wireResponse.StringValue() != "step 03" {
+          t.Error("<title> tag should be step 03 =>", wireResponse.StringValue())
+        }
+      }
+    }
+
+    sleepForSeconds(2)
+
+    if _, err := v.Refresh(); err == nil {
+
+      sleepForSeconds(2)
+
+      if wireResponse, err := v.Title(); err == nil {
+        if wireResponse.StringValue() != "step 03" {
+          t.Error("<title> tag should be step 03 =>", wireResponse.StringValue())
+        }
+      }
+    }
+
+    sleepForSeconds(2)
+
+  }
+
+}

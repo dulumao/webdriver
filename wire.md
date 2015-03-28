@@ -4,10 +4,10 @@ I decided to break up the code into more managable chunks.  Below is a checklist
 it has been completed.
 
 wire.go
-/status
+- /status
 - /session
-/sessions
-/session/:sessionId
+- /sessions
+- /session/:sessionId
 /session/:sessionId/back
 /session/:sessionId/cookie
 /session/:sessionId/cookie/:name
@@ -15,9 +15,9 @@ wire.go
 /session/:sessionId/keys
 /session/:sessionId/location
 /session/:sessionId/refresh
-/session/:sessionId/source
-/session/:sessionId/title
-/session/:sessionId/url
+- /session/:sessionId/source
+- /session/:sessionId/title
+- /session/:sessionId/url
 
 wire_action.go
 /session/:sessionId/alert_text

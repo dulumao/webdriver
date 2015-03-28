@@ -2,8 +2,9 @@ package webdriver
 
 import (
   "fmt"
+  "log"
   "os"
-  "strconv"
+  // "strconv"
   "testing"
   "time"
 )
@@ -22,9 +23,9 @@ var sessions []*Session
 
 ////////////////////////////////////////////////////////////////
 func sleepForSeconds(value int) {
-  duration, _ := time.ParseDuration(strconv.Itoa(value))
-  fmt.Println("sleeping: ", value, " seconds...")
-  time.Sleep(duration * time.Second)
+  duration, _ := time.ParseDuration(fmt.Sprintf("%ds", value))
+  log.Println("sleeping: ", duration, " seconds...")
+  time.Sleep(duration)
 }
 
 ////////////////////////////////////////////////////////////////
@@ -40,14 +41,13 @@ func startChrome() {
 
     clients = append(clients, clientChrome)
 
-    sessions = make([]*Session, 0)
-
     sleepForSeconds(2)
 
     if sessionChrome, err = clientChrome.NewSession(); err != nil {
-      fmt.Println("wtf?", err)
+      log.Println("chrome", err)
     } else {
       sessions = append(sessions, sessionChrome)
+      log.Println("added chrome to list:", len(sessions), sessionChrome)
     }
 
   }
@@ -70,14 +70,13 @@ func startFirefox() {
 
     clients = append(clients, clientFirefox)
 
-    sessions = make([]*Session, 0)
-
     sleepForSeconds(2)
 
     if sessionFirefox, err = clientFirefox.NewSession(); err != nil {
-      fmt.Println("wtf?", err)
+      log.Println("firefox", err)
     } else {
       sessions = append(sessions, sessionFirefox)
+      log.Println("added firefox to list:", len(sessions), sessionFirefox)
     }
 
   }
@@ -86,6 +85,8 @@ func startFirefox() {
 
 ////////////////////////////////////////////////////////////////
 func TestMain(m *testing.M) {
+
+  sessions = make([]*Session, 0)
 
   // setting the environment variable NOFIREFOX to anything
   // will set no_firefox = true
@@ -100,6 +101,10 @@ func TestMain(m *testing.M) {
   } else {
     startFirefox()
   }
+
+  log.Println("total number of sessions: ", len(sessions))
+
+  go startWebServer()
 
   x := m.Run()
 
