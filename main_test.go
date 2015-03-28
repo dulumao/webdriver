@@ -96,11 +96,12 @@ func TestMain(m *testing.M) {
     startChrome()
   }
 
-  if os.Getenv("NOFIREFOX") != "" {
-    no_firefox = true
-  } else {
-    startFirefox()
-  }
+no_firefox = true
+  // if os.Getenv("NOFIREFOX") != "" {
+  //   no_firefox = true
+  // } else {
+  //   startFirefox()
+  // }
 
   log.Println("total number of sessions: ", len(sessions))
 
