@@ -31,7 +31,7 @@ import (
 //      NoSuchWindow - If the currently selected window has been closed.
 //      NoSuchElement - If the element cannot be found.
 //      XPathLookupError - If using XPath and the input expression is invalid
-func (s *Wire) Element(using string, value string) (wireResponse *WireResponse, err error) {
+func (s *Session) Element(using string, value string) (wireResponse *WireResponse, err error) {
 
   var req *http.Request
   if req, err = s.PostRequest("/session/:sessionid/element",

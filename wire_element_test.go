@@ -1,7 +1,7 @@
 package webdriver
 
 import (
-  "fmt"
+  // "fmt"
   // "log"
   // "encoding/json"
   // "strings"
@@ -11,30 +11,92 @@ import (
 ////////////////////////////////////////////////////////////////
 func TestElement(t *testing.T) {
 
+  var err error
+  var wireResponse *WireResponse
+
   for _, v := range sessions {
-    if _, err := v.Url("http://localhost:8080/element.html"); err == nil {
+    if _, err = v.Url("http://localhost:8080/element.html"); err == nil {
 
       sleepForSeconds(1)
 
-      // if wireResponse, err := v.Source(); err == nil {
-      //   value, _ := wireResponse.UnmarshalValue()
-      //   if !strings.Contains(value, "<div>verify source is working</div>") {
-      //     t.Error("should contain: <div>verify source is working</div> => ", value)
-      //   }
-      // }
+      if wireResponse, err = v.Element("class name", "main-div-class"); err == nil {
+        if webElement, err := wireResponse.WebElement(); err == nil {
+          if webElement == nil || webElement.Value == "" {
+            t.Error("could not find element", webElement.Value)
+          }
+        } else {
+          t.Error("could not find element")
+        }
 
-      if wireResponse, err := v.Element("id", "main-div"); err == nil {
+      }
 
-webElement, err := wireResponse.WebElement()
+      if wireResponse, err = v.Element("id", "main-div-id"); err == nil {
+        if webElement, err := wireResponse.WebElement(); err == nil {
+          if webElement == nil || webElement.Value == "" {
+            t.Error("could not find element", webElement.Value)
+          }
+        } else {
+          t.Error("could not find element")
+        }
 
-fmt.Println("wireResponse", webElement, err)
-        // if wireResponse.StringValue() != "title check" {
-        //   t.Error("<title> tag should be title check =>", wireResponse.StringValue())
-        // }
+      }
+
+      if wireResponse, err = v.Element("name", "main-div-name"); err == nil {
+        if webElement, err := wireResponse.WebElement(); err == nil {
+          if webElement == nil || webElement.Value == "" {
+            t.Error("could not find element", webElement.Value)
+          }
+        } else {
+          t.Error("could not find element")
+        }
+
+      }
+
+      if wireResponse, err = v.Element("link text", "link text"); err == nil {
+        if webElement, err := wireResponse.WebElement(); err == nil {
+          if webElement == nil || webElement.Value == "" {
+            t.Error("could not find element", webElement.Value)
+          }
+        } else {
+          t.Error("could not find element")
+        }
+
+      }
+
+      if wireResponse, err = v.Element("partial link text", "partial"); err == nil {
+        if webElement, err := wireResponse.WebElement(); err == nil {
+          if webElement == nil || webElement.Value == "" {
+            t.Error("could not find element", webElement.Value)
+          }
+        } else {
+          t.Error("could not find element")
+        }
+
+      }
+
+      if wireResponse, err = v.Element("tag name", "mytag"); err == nil {
+        if webElement, err := wireResponse.WebElement(); err == nil {
+          if webElement == nil || webElement.Value == "" {
+            t.Error("could not find element", webElement.Value)
+          }
+        } else {
+          t.Error("could not find element")
+        }
+
+      }
+
+      if wireResponse, err = v.Element("xpath", ".//div[@id='main-div-xpath']"); err == nil {
+        if webElement, err := wireResponse.WebElement(); err == nil {
+          if webElement == nil || webElement.Value == "" {
+            t.Error("could not find element", webElement.Value)
+          }
+        } else {
+          t.Error("could not find element")
+        }
+
       }
 
     }
   }
 
 }
-
