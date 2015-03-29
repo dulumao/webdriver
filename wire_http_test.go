@@ -34,6 +34,7 @@ func TestRedirect01(t *testing.T) {
   defer ts.Close()
 
   s := &Wire{}
+  s.SetDefaults()
   s.BaseUrl = ts.URL
 
   if req, wtf := s.NewRequest("GET", "/", nil); wtf == nil {
@@ -61,6 +62,7 @@ func TestRedirect02(t *testing.T) {
   defer ts.Close()
 
   s := &Wire{}
+  s.SetDefaults()
   s.BaseUrl = ts.URL
 
   if req, wtf := s.NewRequest("GET", "/", nil); wtf == nil {
@@ -99,6 +101,7 @@ func TestRedirect03(t *testing.T) {
   defer ts.Close()
 
   s := &Wire{}
+  s.SetDefaults()
   s.BaseUrl = ts.URL
 
   if req, wtf := s.NewRequest("GET", "/", nil); wtf == nil {
@@ -126,6 +129,7 @@ func TestRedirect04(t *testing.T) {
   defer ts.Close()
 
   s := &Wire{}
+  s.SetDefaults()
   s.BaseUrl = ts.URL
 
   if req, wtf := s.NewRequest("GET", "/", nil); wtf == nil {
@@ -147,6 +151,7 @@ func TestNewRequestDelete(t *testing.T) {
   payload, _ := json.Marshal(&Params{"this": "that", "the": "other"})
 
   s := &Wire{}
+  s.SetDefaults()
   s.BaseUrl = "http://localhost:7055"
   s.SessionID = "my-session-id"
 
@@ -191,6 +196,7 @@ func TestNewRequestGet(t *testing.T) {
   payload, _ := json.Marshal(&Params{"this": "that", "the": "other"})
 
   s := &Wire{}
+  s.SetDefaults()
   s.BaseUrl = "http://localhost:7055"
   s.SessionID = "my-session-id"
 
@@ -235,6 +241,7 @@ func TestNewRequestPost(t *testing.T) {
   payload, _ := json.Marshal(&Params{"this": "that", "the": "other"})
 
   s := &Wire{}
+  s.SetDefaults()
   s.BaseUrl = "http://localhost:7055"
   s.SessionID = "my-session-id"
 
@@ -279,6 +286,7 @@ func TestDeleteRequest(t *testing.T) {
   payload, _ := json.Marshal(&Params{"this": "that", "the": "other"})
 
   s := &Wire{}
+  s.SetDefaults()
   s.BaseUrl = "http://localhost:7055"
   s.SessionID = "my-session-id"
 
@@ -323,6 +331,7 @@ func TestGetRequest(t *testing.T) {
   payload, _ := json.Marshal(&Params{"this": "that", "the": "other"})
 
   s := &Wire{}
+  s.SetDefaults()
   s.BaseUrl = "http://localhost:7055"
   s.SessionID = "my-session-id"
 
@@ -367,6 +376,7 @@ func TestPostRequest(t *testing.T) {
   payload, _ := json.Marshal(&Params{"this": "that", "the": "other"})
 
   s := &Wire{}
+  s.SetDefaults()
   s.BaseUrl = "http://localhost:7055"
   s.SessionID = "my-session-id"
 
@@ -406,6 +416,7 @@ func TestPostRequest(t *testing.T) {
 func TestBuildFullUrl(t *testing.T) {
 
   s := &Wire{}
+  s.SetDefaults()
 
   s.BaseUrl = "http://localhost:7055"
   s.SessionID = "no_session"
@@ -420,6 +431,7 @@ func TestBuildFullUrl(t *testing.T) {
 func TestBuildFullUrlWithSessionID(t *testing.T) {
 
   s := &Wire{}
+  s.SetDefaults()
   s.BaseUrl = "http://localhost:7055"
   s.SessionID = "my_session_id"
 

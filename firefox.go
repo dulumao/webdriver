@@ -58,6 +58,7 @@ func (s *Firefox) SetDefaults() (err error) {
   s.Sessions = &Sessions{}
   s.Sessions.SetDefaults()
   s.Wire = &Wire{}
+  s.Wire.SetDefaults()
 
   if s.Extension == nil {
     s.Extension = &Extension{}

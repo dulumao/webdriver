@@ -43,6 +43,7 @@ func (s *Chrome) SetDefaults() (err error) {
   s.Sessions = &Sessions{}
   s.Sessions.SetDefaults()
   s.Wire = &Wire{}
+  s.Wire.SetDefaults()
 
   return err
 }

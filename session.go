@@ -27,6 +27,7 @@ type (
 func (s *Sessions) SetDefaults() (err error) {
 
   s.Wire = &Wire{}
+  s.Wire.SetDefaults()
 
   return err
 }
@@ -34,6 +35,7 @@ func (s *Sessions) SetDefaults() (err error) {
 func (s *Session) SetDefaults() (err error) {
 
   s.Wire = &Wire{}
+  s.Wire.SetDefaults()
 
   return err
 }

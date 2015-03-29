@@ -14,18 +14,41 @@ import (
   "strings"
 )
 
+type (
+
+  WireHTTP struct {
+
+    // a url pointing to a running server supporting the JsonWireProtocol.
+    // typically, http://localhost:7055 for firefox.
+    BaseUrl string
+
+    // represents a JsonWireProtocol Session ID.
+    // The Session struct includes *WireHTTP, so, SessionID is available
+    // to individual sessions.
+    //
+    // Most of the JsonWireProtocol API calls require a session id.
+    // Only a couple do not.  GetFullUrl() will search for :sessionid
+    // and replace it with SessionID during API calls.
+    //
+    // By default, SessionID is "", so, there should be no impact
+    // for API calls that do not require a :sessionid
+    SessionID string
+  }
+
+)
+
 // Convenience method that wraps NewRequest()
-func (s *Wire) DeleteRequest(url string, payload interface{}) (req *http.Request, err error) {
+func (s *WireHTTP) DeleteRequest(url string, payload interface{}) (req *http.Request, err error) {
   return s.NewRequest("DELETE", url, payload)
 }
 
 // Convenience method that wraps NewRequest()
-func (s *Wire) GetRequest(url string, payload interface{}) (req *http.Request, err error) {
+func (s *WireHTTP) GetRequest(url string, payload interface{}) (req *http.Request, err error) {
   return s.NewRequest("GET", url, payload)
 }
 
 // Convenience method that wraps NewRequest()
-func (s *Wire) PostRequest(url string, payload interface{}) (req *http.Request, err error) {
+func (s *WireHTTP) PostRequest(url string, payload interface{}) (req *http.Request, err error) {
   return s.NewRequest("POST", url, payload)
 }
 
@@ -40,7 +63,7 @@ func (s *Wire) PostRequest(url string, payload interface{}) (req *http.Request, 
 //
 // payload - JSON values to be included in the request.
 //
-func (s *Wire) NewRequest(method string, url string, payload interface{}) (req *http.Request, err error) {
+func (s *WireHTTP) NewRequest(method string, url string, payload interface{}) (req *http.Request, err error) {
 
   var body []byte
 
@@ -78,14 +101,14 @@ func (s *Wire) NewRequest(method string, url string, payload interface{}) (req *
 //   // would produce
 //   http://localhost:7055/session/my-session-id/forward
 //
-func (s *Wire) BuildFullUrl(url string) string {
+func (s *WireHTTP) BuildFullUrl(url string) string {
   return fmt.Sprintf("%v%v", s.BaseUrl, strings.Replace(url, ":sessionid", s.SessionID, -1))
 }
 
 // Submits a request to a JsonWireProtocol server (selenium webdriver)
 // and reads the response back into a WireResponse if the server
 // responds with status code 200.
-func (s *Wire) Do(req *http.Request) (wireResponse *WireResponse, err error) {
+func (s *WireHTTP) Do(req *http.Request) (wireResponse *WireResponse, err error) {
 
   var resp *http.Response
   if resp, err = http.DefaultClient.Do(req); err == nil {

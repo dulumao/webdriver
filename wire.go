@@ -19,24 +19,34 @@ type (
   // All JsonWireProtocol commands are attached to this struct.
   Wire struct {
 
-    // a url pointing to a running server supporting the JsonWireProtocol.
-    // typically, http://localhost:7055 for firefox.
-    BaseUrl string
+    // // a url pointing to a running server supporting the JsonWireProtocol.
+    // // typically, http://localhost:7055 for firefox.
+    // BaseUrl string
 
-    // represents a JsonWireProtocol Session ID.
-    // The Session struct includes *Wire, so, SessionID is available
-    // to individual sessions.
-    //
-    // Most of the JsonWireProtocol API calls require a session id.
-    // Only a couple do not.  GetFullUrl() will search for :sessionid
-    // and replace it with SessionID during API calls.
-    //
-    // By default, SessionID is "", so, there should be no impact
-    // for API calls that do not require a :sessionid
-    SessionID string
+    // // represents a JsonWireProtocol Session ID.
+    // // The Session struct includes *Wire, so, SessionID is available
+    // // to individual sessions.
+    // //
+    // // Most of the JsonWireProtocol API calls require a session id.
+    // // Only a couple do not.  GetFullUrl() will search for :sessionid
+    // // and replace it with SessionID during API calls.
+    // //
+    // // By default, SessionID is "", so, there should be no impact
+    // // for API calls that do not require a :sessionid
+    // SessionID string
+
+    *WireHTTP
   }
 
 )
+
+// Sets the default values for a *WireHTTP.
+func (s *Wire) SetDefaults() (err error) {
+
+  s.WireHTTP = &WireHTTP{}
+
+  return err
+}
 
 // POST  /session/:sessionId/back
 //
