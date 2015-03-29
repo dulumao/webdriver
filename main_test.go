@@ -96,11 +96,11 @@ func TestMain(m *testing.M) {
 
   sessions = make([]*Session, 0)
 
-  if os.Getenv("CIRCLECI") != "" {
+  if os.Getenv("ENV_CIRCLECI") != "" {
     env_circle = true
   }
 
-  if os.Getenv("TRAVISCI") != "" {
+  if os.Getenv("ENV_TRAVISCI") != "" {
     env_travis = true
   }
 

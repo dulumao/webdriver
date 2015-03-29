@@ -1,6 +1,4 @@
-[![Build Status](https://circleci.com/gh/jduckett/webdriver.png?circle-token=:circle-token)](https://circleci.com/gh/jduckett/webdriver)
-
-[![Build Status](https://travis-ci.org/jduckett/webdriver.svg?branch=master)](https://travis-ci.org/jduckett/webdriver)
+[![Build Status](https://circleci.com/gh/jduckett/webdriver.png?circle-token=:circle-token)](https://circleci.com/gh/jduckett/webdriver) [![Build Status](https://travis-ci.org/jduckett/webdriver.svg?branch=master)](https://travis-ci.org/jduckett/webdriver)
 
 # Webdriver Golang Style
 A pure Golang webdriver library that supports the Json Wire Protocol.

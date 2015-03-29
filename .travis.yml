@@ -20,5 +20,5 @@ before_install:
   - "sh -e /etc/init.d/xvfb start"
 
 env:
-  - TRAVISCI=true
+  - ENV_TRAVISCI=true
   - VOLATILE=true

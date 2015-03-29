@@ -18,4 +18,5 @@ general:
 
 machine:
   environment:
+    ENV_CIRCLECI: true
     VOLATILE: true
