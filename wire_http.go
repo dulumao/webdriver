@@ -1,15 +1,10 @@
 package webdriver
 
-// Contains all of the http related functions required to communicate
-// with a webdriver http server.  Broken into a separate file for
-// readability and maintainzbility.
-
 import (
   "bytes"
   "encoding/json"
   "fmt"
   "io/ioutil"
-  // "log"
   "net/http"
   "strings"
 )
