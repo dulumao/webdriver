@@ -54,7 +54,7 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">github.com/webdriver/chrome.go (88.4%)</option>
+				<option value="file0">github.com/webdriver/chrome.go (100.0%)</option>
 				
 				<option value="file1">github.com/webdriver/firefox.go (100.0%)</option>
 				
@@ -66,9 +66,15 @@
 				
 				<option value="file5">github.com/webdriver/tcp.go (100.0%)</option>
 				
-				<option value="file6">github.com/webdriver/wire.go (90.2%)</option>
+				<option value="file6">github.com/webdriver/web_element.go (100.0%)</option>
 				
-				<option value="file7">github.com/webdriver/wire_http.go (100.0%)</option>
+				<option value="file7">github.com/webdriver/wire.go (100.0%)</option>
+				
+				<option value="file8">github.com/webdriver/wire_element.go (100.0%)</option>
+				
+				<option value="file9">github.com/webdriver/wire_http.go (100.0%)</option>
+				
+				<option value="file10">github.com/webdriver/wire_response.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -127,6 +133,7 @@ func (s *Chrome) SetDefaults() (err error) <span class="cov8" title="1">{
   <span class="cov8" title="1">s.Sessions = &amp;Sessions{}
   s.Sessions.SetDefaults()
   s.Wire = &amp;Wire{}
+  s.Wire.SetDefaults()
 
   return err</span>
 }
@@ -207,18 +214,18 @@ func (s *Chrome) buildOptions() (options []string) <span class="cov8" title="1">
 // TODO Figure out how to shutdown the browser as well as the webdriver
 // currently, it seems like just the webdriver is being shutdown
 // Kills the currently running webdriver if it is running.
-func (s *Chrome) Close() (err error) <span class="cov0" title="0">{
+func (s *Chrome) Close() (err error) <span class="cov8" title="1">{
 
-  if s.Process != nil </span><span class="cov0" title="0">{
+  if s.Process != nil </span><span class="cov8" title="1">{
 
-    for _, v := range s.Sessions.List </span><span class="cov0" title="0">{
+    for _, v := range s.Sessions.List </span><span class="cov8" title="1">{
       v.Delete()
     }</span>
 
-    <span class="cov0" title="0">s.Process.Kill()</span>
+    <span class="cov8" title="1">s.Process.Kill()</span>
   }
 
-  <span class="cov0" title="0">return err</span>
+  <span class="cov8" title="1">return err</span>
 }
 
 
@@ -308,6 +315,7 @@ func (s *Firefox) SetDefaults() (err error) <span class="cov8" title="1">{
   s.Sessions = &amp;Sessions{}
   s.Sessions.SetDefaults()
   s.Wire = &amp;Wire{}
+  s.Wire.SetDefaults()
 
   if s.Extension == nil </span><span class="cov8" title="1">{
     s.Extension = &amp;Extension{}
@@ -1085,6 +1093,7 @@ type (
 func (s *Sessions) SetDefaults() (err error) <span class="cov8" title="1">{
 
   s.Wire = &amp;Wire{}
+  s.Wire.SetDefaults()
 
   return err
 }</span>
@@ -1092,6 +1101,7 @@ func (s *Sessions) SetDefaults() (err error) <span class="cov8" title="1">{
 func (s *Session) SetDefaults() (err error) <span class="cov8" title="1">{
 
   s.Wire = &amp;Wire{}
+  s.Wire.SetDefaults()
 
   return err
 }</span>
@@ -1273,8 +1283,168 @@ func findNextAvailablePort(host string, port int, timeout float64) (newPort int,
 		<pre class="file" id="file6" style="display: none">package webdriver
 
 import (
-  "bytes"
-  "encoding/json"
+  // "fmt"
+  "net/http"
+  "strings"
+)
+
+type (
+
+  // WebElement - An object in the WebDriver API that represents a DOM element on the page.
+  //
+  // WebElement JSON Object - The JSON representation of a WebElement for transmission over the wire.
+  //     Key Type  Description
+  //     ELEMENT string  The opaque ID assigned to the element by the server. This ID should be used in all subsequent commands issued against the element.
+  WebElement struct {
+    Session             *Session
+    Value               string `json:"element"`
+  }
+
+)
+
+// BuildElementUrl() is similar to BuildFullUrl(), except it simply does a search / replace
+// on the :id value of the current WebElement.  Relies on the current value of Value as the element :id.
+//
+//   // given:
+//     Value = "{my-hex-value-or-some-custom-id-value}"
+//
+//   // the following call
+//   BuildElement("/session/:sessionid/element/:id/text")
+//
+//   // would produce
+//   /session/:sessionid/element/{my-hex-value-or-some-custom-id-value}/text
+func (s *WebElement) BuildElementUrl(url string) string <span class="cov8" title="1">{
+  return strings.Replace(url, ":id", s.Value, -1)
+}</span>
+
+// POST /session/:sessionId/element/:id/element
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/element
+//
+// Search for an element on the page, starting from the identified element. The located element will be returned as a WebElement JSON object. The table below lists the locator strategies that each server should support. Each locator must return the first matching element located in the DOM.
+//
+//    Strategy              Description
+//      class name          Returns an element whose class name contains the search value; compound class names are not permitted.
+//      css selector        Returns an element matching a CSS selector.
+//      id                  Returns an element whose ID attribute matches the search value.
+//      name                Returns an element whose NAME attribute matches the search value.
+//      link text           Returns an anchor element whose visible text matches the search value.
+//      partial link text   Returns an anchor element whose visible text partially matches the search value.
+//      tag name            Returns an element whose tag name matches the search value.
+//      xpath               Returns an element matching an XPath expression.
+//
+//    JSON Parameters:
+//      using - {string} The locator strategy to use.
+//      value - {string} The The search target.
+//
+//    Returns:
+//      {ELEMENT:string} A WebElement JSON object for the located element.
+//
+//    Potential Errors:
+//      NoSuchWindow - If the currently selected window has been closed.
+//      NoSuchElement - If the element cannot be found.
+//      XPathLookupError - If using XPath and the input expression is invalid
+func (s *WebElement) Element(using string, value string) (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
+
+  var req *http.Request
+  if req, err = s.Session.PostRequest(s.BuildElementUrl("/session/:sessionid/element/:id/element"),
+                              &amp;Params{"using": using, "value": value}); err == nil </span><span class="cov8" title="1">{
+
+    wireResponse, err = s.Session.Do(req)
+
+    if wireResponse != nil </span><span class="cov8" title="1">{
+      wireResponse.Session = s.Session
+    }</span>
+
+  }
+
+  <span class="cov8" title="1">return wireResponse, err</span>
+}
+
+// POST /session/:sessionId/element/:id/elements
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/elements
+//
+// Search for multiple elements on the page, starting from the identified element. The located elements will be returned as a WebElement JSON objects. The table below lists the locator strategies that each server should support. Elements should be returned in the order located in the DOM.
+//
+//    Strategy              Description
+//      class name          Returns an element whose class name contains the search value; compound class names are not permitted.
+//      css selector        Returns an element matching a CSS selector.
+//      id                  Returns an element whose ID attribute matches the search value.
+//      name                Returns an element whose NAME attribute matches the search value.
+//      link text           Returns an anchor element whose visible text matches the search value.
+//      partial link text   Returns an anchor element whose visible text partially matches the search value.
+//      tag name            Returns an element whose tag name matches the search value.
+//      xpath               Returns an element matching an XPath expression.
+//
+//    JSON Parameters:
+//      using - {string} The locator strategy to use.
+//      value - {string} The The search target.
+//
+//    Returns:
+//      {Array.&lt;{ELEMENT:string}&gt;} A list of WebElement JSON objects for the located elements.
+//
+//    Potential Errors:
+//      NoSuchWindow - If the currently selected window has been closed.
+//      NoSuchElement - If the element cannot be found.
+//      XPathLookupError - If using XPath and the input expression is invalid
+func (s *WebElement) Elements(using string, value string) (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
+
+  var req *http.Request
+  if req, err = s.Session.PostRequest(s.BuildElementUrl("/session/:sessionid/element/:id/elements"),
+                              &amp;Params{"using": using, "value": value}); err == nil </span><span class="cov8" title="1">{
+
+    wireResponse, err = s.Session.Do(req)
+
+    if wireResponse != nil </span><span class="cov8" title="1">{
+      wireResponse.Session = s.Session
+    }</span>
+
+  }
+
+  <span class="cov8" title="1">return wireResponse, err</span>
+}
+
+// GET /session/:sessionId/element/:id/text
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/text
+//
+// Returns the visible text for the element.
+func (s *WebElement) Text() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
+
+  var req *http.Request
+  if req, err = s.Session.GetRequest(s.BuildElementUrl("/session/:sessionid/element/:id/text"),
+                              nil); err == nil </span><span class="cov8" title="1">{
+
+    wireResponse, err = s.Session.Do(req)
+
+    if wireResponse != nil </span><span class="cov8" title="1">{
+      wireResponse.Session = s.Session
+    }</span>
+
+  }
+
+  <span class="cov8" title="1">return wireResponse, err</span>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package webdriver
+
+import (
+  // "bytes"
+  // "encoding/json"
   // "fmt"
   "net/http"
 )
@@ -1291,51 +1461,108 @@ type (
   // All JsonWireProtocol commands are attached to this struct.
   Wire struct {
 
-    // a url pointing to a running server supporting the JsonWireProtocol.
-    // typically, http://localhost:7055 for firefox.
-    BaseUrl string
+    *WireHTTP
 
-    // represents a JsonWireProtocol Session ID.
-    // The Session struct includes *Wire, so, SessionID is available
-    // to individual sessions.
-    //
-    // Most of the JsonWireProtocol API calls require a session id.
-    // Only a couple do not.  GetFullUrl() will search for :sessionid
-    // and replace it with SessionID during API calls.
-    //
-    // By default, SessionID is "", so, there should be no impact
-    // for API calls that do not require a :sessionid
-    SessionID string
-  }
-
-  // the standard Json returned from a server
-  WireResponse struct {
-    Name                  string `json:"name"`
-    SessionID             string `json:"sessionId"`
-    Status                   int `json:"status"`
-    Value        json.RawMessage `json:"value"`
   }
 
 )
 
-// Convenience method to extract a WireResponse.Value as a string.
-func (s *WireResponse) StringValue() (value string) <span class="cov8" title="1">{
+// Sets the default values for a *WireHTTP.
+func (s *Wire) SetDefaults() (err error) <span class="cov8" title="1">{
 
-  if s.Value != nil </span><span class="cov8" title="1">{
-    value = string(bytes.Trim(s.Value, "{}\""))
+  s.WireHTTP = &amp;WireHTTP{}
+
+  return err
+}</span>
+
+// POST  /session/:sessionId/back
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/back
+//
+// Navigate forwards in the browser history, if possible.
+//
+func (s *Wire) Back() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
+
+  var req *http.Request
+  if req, err = s.PostRequest("/session/:sessionid/back", nil); err == nil </span><span class="cov8" title="1">{
+
+    wireResponse, err = s.Do(req)
+
   }</span>
 
-  <span class="cov8" title="1">return value</span>
+  <span class="cov8" title="1">return wireResponse, err</span>
 }
 
-// Convenience method to unmarshal the json.RawMessage Value to a string.
-func (s *WireResponse) UnmarshalValue() (value string, err error) <span class="cov8" title="1">{
+// DELETE /session/:sessionid
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId
+//
+// Delete the session.
+//
+func (s *Wire) Delete() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
 
-  if s.Value != nil </span><span class="cov8" title="1">{
-    err = json.Unmarshal(s.Value, &amp;value)
+  if req, err := s.DeleteRequest("/session/:sessionid", nil); err == nil </span><span class="cov8" title="1">{
+
+    wireResponse, err = s.Do(req)
+
   }</span>
 
-  <span class="cov8" title="1">return value, err</span>
+  <span class="cov8" title="1">return wireResponse, err</span>
+}
+
+// GET /session/:sessionid
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId
+//
+// Retrieve the capabilities of the specified session.
+//
+//    Returns:
+//    {object} An object describing the session's capabilities.
+func (s *Wire) GetSession() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
+
+  if req, err := s.GetRequest("/session/:sessionid", nil); err == nil </span><span class="cov8" title="1">{
+
+    wireResponse, err = s.Do(req)
+
+  }</span>
+
+  <span class="cov8" title="1">return wireResponse, err</span>
+}
+
+// POST  /session/:sessionId/forward
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/forward
+//
+// Navigate forwards in the browser history, if possible.
+//
+func (s *Wire) Forward() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
+
+  var req *http.Request
+  if req, err = s.PostRequest("/session/:sessionid/forward", nil); err == nil </span><span class="cov8" title="1">{
+
+    wireResponse, err = s.Do(req)
+
+  }</span>
+
+  <span class="cov8" title="1">return wireResponse, err</span>
+}
+
+// POST  /session/:sessionId/refresh
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/refresh
+//
+// Refresh the current page.
+//
+func (s *Wire) Refresh() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
+
+  var req *http.Request
+  if req, err = s.PostRequest("/session/:sessionid/refresh", nil); err == nil </span><span class="cov8" title="1">{
+
+    wireResponse, err = s.Do(req)
+
+  }</span>
+
+  <span class="cov8" title="1">return wireResponse, err</span>
 }
 
 // POST /session
@@ -1350,13 +1577,13 @@ func (s *Wire) Session(capabilities ...*Capabilities) (wireResponse *WireRespons
   // desired needs to be first in line, then, required.
   // know a better way?  I'm all ears...
   x := map[string]*Capabilities{}
-  if len(capabilities) &gt; 0 &amp;&amp; capabilities[0] != nil </span><span class="cov0" title="0">{
+  if len(capabilities) &gt; 0 &amp;&amp; capabilities[0] != nil </span><span class="cov8" title="1">{
     x["desiredCapabilities"] = capabilities[0]
   }</span><span class="cov8" title="1"> else {
     x["desiredCapabilities"] = &amp;Capabilities{}
   }</span>
 
-  <span class="cov8" title="1">if len(capabilities) &gt; 1 &amp;&amp; capabilities[1] != nil </span><span class="cov0" title="0">{
+  <span class="cov8" title="1">if len(capabilities) &gt; 1 &amp;&amp; capabilities[1] != nil </span><span class="cov8" title="1">{
     x["requiredCapabilities"] = capabilities[1]
   }</span><span class="cov8" title="1"> else {
     x["requiredCapabilities"] = &amp;Capabilities{}
@@ -1373,12 +1600,40 @@ func (s *Wire) Session(capabilities ...*Capabilities) (wireResponse *WireRespons
   <span class="cov8" title="1">return wireResponse, err</span>
 }
 
+// GET /sessions
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/sessions
+//
+// Returns a list of the currently active sessions. Each session will be returned as a list of JSON objects with the following keys:
+//
+//    Key              Type      Description
+//    id               string    The session ID.
+//    capabilities     object    An object describing the session's capabilities.
+//
+//    Returns:
+//    {Array.&lt;Object&gt;} A list of the currently active sessions.
+func (s *Wire) Sessions() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
+
+  if req, err := s.GetRequest("/sessions", nil); err == nil </span><span class="cov8" title="1">{
+
+    wireResponse, err = s.Do(req)
+
+  }</span>
+
+  <span class="cov8" title="1">return wireResponse, err</span>
+}
+
 // GET /session/:sessionId/source
 //
 // https://code.google.com/p/selenium/wiki/JsonWireProtocol#GET_/session/:sessionId/source
 //
 // Get and return the browser's current page source as HTML.
 // wireResponse.StringValue() will contain the entire source as HTML.
+//
+// Source will return a wireResponse struct.  Value will contain a json.RawMessage value
+// returned from the server.  Firefox and chrome return different encodings, so, the raw
+// bytes are left "as is" from the server.  You can use wireResponse.UnmarshalValue() to attempt
+// to decode the value into a normal string.
 func (s *Wire) Source() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
 
   if req, err := s.GetRequest("/session/:sessionid/source", nil); err == nil </span><span class="cov8" title="1">{
@@ -1422,65 +1677,6 @@ func (s *Wire) Title() (wireResponse *WireResponse, err error) <span class="cov8
   <span class="cov8" title="1">return wireResponse, err</span>
 }
 
-// GET /sessions
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/sessions
-//
-// Returns a list of the currently active sessions. Each session will be returned as a list of JSON objects with the following keys:
-//
-//    Key              Type      Description
-//    id               string    The session ID.
-//    capabilities     object    An object describing the session's capabilities.
-//
-//    Returns:
-//    {Array.&lt;Object&gt;} A list of the currently active sessions.
-func (s *Wire) Sessions() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  if req, err := s.GetRequest("/sessions", nil); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Do(req)
-
-  }</span>
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
-
-// GET /session/:sessionid
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId
-//
-// Retrieve the capabilities of the specified session.
-//
-//    Returns:
-//    {object} An object describing the session's capabilities.
-func (s *Wire) GetSession() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  if req, err := s.GetRequest("/session/:sessionid", nil); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Do(req)
-
-  }</span>
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
-
-// DELETE /session/:sessionid
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId
-//
-// Delete the session.
-//
-func (s *Wire) Delete() (wireResponse *WireResponse, err error) <span class="cov0" title="0">{
-
-  if req, err := s.DeleteRequest("/session/:sessionid", nil); err == nil </span><span class="cov0" title="0">{
-
-    wireResponse, err = s.Do(req)
-
-  }</span>
-
-  <span class="cov0" title="0">return wireResponse, err</span>
-}
-
 // POST  /session/:sessionId/url
 //
 // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/url
@@ -1504,59 +1700,6 @@ func (s *Wire) Url(url string) (wireResponse *WireResponse, err error) <span cla
   <span class="cov8" title="1">return wireResponse, err</span>
 }
 
-// POST  /session/:sessionId/forward
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/forward
-//
-// Navigate forwards in the browser history, if possible.
-//
-func (s *Wire) Forward() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  var req *http.Request
-  if req, err = s.PostRequest("/session/:sessionid/forward", nil); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Do(req)
-
-  }</span>
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
-
-// POST  /session/:sessionId/back
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/back
-//
-// Navigate forwards in the browser history, if possible.
-//
-func (s *Wire) Back() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  var req *http.Request
-  if req, err = s.PostRequest("/session/:sessionid/back", nil); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Do(req)
-
-  }</span>
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
-
-// POST  /session/:sessionId/refresh
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/refresh
-//
-// Refresh the current page.
-//
-func (s *Wire) Refresh() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  var req *http.Request
-  if req, err = s.PostRequest("/session/:sessionid/refresh", nil); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Do(req)
-
-  }</span>
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
 
 
 
@@ -1587,34 +1730,172 @@ func (s *Wire) Refresh() (wireResponse *WireResponse, err error) <span class="co
 
 </pre>
 		
-		<pre class="file" id="file7" style="display: none">package webdriver
+		<pre class="file" id="file8" style="display: none">package webdriver
 
-// Contains all of the http related functions required to communicate
-// with a webdriver http server.  Broken into a separate file for
-// readability and maintainzbility.
+import (
+  "net/http"
+)
+
+// POST /session/:sessionId/element
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element
+//
+// Search for an element on the page, starting from the document root. The located element will be returned as a WebElement JSON object. The table below lists the locator strategies that each server should support. Each locator must return the first matching element located in the DOM.
+//
+//    Strategy              Description
+//      class name          Returns an element whose class name contains the search value; compound class names are not permitted.
+//      css selector        Returns an element matching a CSS selector.
+//      id                  Returns an element whose ID attribute matches the search value.
+//      name                Returns an element whose NAME attribute matches the search value.
+//      link text           Returns an anchor element whose visible text matches the search value.
+//      partial link text   Returns an anchor element whose visible text partially matches the search value.
+//      tag name            Returns an element whose tag name matches the search value.
+//      xpath               Returns an element matching an XPath expression.
+//
+//    JSON Parameters:
+//      using - {string} The locator strategy to use.
+//      value - {string} The The search target.
+//
+//    Returns:
+//      {ELEMENT:string} A WebElement JSON object for the located element.
+//
+//    Potential Errors:
+//      NoSuchWindow - If the currently selected window has been closed.
+//      NoSuchElement - If the element cannot be found.
+//      XPathLookupError - If using XPath and the input expression is invalid
+func (s *Session) Element(using string, value string) (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
+
+  var req *http.Request
+  if req, err = s.PostRequest("/session/:sessionid/element",
+                              &amp;Params{"using": using, "value": value}); err == nil </span><span class="cov8" title="1">{
+
+    wireResponse, err = s.Do(req)
+    if wireResponse != nil </span><span class="cov8" title="1">{
+      wireResponse.Session = s
+    }</span>
+
+  }
+
+  <span class="cov8" title="1">return wireResponse, err</span>
+}
+
+// POST /session/:sessionId/elements
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/elements
+//
+// Search for multiple elements on the page, starting from the document root. The located elements will be returned as a WebElement JSON objects. The table below lists the locator strategies that each server should support. Elements should be returned in the order located in the DOM.
+//
+//    Strategy              Description
+//      class name          Returns an element whose class name contains the search value; compound class names are not permitted.
+//      css selector        Returns an element matching a CSS selector.
+//      id                  Returns an element whose ID attribute matches the search value.
+//      name                Returns an element whose NAME attribute matches the search value.
+//      link text           Returns an anchor element whose visible text matches the search value.
+//      partial link text   Returns an anchor element whose visible text partially matches the search value.
+//      tag name            Returns an element whose tag name matches the search value.
+//      xpath               Returns an element matching an XPath expression.
+//
+//    JSON Parameters:
+//      using - {string} The locator strategy to use.
+//      value - {string} The The search target.
+//
+//    Returns:
+//      {Array.&lt;{ELEMENT:string}&gt;} A list of WebElement JSON objects for the located elements.
+//
+//    Potential Errors:
+//      NoSuchWindow - If the currently selected window has been closed.
+//      XPathLookupError - If using XPath and the input expression is invalid
+func (s *Session) Elements(using string, value string) (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
+
+  var req *http.Request
+  if req, err = s.PostRequest("/session/:sessionid/elements",
+                              &amp;Params{"using": using, "value": value}); err == nil </span><span class="cov8" title="1">{
+
+    wireResponse, err = s.Do(req)
+
+    if wireResponse != nil </span><span class="cov8" title="1">{
+      wireResponse.Session = s
+    }</span>
+
+  }
+
+  <span class="cov8" title="1">return wireResponse, err</span>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package webdriver
 
 import (
   "bytes"
   "encoding/json"
   "fmt"
   "io/ioutil"
-  // "log"
   "net/http"
   "strings"
 )
 
+type (
+
+  WireHTTP struct {
+
+    // a url pointing to a running server supporting the JsonWireProtocol.
+    // typically, http://localhost:7055 for firefox.
+    BaseUrl string
+
+    // represents a JsonWireProtocol Session ID.
+    // The Session struct includes *WireHTTP, so, SessionID is available
+    // to individual sessions.
+    //
+    // Most of the JsonWireProtocol API calls require a session id.
+    // Only a couple do not.  GetFullUrl() will search for :sessionid
+    // and replace it with SessionID during API calls.
+    //
+    // By default, SessionID is "", so, there should be no impact
+    // for API calls that do not require a :sessionid
+    SessionID string
+  }
+
+)
+
 // Convenience method that wraps NewRequest()
-func (s *Wire) DeleteRequest(url string, payload interface{}) (req *http.Request, err error) <span class="cov8" title="1">{
+func (s *WireHTTP) DeleteRequest(url string, payload interface{}) (req *http.Request, err error) <span class="cov8" title="1">{
   return s.NewRequest("DELETE", url, payload)
 }</span>
 
 // Convenience method that wraps NewRequest()
-func (s *Wire) GetRequest(url string, payload interface{}) (req *http.Request, err error) <span class="cov8" title="1">{
+func (s *WireHTTP) GetRequest(url string, payload interface{}) (req *http.Request, err error) <span class="cov8" title="1">{
   return s.NewRequest("GET", url, payload)
 }</span>
 
 // Convenience method that wraps NewRequest()
-func (s *Wire) PostRequest(url string, payload interface{}) (req *http.Request, err error) <span class="cov8" title="1">{
+func (s *WireHTTP) PostRequest(url string, payload interface{}) (req *http.Request, err error) <span class="cov8" title="1">{
   return s.NewRequest("POST", url, payload)
 }</span>
 
@@ -1629,7 +1910,7 @@ func (s *Wire) PostRequest(url string, payload interface{}) (req *http.Request, 
 //
 // payload - JSON values to be included in the request.
 //
-func (s *Wire) NewRequest(method string, url string, payload interface{}) (req *http.Request, err error) <span class="cov8" title="1">{
+func (s *WireHTTP) NewRequest(method string, url string, payload interface{}) (req *http.Request, err error) <span class="cov8" title="1">{
 
   var body []byte
 
@@ -1667,19 +1948,21 @@ func (s *Wire) NewRequest(method string, url string, payload interface{}) (req *
 //   // would produce
 //   http://localhost:7055/session/my-session-id/forward
 //
-func (s *Wire) BuildFullUrl(url string) string <span class="cov8" title="1">{
+func (s *WireHTTP) BuildFullUrl(url string) string <span class="cov8" title="1">{
   return fmt.Sprintf("%v%v", s.BaseUrl, strings.Replace(url, ":sessionid", s.SessionID, -1))
 }</span>
 
 // Submits a request to a JsonWireProtocol server (selenium webdriver)
 // and reads the response back into a WireResponse if the server
 // responds with status code 200.
-func (s *Wire) Do(req *http.Request) (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
+func (s *WireHTTP) Do(req *http.Request) (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
 
   var resp *http.Response
   if resp, err = http.DefaultClient.Do(req); err == nil </span><span class="cov8" title="1">{
 
-    // log.Println("status: ", resp.StatusCode)
+    wireResponse = &amp;WireResponse{}
+
+    fmt.Println("status: ", resp.StatusCode)
 
     // looking at the code for the Do method of the DefaultClient in the
     // http package.  It looks like I shouldn't have to be concerned with
@@ -1689,7 +1972,6 @@ func (s *Wire) Do(req *http.Request) (wireResponse *WireResponse, err error) <sp
       var buffer []byte
       if buffer, err = ioutil.ReadAll(resp.Body); err == nil </span><span class="cov8" title="1">{
 
-        wireResponse = &amp;WireResponse{}
         err = json.Unmarshal(buffer, wireResponse)
 
       }</span>
@@ -1701,6 +1983,97 @@ func (s *Wire) Do(req *http.Request) (wireResponse *WireResponse, err error) <sp
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package webdriver
+
+import (
+  "bytes"
+  "encoding/json"
+  // "fmt"
+  // "net/http"
+)
+
+type (
+
+  // the standard Json returned from a server
+  WireResponse struct {
+    Name                  string `json:"name"`
+    Session                       *Session
+    SessionID             string `json:"sessionId"`
+    Status                   int `json:"status"`
+    Value        json.RawMessage `json:"value"`
+
+  }
+
+)
+
+// Convenience method to extract a WireResponse.Value as a string.
+func (s *WireResponse) StringValue() (value string) <span class="cov8" title="1">{
+
+  if s.Value != nil </span><span class="cov8" title="1">{
+    value = string(bytes.Trim(s.Value, "{}\""))
+  }</span>
+
+  <span class="cov8" title="1">return value</span>
+}
+
+// Convenience method to unmarshal the json.RawMessage Value to a string.
+func (s *WireResponse) UnmarshalValue() (value string, err error) <span class="cov8" title="1">{
+
+  if s.Value != nil </span><span class="cov8" title="1">{
+    err = json.Unmarshal(s.Value, &amp;value)
+  }</span>
+
+  <span class="cov8" title="1">return value, err</span>
+}
+
+// Convenience method to unmarshal the json.RawMessage Value to a string.
+func (s *WireResponse) WebElement() (value *WebElement, err error) <span class="cov8" title="1">{
+
+  if s.Value != nil </span><span class="cov8" title="1">{
+    err = json.Unmarshal(s.Value, &amp;value)
+    value.Session = s.Session
+  }</span>
+
+  <span class="cov8" title="1">return value, err</span>
+}
+
+// Convenience method to unmarshal the json.RawMessage Value to a string.
+func (s *WireResponse) WebElements() (value []*WebElement, err error) <span class="cov8" title="1">{
+
+  if s.Value != nil </span><span class="cov8" title="1">{
+    err = json.Unmarshal(s.Value, &amp;value)
+    for _, v := range value </span><span class="cov8" title="1">{
+      v.Session = s.Session
+    }</span>
+  }
+
+  <span class="cov8" title="1">return value, err</span>
+}
 
 
 

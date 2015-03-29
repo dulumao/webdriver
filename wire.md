@@ -59,12 +59,12 @@ wire_element.go
 - /session/:sessionId/element
 - /session/:sessionId/elements
 /session/:sessionId/element/active
-/session/:sessionId/element/:id
-/session/:sessionId/element/:id/element
-/session/:sessionId/element/:id/elements
+/session/:sessionId/element/:id     (json wire doc says command reserved for future use.  not implementing)
+- /session/:sessionId/element/:id/element
+- /session/:sessionId/element/:id/elements
 /session/:sessionId/element/:id/click
 /session/:sessionId/element/:id/submit
-/session/:sessionId/element/:id/text
+- /session/:sessionId/element/:id/text
 /session/:sessionId/element/:id/value
 /session/:sessionId/element/:id/name
 /session/:sessionId/element/:id/clear

@@ -9,21 +9,14 @@ import (
 
 type (
 
-  // WebElement - An object in the WebDriver API that represents a DOM element on the page.
-  //
-  // WebElement JSON Object - The JSON representation of a WebElement for transmission over the wire.
-  //     Key Type  Description
-  //     ELEMENT string  The opaque ID assigned to the element by the server. This ID should be used in all subsequent commands issued against the element.
-  WebElement struct {
-    Value               string `json:"element"`
-  }
-
   // the standard Json returned from a server
   WireResponse struct {
     Name                  string `json:"name"`
+    Session                       *Session
     SessionID             string `json:"sessionId"`
     Status                   int `json:"status"`
     Value        json.RawMessage `json:"value"`
+
   }
 
 )
@@ -53,6 +46,7 @@ func (s *WireResponse) WebElement() (value *WebElement, err error) {
 
   if s.Value != nil {
     err = json.Unmarshal(s.Value, &value)
+    value.Session = s.Session
   }
 
   return value, err
@@ -63,6 +57,9 @@ func (s *WireResponse) WebElements() (value []*WebElement, err error) {
 
   if s.Value != nil {
     err = json.Unmarshal(s.Value, &value)
+    for _, v := range value {
+      v.Session = s.Session
+    }
   }
 
   return value, err

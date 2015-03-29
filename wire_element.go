@@ -38,6 +38,9 @@ func (s *Session) Element(using string, value string) (wireResponse *WireRespons
                               &Params{"using": using, "value": value}); err == nil {
 
     wireResponse, err = s.Do(req)
+    if wireResponse != nil {
+      wireResponse.Session = s
+    }
 
   }
 
@@ -77,6 +80,10 @@ func (s *Session) Elements(using string, value string) (wireResponse *WireRespon
                               &Params{"using": using, "value": value}); err == nil {
 
     wireResponse, err = s.Do(req)
+
+    if wireResponse != nil {
+      wireResponse.Session = s
+    }
 
   }
 

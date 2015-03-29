@@ -108,7 +108,9 @@ func (s *WireHTTP) Do(req *http.Request) (wireResponse *WireResponse, err error)
   var resp *http.Response
   if resp, err = http.DefaultClient.Do(req); err == nil {
 
-    // log.Println("status: ", resp.StatusCode)
+    wireResponse = &WireResponse{}
+
+    fmt.Println("status: ", resp.StatusCode)
 
     // looking at the code for the Do method of the DefaultClient in the
     // http package.  It looks like I shouldn't have to be concerned with
@@ -118,7 +120,6 @@ func (s *WireHTTP) Do(req *http.Request) (wireResponse *WireResponse, err error)
       var buffer []byte
       if buffer, err = ioutil.ReadAll(resp.Body); err == nil {
 
-        wireResponse = &WireResponse{}
         err = json.Unmarshal(buffer, wireResponse)
 
       }
