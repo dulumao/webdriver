@@ -11,6 +11,7 @@ import (
 func startWebServer() {
 
   http.HandleFunc("/", handlerIndex)
+  http.HandleFunc("/element.html", handlerElement)
   http.HandleFunc("/source.html", handlerSource)
   http.HandleFunc("/step01.html", handlerStep01)
   http.HandleFunc("/step02.html", handlerStep02)
@@ -26,6 +27,15 @@ func startWebServer() {
 func handlerIndex(w http.ResponseWriter, r *http.Request) {
 
   t, _ := template.ParseFiles("templates/index.html")
+
+  t.Execute(w, nil)
+
+}
+
+////////////////////////////////////////////////////////////////
+func handlerElement(w http.ResponseWriter, r *http.Request) {
+
+  t, _ := template.ParseFiles("templates/element.html")
 
   t.Execute(w, nil)
 

@@ -8,13 +8,13 @@ wire.go
 - /session
 - /sessions
 - /session/:sessionId
-/session/:sessionId/back
+- /session/:sessionId/back
 /session/:sessionId/cookie
 /session/:sessionId/cookie/:name
-/session/:sessionId/forward
+- /session/:sessionId/forward
 /session/:sessionId/keys
 /session/:sessionId/location
-/session/:sessionId/refresh
+- /session/:sessionId/refresh
 - /session/:sessionId/source
 - /session/:sessionId/title
 - /session/:sessionId/url

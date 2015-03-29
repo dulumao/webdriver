@@ -1,8 +1,8 @@
 package webdriver
 
 import (
-  "bytes"
-  "encoding/json"
+  // "bytes"
+  // "encoding/json"
   // "fmt"
   "net/http"
 )
@@ -36,34 +36,96 @@ type (
     SessionID string
   }
 
-  // the standard Json returned from a server
-  WireResponse struct {
-    Name                  string `json:"name"`
-    SessionID             string `json:"sessionId"`
-    Status                   int `json:"status"`
-    Value        json.RawMessage `json:"value"`
-  }
-
 )
 
-// Convenience method to extract a WireResponse.Value as a string.
-func (s *WireResponse) StringValue() (value string) {
+// POST  /session/:sessionId/back
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/back
+//
+// Navigate forwards in the browser history, if possible.
+//
+func (s *Wire) Back() (wireResponse *WireResponse, err error) {
 
-  if s.Value != nil {
-    value = string(bytes.Trim(s.Value, "{}\""))
+  var req *http.Request
+  if req, err = s.PostRequest("/session/:sessionid/back", nil); err == nil {
+
+    wireResponse, err = s.Do(req)
+
   }
 
-  return value
+  return wireResponse, err
 }
 
-// Convenience method to unmarshal the json.RawMessage Value to a string.
-func (s *WireResponse) UnmarshalValue() (value string, err error) {
+// DELETE /session/:sessionid
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId
+//
+// Delete the session.
+//
+func (s *Wire) Delete() (wireResponse *WireResponse, err error) {
 
-  if s.Value != nil {
-    err = json.Unmarshal(s.Value, &value)
+  if req, err := s.DeleteRequest("/session/:sessionid", nil); err == nil {
+
+    wireResponse, err = s.Do(req)
+
   }
 
-  return value, err
+  return wireResponse, err
+}
+
+// GET /session/:sessionid
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId
+//
+// Retrieve the capabilities of the specified session.
+//
+//    Returns:
+//    {object} An object describing the session's capabilities.
+func (s *Wire) GetSession() (wireResponse *WireResponse, err error) {
+
+  if req, err := s.GetRequest("/session/:sessionid", nil); err == nil {
+
+    wireResponse, err = s.Do(req)
+
+  }
+
+  return wireResponse, err
+}
+
+// POST  /session/:sessionId/forward
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/forward
+//
+// Navigate forwards in the browser history, if possible.
+//
+func (s *Wire) Forward() (wireResponse *WireResponse, err error) {
+
+  var req *http.Request
+  if req, err = s.PostRequest("/session/:sessionid/forward", nil); err == nil {
+
+    wireResponse, err = s.Do(req)
+
+  }
+
+  return wireResponse, err
+}
+
+// POST  /session/:sessionId/refresh
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/refresh
+//
+// Refresh the current page.
+//
+func (s *Wire) Refresh() (wireResponse *WireResponse, err error) {
+
+  var req *http.Request
+  if req, err = s.PostRequest("/session/:sessionid/refresh", nil); err == nil {
+
+    wireResponse, err = s.Do(req)
+
+  }
+
+  return wireResponse, err
 }
 
 // POST /session
@@ -101,12 +163,40 @@ func (s *Wire) Session(capabilities ...*Capabilities) (wireResponse *WireRespons
   return wireResponse, err
 }
 
+// GET /sessions
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/sessions
+//
+// Returns a list of the currently active sessions. Each session will be returned as a list of JSON objects with the following keys:
+//
+//    Key              Type      Description
+//    id               string    The session ID.
+//    capabilities     object    An object describing the session's capabilities.
+//
+//    Returns:
+//    {Array.<Object>} A list of the currently active sessions.
+func (s *Wire) Sessions() (wireResponse *WireResponse, err error) {
+
+  if req, err := s.GetRequest("/sessions", nil); err == nil {
+
+    wireResponse, err = s.Do(req)
+
+  }
+
+  return wireResponse, err
+}
+
 // GET /session/:sessionId/source
 //
 // https://code.google.com/p/selenium/wiki/JsonWireProtocol#GET_/session/:sessionId/source
 //
 // Get and return the browser's current page source as HTML.
 // wireResponse.StringValue() will contain the entire source as HTML.
+//
+// Source will return a wireResponse struct.  Value will contain a json.RawMessage value
+// returned from the server.  Firefox and chrome return different encodings, so, the raw
+// bytes are left "as is" from the server.  You can use wireResponse.UnmarshalValue() to attempt
+// to decode the value into a normal string.
 func (s *Wire) Source() (wireResponse *WireResponse, err error) {
 
   if req, err := s.GetRequest("/session/:sessionid/source", nil); err == nil {
@@ -150,65 +240,6 @@ func (s *Wire) Title() (wireResponse *WireResponse, err error) {
   return wireResponse, err
 }
 
-// GET /sessions
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/sessions
-//
-// Returns a list of the currently active sessions. Each session will be returned as a list of JSON objects with the following keys:
-//
-//    Key              Type      Description
-//    id               string    The session ID.
-//    capabilities     object    An object describing the session's capabilities.
-//
-//    Returns:
-//    {Array.<Object>} A list of the currently active sessions.
-func (s *Wire) Sessions() (wireResponse *WireResponse, err error) {
-
-  if req, err := s.GetRequest("/sessions", nil); err == nil {
-
-    wireResponse, err = s.Do(req)
-
-  }
-
-  return wireResponse, err
-}
-
-// GET /session/:sessionid
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId
-//
-// Retrieve the capabilities of the specified session.
-//
-//    Returns:
-//    {object} An object describing the session's capabilities.
-func (s *Wire) GetSession() (wireResponse *WireResponse, err error) {
-
-  if req, err := s.GetRequest("/session/:sessionid", nil); err == nil {
-
-    wireResponse, err = s.Do(req)
-
-  }
-
-  return wireResponse, err
-}
-
-// DELETE /session/:sessionid
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId
-//
-// Delete the session.
-//
-func (s *Wire) Delete() (wireResponse *WireResponse, err error) {
-
-  if req, err := s.DeleteRequest("/session/:sessionid", nil); err == nil {
-
-    wireResponse, err = s.Do(req)
-
-  }
-
-  return wireResponse, err
-}
-
 // POST  /session/:sessionId/url
 //
 // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/url
@@ -232,59 +263,6 @@ func (s *Wire) Url(url string) (wireResponse *WireResponse, err error) {
   return wireResponse, err
 }
 
-// POST  /session/:sessionId/forward
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/forward
-//
-// Navigate forwards in the browser history, if possible.
-//
-func (s *Wire) Forward() (wireResponse *WireResponse, err error) {
-
-  var req *http.Request
-  if req, err = s.PostRequest("/session/:sessionid/forward", nil); err == nil {
-
-    wireResponse, err = s.Do(req)
-
-  }
-
-  return wireResponse, err
-}
-
-// POST  /session/:sessionId/back
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/back
-//
-// Navigate forwards in the browser history, if possible.
-//
-func (s *Wire) Back() (wireResponse *WireResponse, err error) {
-
-  var req *http.Request
-  if req, err = s.PostRequest("/session/:sessionid/back", nil); err == nil {
-
-    wireResponse, err = s.Do(req)
-
-  }
-
-  return wireResponse, err
-}
-
-// POST  /session/:sessionId/refresh
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/refresh
-//
-// Refresh the current page.
-//
-func (s *Wire) Refresh() (wireResponse *WireResponse, err error) {
-
-  var req *http.Request
-  if req, err = s.PostRequest("/session/:sessionid/refresh", nil); err == nil {
-
-    wireResponse, err = s.Do(req)
-
-  }
-
-  return wireResponse, err
-}
 
 
 
