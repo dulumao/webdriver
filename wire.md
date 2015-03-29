@@ -56,8 +56,8 @@ wire_window.go
 /session/:sessionId/window/:windowHandle/maximize
 
 wire_element.go
-/session/:sessionId/element
-/session/:sessionId/elements
+- /session/:sessionId/element
+- /session/:sessionId/elements
 /session/:sessionId/element/active
 /session/:sessionId/element/:id
 /session/:sessionId/element/:id/element

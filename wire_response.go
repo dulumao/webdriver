@@ -58,6 +58,16 @@ func (s *WireResponse) WebElement() (value *WebElement, err error) {
   return value, err
 }
 
+// Convenience method to unmarshal the json.RawMessage Value to a string.
+func (s *WireResponse) WebElements() (value []*WebElement, err error) {
+
+  if s.Value != nil {
+    err = json.Unmarshal(s.Value, &value)
+  }
+
+  return value, err
+}
+
 
 
 

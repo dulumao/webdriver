@@ -100,3 +100,33 @@ func TestElement(t *testing.T) {
   }
 
 }
+
+////////////////////////////////////////////////////////////////
+func TestElements(t *testing.T) {
+
+  var err error
+  var wireResponse *WireResponse
+
+  for _, v := range sessions {
+    if _, err = v.Url("http://localhost:8080/elements.html"); err == nil {
+
+      sleepForSeconds(1)
+
+      if wireResponse, err = v.Elements("class name", "myclass"); err == nil {
+
+        var list []*WebElement
+        if list, err = wireResponse.WebElements(); err == nil {
+
+          if len(list) < 4 {
+            t.Error("Should have found 4 elements")
+          }
+        } else {
+          t.Error("could not find elements")
+        }
+
+      }
+
+    }
+  }
+
+}
