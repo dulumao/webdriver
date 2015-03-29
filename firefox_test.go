@@ -161,17 +161,21 @@ func TestVerifyExtensionsPathAlreadyExists(t *testing.T) {
 ////////////////////////////////////////////////////////////////
 func TestVerifyExtensionsPathPermissionsFailure(t *testing.T) {
 
-  client := &Firefox{
-                      ProfileDir: "/root/user01",
-                      Extension: &Extension{
-                        Path: "support/drivers/webdriver.xpi",
-                      },
-                    }
+  if env_volatile {
+    client := &Firefox{
+                        ProfileDir: "/root/user01",
+                        Extension: &Extension{
+                          Path: "support/drivers/webdriver.xpi",
+                        },
+                      }
 
-  client.SetDefaults()
+    client.SetDefaults()
 
-  if err := client.verifyExtensionsPath(); err == nil {
-    t.Error("this should have failed due to permissions.  should not write to /root directory")
+    if err := client.verifyExtensionsPath(); err == nil {
+      t.Error("this should have failed due to permissions.  should not write to /root directory")
+    }
+  } else {
+    t.Skip("Skipping VOLATILE test...")
   }
 
 }
@@ -179,19 +183,23 @@ func TestVerifyExtensionsPathPermissionsFailure(t *testing.T) {
 ////////////////////////////////////////////////////////////////
 func TestExtractExtensionContentsFailure(t *testing.T) {
 
-  client := &Firefox{
-                      ProfileDir: "/root/user01",
-                      Extension: &Extension{
-                        Path: "support/drivers/webdriver.xpi",
-                      },
-                    }
+  if env_volatile {
+    client := &Firefox{
+                        ProfileDir: "/root/user01",
+                        Extension: &Extension{
+                          Path: "support/drivers/webdriver.xpi",
+                        },
+                      }
 
-  client.SetDefaults()
+    client.SetDefaults()
 
-  client.Extension.TargetPath = "/root/user01/extensions"
+    client.Extension.TargetPath = "/root/user01/extensions"
 
-  if err := client.extractExtensionContents(); err == nil {
-    t.Error("this should have failed due to permissions.  should not write to /root directory")
+    if err := client.extractExtensionContents(); err == nil {
+      t.Error("this should have failed due to permissions.  should not write to /root directory")
+    }
+  } else {
+    t.Skip("Skipping VOLATILE test...")
   }
 
 }
@@ -199,19 +207,23 @@ func TestExtractExtensionContentsFailure(t *testing.T) {
 ////////////////////////////////////////////////////////////////
 func TestPrepareExtensionTargetRemoveAllFailure(t *testing.T) {
 
-  client := &Firefox{
-                      ProfileDir: "/root/user01",
-                      Extension: &Extension{
-                        Path: "support/drivers/webdriver.xpi",
-                      },
-                    }
+  if env_volatile {
+    client := &Firefox{
+                        ProfileDir: "/root/user01",
+                        Extension: &Extension{
+                          Path: "support/drivers/webdriver.xpi",
+                        },
+                      }
 
-  client.SetDefaults()
+    client.SetDefaults()
 
-  // client.Extension.TargetPath = "/root"
+    // client.Extension.TargetPath = "/root"
 
-  if err := client.prepareExtensionTarget(); err == nil {
-    t.Error("this should have failed due to permissions.  should not remove to /root directory")
+    if err := client.prepareExtensionTarget(); err == nil {
+      t.Error("this should have failed due to permissions.  should not remove to /root directory")
+    }
+  } else {
+    t.Skip("Skipping VOLATILE test...")
   }
 
 }

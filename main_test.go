@@ -11,6 +11,9 @@ import (
 
 var no_chrome bool
 var no_firefox bool
+var env_circle bool
+var env_travis bool
+var env_volatile bool
 
 var clientChrome Client
 var sessionChrome *Session
@@ -48,8 +51,11 @@ func startChrome() {
     } else {
 
       // rigging the tests for now
-      // sessions = append(sessions, sessionChrome)
-      // log.Println("added chrome to list:", len(sessions), sessionChrome)
+      if !env_circle && !env_travis {
+        sessions = append(sessions, sessionChrome)
+        log.Println("added chrome to list:", len(sessions), sessionChrome)
+      }
+
     }
 
   }
@@ -89,6 +95,25 @@ func startFirefox() {
 func TestMain(m *testing.M) {
 
   sessions = make([]*Session, 0)
+
+  if os.Getenv("CIRCLECI") != "" {
+    env_circle = true
+  }
+
+  if os.Getenv("TRAVISCI") != "" {
+    env_travis = true
+  }
+
+  // tests that use the /root directory are volatile, because, they attempt to remove entire
+  // directory structures using removeall().  you have to set the environment variable VOLATILE=true
+  // to get these tests to run.  otherwise, they are skipped.
+  // the reason for using the /root directory is permissions.  parts of the code for installing
+  // firefox will remove entire directories.  i'm using the /root to test that code, because, the
+  // default user would not have permissions to nuke a directory owned by root.
+  // I plan to develop a better solution using a mock file system.  for now, just using something quick and easy.
+  if os.Getenv("VOLATILE") != "" {
+    env_volatile = true
+  }
 
   // setting the environment variable NOFIREFOX to anything
   // will set no_firefox = true

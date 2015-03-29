@@ -54,7 +54,7 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">github.com/webdriver/chrome.go (100.0%)</option>
+				<option value="file0">github.com/webdriver/chrome.go (88.4%)</option>
 				
 				<option value="file1">github.com/webdriver/firefox.go (100.0%)</option>
 				
@@ -66,7 +66,7 @@
 				
 				<option value="file5">github.com/webdriver/tcp.go (100.0%)</option>
 				
-				<option value="file6">github.com/webdriver/wire.go (100.0%)</option>
+				<option value="file6">github.com/webdriver/wire.go (90.2%)</option>
 				
 				<option value="file7">github.com/webdriver/wire_http.go (100.0%)</option>
 				
@@ -207,18 +207,18 @@ func (s *Chrome) buildOptions() (options []string) <span class="cov8" title="1">
 // TODO Figure out how to shutdown the browser as well as the webdriver
 // currently, it seems like just the webdriver is being shutdown
 // Kills the currently running webdriver if it is running.
-func (s *Chrome) Close() (err error) <span class="cov8" title="1">{
+func (s *Chrome) Close() (err error) <span class="cov0" title="0">{
 
-  if s.Process != nil </span><span class="cov8" title="1">{
+  if s.Process != nil </span><span class="cov0" title="0">{
 
-    for _, v := range s.Sessions.List </span><span class="cov8" title="1">{
+    for _, v := range s.Sessions.List </span><span class="cov0" title="0">{
       v.Delete()
     }</span>
 
-    <span class="cov8" title="1">s.Process.Kill()</span>
+    <span class="cov0" title="0">s.Process.Kill()</span>
   }
 
-  <span class="cov8" title="1">return err</span>
+  <span class="cov0" title="0">return err</span>
 }
 
 
@@ -1350,13 +1350,13 @@ func (s *Wire) Session(capabilities ...*Capabilities) (wireResponse *WireRespons
   // desired needs to be first in line, then, required.
   // know a better way?  I'm all ears...
   x := map[string]*Capabilities{}
-  if len(capabilities) &gt; 0 &amp;&amp; capabilities[0] != nil </span><span class="cov8" title="1">{
+  if len(capabilities) &gt; 0 &amp;&amp; capabilities[0] != nil </span><span class="cov0" title="0">{
     x["desiredCapabilities"] = capabilities[0]
   }</span><span class="cov8" title="1"> else {
     x["desiredCapabilities"] = &amp;Capabilities{}
   }</span>
 
-  <span class="cov8" title="1">if len(capabilities) &gt; 1 &amp;&amp; capabilities[1] != nil </span><span class="cov8" title="1">{
+  <span class="cov8" title="1">if len(capabilities) &gt; 1 &amp;&amp; capabilities[1] != nil </span><span class="cov0" title="0">{
     x["requiredCapabilities"] = capabilities[1]
   }</span><span class="cov8" title="1"> else {
     x["requiredCapabilities"] = &amp;Capabilities{}
@@ -1470,15 +1470,15 @@ func (s *Wire) GetSession() (wireResponse *WireResponse, err error) <span class=
 //
 // Delete the session.
 //
-func (s *Wire) Delete() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
+func (s *Wire) Delete() (wireResponse *WireResponse, err error) <span class="cov0" title="0">{
 
-  if req, err := s.DeleteRequest("/session/:sessionid", nil); err == nil </span><span class="cov8" title="1">{
+  if req, err := s.DeleteRequest("/session/:sessionid", nil); err == nil </span><span class="cov0" title="0">{
 
     wireResponse, err = s.Do(req)
 
   }</span>
 
-  <span class="cov8" title="1">return wireResponse, err</span>
+  <span class="cov0" title="0">return wireResponse, err</span>
 }
 
 // POST  /session/:sessionId/url
