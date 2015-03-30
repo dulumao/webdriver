@@ -654,7 +654,7 @@ func TestCssProperty(t *testing.T) {
         if webElement, err = wireResponse.WebElement(); err == nil && !webElement.Blank() {
 
           if wireResponse, err = webElement.CssProperty("display"); err == nil && wireResponse.Success() {
-            if wireResponse.StringValue() != "inline-block" {
+            if wireResponse.StringValue() != "block" {
               t.Error("StringValue() should equal inline-block: ", wireResponse.StringValue())
             }
           }
