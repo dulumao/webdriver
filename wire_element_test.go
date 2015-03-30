@@ -13,85 +13,36 @@ func TestElement(t *testing.T) {
 
   var err error
   var wireResponse *WireResponse
+  var webElement *WebElement
+
+  keys := []string{"class name", "id", "name", "link text", "partial link text", "tag name", "xpath"}
+  text_values := []string{"main class", "main id", "main name", "link text", "partial link text", "my tag", "main id xpath"}
+  values := []string{"main-div-class", "main-div-id", "main-div-name", "link text", "partial", "mytag", ".//div[@id='main-div-xpath']"}
 
   for _, v := range sessions {
     if _, err = v.Url("http://localhost:8080/element.html"); err == nil {
 
       sleepForSeconds(1)
 
-      if wireResponse, err = v.Element("class name", "main-div-class"); err == nil {
-        if webElement, err := wireResponse.WebElement(); err == nil {
-          if webElement == nil || webElement.Value == "" {
-            t.Error("could not find element", webElement.Value)
+      for i, key := range keys {
+
+        if wireResponse, err = v.Element(key, values[i]); err == nil && wireResponse.Success() {
+          if webElement, err = wireResponse.WebElement(); err == nil && !webElement.Blank() {
+              if wireResponse, err = webElement.Text(); err == nil && wireResponse.Success() {
+                if wireResponse.StringValue() != text_values[i] {
+                  t.Error("StringValue does not match", wireResponse.StringValue())
+                }
+
+              } else {
+                t.Error(err, wireResponse.HttpStatusCode)
+              }
+
+          } else {
+            t.Error(err, webElement)
           }
+
         } else {
-          t.Error("could not find element")
-        }
-
-      }
-
-      if wireResponse, err = v.Element("id", "main-div-id"); err == nil {
-        if webElement, err := wireResponse.WebElement(); err == nil {
-          if webElement == nil || webElement.Value == "" {
-            t.Error("could not find element", webElement.Value)
-          }
-        } else {
-          t.Error("could not find element")
-        }
-
-      }
-
-      if wireResponse, err = v.Element("name", "main-div-name"); err == nil {
-        if webElement, err := wireResponse.WebElement(); err == nil {
-          if webElement == nil || webElement.Value == "" {
-            t.Error("could not find element", webElement.Value)
-          }
-        } else {
-          t.Error("could not find element")
-        }
-
-      }
-
-      if wireResponse, err = v.Element("link text", "link text"); err == nil {
-        if webElement, err := wireResponse.WebElement(); err == nil {
-          if webElement == nil || webElement.Value == "" {
-            t.Error("could not find element", webElement.Value)
-          }
-        } else {
-          t.Error("could not find element")
-        }
-
-      }
-
-      if wireResponse, err = v.Element("partial link text", "partial"); err == nil {
-        if webElement, err := wireResponse.WebElement(); err == nil {
-          if webElement == nil || webElement.Value == "" {
-            t.Error("could not find element", webElement.Value)
-          }
-        } else {
-          t.Error("could not find element")
-        }
-
-      }
-
-      if wireResponse, err = v.Element("tag name", "mytag"); err == nil {
-        if webElement, err := wireResponse.WebElement(); err == nil {
-          if webElement == nil || webElement.Value == "" {
-            t.Error("could not find element", webElement.Value)
-          }
-        } else {
-          t.Error("could not find element")
-        }
-
-      }
-
-      if wireResponse, err = v.Element("xpath", ".//div[@id='main-div-xpath']"); err == nil {
-        if webElement, err := wireResponse.WebElement(); err == nil {
-          if webElement == nil || webElement.Value == "" {
-            t.Error("could not find element", webElement.Value)
-          }
-        } else {
-          t.Error("could not find element")
+          t.Error(err, wireResponse.HttpStatusCode)
         }
 
       }
@@ -116,23 +67,17 @@ func TestElements(t *testing.T) {
       if wireResponse, err = v.Elements("class name", "myclass"); err == nil {
 
         var list []*WebElement
-        if list, err = wireResponse.WebElements(); err == nil {
+        if list, err = wireResponse.WebElements(); err == nil && len(list) >= 4 {
 
-          if len(list) < 4 {
-            t.Error("Should have found 4 elements")
-          } else {
+          all_text := "my class 1_my class 2_my class 3_my class 4_"
 
-            all_text := "my class 1_my class 2_my class 3_my class 4_"
+          for _, v := range list {
 
-            for _, v := range list {
-
-              if wireSubResponse2, err = v.Text(); err == nil {
-                if !strings.Contains(all_text, wireSubResponse2.StringValue()) {
-                  t.Error("text not found in all_text variable", wireSubResponse2.StringValue())
-                }
+            if wireSubResponse2, err = v.Text(); err == nil {
+              if !strings.Contains(all_text, wireSubResponse2.StringValue()) {
+                t.Error("text not found in all_text variable", wireSubResponse2.StringValue())
               }
             }
-
           }
 
         } else {
@@ -162,21 +107,13 @@ func TestSubElement(t *testing.T) {
       sleepForSeconds(1)
 
       if wireResponse, err = v.Element("id", "main-div-id"); err == nil {
-        if webElement, err = wireResponse.WebElement(); err == nil {
-          if webElement == nil || webElement.Value == "" {
-            t.Error("could not find element", webElement.Value)
-          } else {
-
-            if wireSubResponse, err = webElement.Element("id", "div-sub"); err == nil {
-              if subElement, err = wireSubResponse.WebElement(); err == nil {
-                if wireSubResponse2, err = subElement.Text(); err == nil {
-                  if wireSubResponse2.StringValue() != "main div sub" {
-                    t.Error("text should be main div sub", wireSubResponse2.StringValue())
-                  }
-                } else {
-                  t.Error("could not find element")
+        if webElement, err = wireResponse.WebElement(); err == nil && !webElement.Blank() {
+          if wireSubResponse, err = webElement.Element("id", "div-sub"); err == nil {
+            if subElement, err = wireSubResponse.WebElement(); err == nil {
+              if wireSubResponse2, err = subElement.Text(); err == nil {
+                if wireSubResponse2.StringValue() != "main div sub" {
+                  t.Error("text should be main div sub", wireSubResponse2.StringValue())
                 }
-
               } else {
                 t.Error("could not find element")
               }
@@ -185,7 +122,10 @@ func TestSubElement(t *testing.T) {
               t.Error("could not find element")
             }
 
+          } else {
+            t.Error("could not find element")
           }
+
         } else {
           t.Error("could not find element")
         }
@@ -212,38 +152,30 @@ func TestSubElements(t *testing.T) {
       sleepForSeconds(1)
 
       if wireResponse, err = v.Element("id", "main-div-id"); err == nil {
-        if webElement, err = wireResponse.WebElement(); err == nil {
-          if webElement == nil || webElement.Value == "" {
-            t.Error("could not find element", webElement.Value)
-          } else {
+        if webElement, err = wireResponse.WebElement(); err == nil && !webElement.Blank() {
+          if wireSubResponse, err = webElement.Elements("class name", "myclass"); err == nil {
 
-            if wireSubResponse, err = webElement.Elements("class name", "myclass"); err == nil {
+            var list []*WebElement
+            if list, err = wireSubResponse.WebElements(); err == nil && len(list) >= 4 {
 
-              var list []*WebElement
-              if list, err = wireSubResponse.WebElements(); err == nil {
-                if len(list) < 4 {
-                  t.Error("Should have found 4 elements")
-                } else {
+              all_text := "my class 1_my class 2_my class 3_my class 4_"
 
-                  all_text := "my class 1_my class 2_my class 3_my class 4_"
-
-                  for _, v := range list {
-
-                    if wireSubResponse2, err = v.Text(); err == nil {
-                      if !strings.Contains(all_text, wireSubResponse2.StringValue()) {
-                        t.Error("text not found in all_text variable", wireSubResponse2.StringValue())
-                      }
-                    }
+              for _, v := range list {
+                if wireSubResponse2, err = v.Text(); err == nil {
+                  if !strings.Contains(all_text, wireSubResponse2.StringValue()) {
+                    t.Error("text not found in all_text variable", wireSubResponse2.StringValue())
                   }
                 }
-
               }
 
             } else {
-              t.Error("could not find element")
+              t.Error("should have produced at least four elements: ", len(list))
             }
 
+          } else {
+            t.Error("could not find element")
           }
+
         } else {
           t.Error("could not find element")
         }
@@ -254,3 +186,4 @@ func TestSubElements(t *testing.T) {
   }
 
 }
+

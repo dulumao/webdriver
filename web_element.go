@@ -20,6 +20,13 @@ type (
 
 )
 
+// Returns true if WebElement.Value is an empty string.  You could simply check for an empty string
+// in your code and call it a day.  However, Blank() encapsulates that logic into a method call as future
+// versions of the code may change and this could reduce the amount of future changes in app code.
+func (s *WebElement) Blank() bool {
+  return s.Value == ""
+}
+
 // BuildElementUrl() is similar to BuildFullUrl(), except it simply does a search / replace
 // on the :id value of the current WebElement.  Relies on the current value of Value as the element :id.
 //

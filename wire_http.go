@@ -105,12 +105,15 @@ func (s *WireHTTP) BuildFullUrl(url string) string {
 // responds with status code 200.
 func (s *WireHTTP) Do(req *http.Request) (wireResponse *WireResponse, err error) {
 
+  // never be nil
+  wireResponse = &WireResponse{}
+
   var resp *http.Response
   if resp, err = http.DefaultClient.Do(req); err == nil {
 
-    wireResponse = &WireResponse{}
-
     fmt.Println("status: ", resp.StatusCode)
+
+    wireResponse.HttpStatusCode = resp.StatusCode
 
     // looking at the code for the Do method of the DefaultClient in the
     // http package.  It looks like I shouldn't have to be concerned with
