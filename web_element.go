@@ -340,31 +340,6 @@ func (s *WebElement) Text() (wireResponse *WireResponse, err error) {
   return wireResponse, err
 }
 
-// GET /session/:sessionId/element/:id/enabled
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/enabled
-//
-// Determine if an element is currently enabled.
-//
-//     Returns:
-//       {boolean} Whether the element is enabled.
-func (s *WebElement) Enabled() (wireResponse *WireResponse, err error) {
-
-  var req *http.Request
-  if req, err = s.Session.GetRequest(s.BuildElementUrl("/session/:sessionid/element/:id/enabled"),
-                              nil); err == nil {
-
-    wireResponse, err = s.Session.Do(req)
-
-    if wireResponse != nil {
-      wireResponse.Session = s.Session
-    }
-
-  }
-
-  return wireResponse, err
-}
-
 
 
 
