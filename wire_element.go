@@ -90,6 +90,34 @@ func (s *Session) Elements(using string, value string) (wireResponse *WireRespon
   return wireResponse, err
 }
 
+// POST  /session/:sessionId/element/active
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/active
+//
+// Get the element on the page that currently has focus. The element will be returned as a WebElement JSON object.
+//
+//    Returns:
+//      {ELEMENT:string} A WebElement JSON object for the active element.
+//
+//    Potential Errors:
+//      NoSuchWindow - If the currently selected window has been closed.
+func (s *Session) Active() (wireResponse *WireResponse, err error) {
+
+  var req *http.Request
+  if req, err = s.PostRequest("/session/:sessionid/element/active", nil); err == nil {
+
+    wireResponse, err = s.Do(req)
+
+    if wireResponse != nil {
+      wireResponse.Session = s
+    }
+
+  }
+
+  return wireResponse, err
+}
+
+
 
 
 
