@@ -42,7 +42,6 @@ type (
 
 )
 
-/************************************************/
 func (s *Firefox) SetDefaults() (err error) {
 
   if s.DirPermissions == 0 {s.DirPermissions = 0770}
@@ -122,7 +121,6 @@ func (s *Firefox) SetDefaults() (err error) {
   return err
 }
 
-/************************************************/
 func (s *Firefox) Run() (err error) {
 
   var listener net.Listener
