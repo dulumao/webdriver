@@ -481,3 +481,120 @@ func TestEnabled(t *testing.T) {
   }
 
 }
+
+////////////////////////////////////////////////////////////////
+func TestDisplayed(t *testing.T) {
+
+  var err error
+  var wireResponse *WireResponse
+  var webElement *WebElement
+
+  for _, v := range sessions {
+    if _, err = v.Url("http://localhost:8080/form01.html"); err == nil {
+
+      sleepForSeconds(1)
+
+      if wireResponse, err = v.Element("id", "first-name"); err == nil && wireResponse.Success() {
+        if webElement, err = wireResponse.WebElement(); err == nil && !webElement.Blank() {
+
+          if wireResponse, err = webElement.Displayed(); err == nil && wireResponse.Success() {
+
+            if wireResponse.StringValue() != "true" {
+              t.Error("StringValue() should be true: ", wireResponse.StringValue())
+            }
+
+          } else {
+            t.Error(err, wireResponse)
+          }
+
+        } else {
+          t.Error(err, webElement)
+        }
+      } else {
+        t.Error(err, wireResponse)
+      }
+
+      if wireResponse, err = v.Element("id", "hidden"); err == nil && wireResponse.Success() {
+        if webElement, err = wireResponse.WebElement(); err == nil && !webElement.Blank() {
+
+          if wireResponse, err = webElement.Displayed(); err == nil && wireResponse.Success() {
+
+            if wireResponse.StringValue() != "false" {
+              t.Error("StringValue() should be false: ", wireResponse.StringValue())
+            }
+
+          } else {
+            t.Error(err, wireResponse)
+          }
+
+        } else {
+          t.Error(err, webElement)
+        }
+      } else {
+        t.Error(err, wireResponse)
+      }
+
+    }
+  }
+
+}
+
+////////////////////////////////////////////////////////////////
+func TestLocation(t *testing.T) {
+
+  var err error
+  var wireResponse *WireResponse
+  var webElement *WebElement
+  var point *Point
+
+  for _, v := range sessions {
+    if _, err = v.Url("http://localhost:8080/form01.html"); err == nil {
+
+      sleepForSeconds(1)
+
+      if wireResponse, err = v.Element("id", "first-name"); err == nil && wireResponse.Success() {
+        if webElement, err = wireResponse.WebElement(); err == nil && !webElement.Blank() {
+
+          if wireResponse, err = webElement.Location(); err == nil && wireResponse.Success() {
+            if point, err = wireResponse.Point(); err != nil {
+              t.Error(err, point)
+            } else {
+              t.Log("location", point)
+            }
+
+          } else {
+            t.Error(err, wireResponse)
+          }
+
+        } else {
+          t.Error(err, webElement)
+        }
+      } else {
+        t.Error(err, wireResponse)
+      }
+
+      if wireResponse, err = v.Element("id", "last-name"); err == nil && wireResponse.Success() {
+        if webElement, err = wireResponse.WebElement(); err == nil && !webElement.Blank() {
+
+          if wireResponse, err = webElement.LocationInView(); err == nil && wireResponse.Success() {
+            if point, err = wireResponse.Point(); err != nil {
+              t.Error(err, point)
+            } else {
+              t.Log("location in view", point)
+            }
+
+          } else {
+            t.Error(err, wireResponse)
+          }
+
+        } else {
+          t.Error(err, webElement)
+        }
+      } else {
+        t.Error(err, wireResponse)
+      }
+
+    }
+  }
+
+}

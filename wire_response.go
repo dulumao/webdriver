@@ -10,6 +10,12 @@ import (
 
 type (
 
+  // Represents an X,Y coordinate.
+  Point struct {
+    X     int `json:"x"`
+    Y     int `json:"y"`
+  }
+
   // the standard Json returned from a server
   WireResponse struct {
 
@@ -86,6 +92,19 @@ func (s *WireResponse) WebElements() (value []*WebElement, err error) {
   return value, err
 }
 
+// Convenience method to unmarshal the json.RawMessage Value to a string.
+func (s *WireResponse) Point() (value *Point, err error) {
+
+  value = &Point{}
+
+  if s.Value != nil {
+    err = json.Unmarshal(s.Value, value)
+  } else {
+    err = errors.New("WireResponse.Value is nil")
+  }
+
+  return value, err
+}
 
 
 

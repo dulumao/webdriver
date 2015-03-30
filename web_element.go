@@ -1,6 +1,8 @@
 package webdriver
 
 import (
+  // "encoding/json"
+  // "errors"
   "fmt"
   "net/http"
   "strings"
@@ -108,6 +110,31 @@ func (s *WebElement) Click() (wireResponse *WireResponse, err error) {
   return wireResponse, err
 }
 
+// GET /session/:sessionId/element/:id/displayed
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/displayed
+//
+// Determine if an element is currently displayed.
+//
+//     Returns:
+//       {boolean} Whether the element is displayed.
+func (s *WebElement) Displayed() (wireResponse *WireResponse, err error) {
+
+  var req *http.Request
+  if req, err = s.Session.GetRequest(s.BuildElementUrl("/session/:sessionid/element/:id/displayed"),
+                              nil); err == nil {
+
+    wireResponse, err = s.Session.Do(req)
+
+    if wireResponse != nil {
+      wireResponse.Session = s.Session
+    }
+
+  }
+
+  return wireResponse, err
+}
+
 // POST /session/:sessionId/element/:id/element
 //
 // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/element
@@ -196,15 +223,18 @@ func (s *WebElement) Elements(using string, value string) (wireResponse *WireRes
   return wireResponse, err
 }
 
-// GET /session/:sessionId/element/:id/name
+// GET /session/:sessionId/element/:id/enabled
 //
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/name
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/enabled
 //
-// Query for an element's tag name.
-func (s *WebElement) Name() (wireResponse *WireResponse, err error) {
+// Determine if an element is currently enabled.
+//
+//     Returns:
+//       {boolean} Whether the element is enabled.
+func (s *WebElement) Enabled() (wireResponse *WireResponse, err error) {
 
   var req *http.Request
-  if req, err = s.Session.GetRequest(s.BuildElementUrl("/session/:sessionid/element/:id/name"),
+  if req, err = s.Session.GetRequest(s.BuildElementUrl("/session/:sessionid/element/:id/enabled"),
                               nil); err == nil {
 
     wireResponse, err = s.Session.Do(req)
@@ -218,18 +248,68 @@ func (s *WebElement) Name() (wireResponse *WireResponse, err error) {
   return wireResponse, err
 }
 
-// GET /session/:sessionId/element/:id/enabled
+// GET /session/:sessionId/element/:id/location
 //
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/enabled
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/location
 //
-// Determine if an element is currently enabled.
+// Determine an element's location on the page. The point (0, 0) refers to the upper-left corner of the page. The element's coordinates are returned as a JSON object with x and y properties.
 //
 //     Returns:
-//       {boolean} Whether the element is enabled.
-func (s *WebElement) Enabled() (wireResponse *WireResponse, err error) {
+//       {x:number, y:number} The X and Y coordinates for the element on the page.
+func (s *WebElement) Location() (wireResponse *WireResponse, err error) {
 
   var req *http.Request
-  if req, err = s.Session.GetRequest(s.BuildElementUrl("/session/:sessionid/element/:id/enabled"),
+  if req, err = s.Session.GetRequest(s.BuildElementUrl("/session/:sessionid/element/:id/location"),
+                              nil); err == nil {
+
+    wireResponse, err = s.Session.Do(req)
+
+    if wireResponse != nil {
+      wireResponse.Session = s.Session
+    }
+
+  }
+
+  return wireResponse, err
+}
+
+// GET /session/:sessionId/element/:id/location_in_view
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/location_in_view
+//
+// Determine an element's location on the screen once it has been scrolled into view.
+//
+//     Note:
+//       This is considered an internal command and should only be used to determine an element's location for correctly generating native events.
+//
+//     Returns:
+//       {x:number, y:number} The X and Y coordinates for the element on the page.
+func (s *WebElement) LocationInView() (wireResponse *WireResponse, err error) {
+
+  var req *http.Request
+  if req, err = s.Session.GetRequest(s.BuildElementUrl("/session/:sessionid/element/:id/location_in_view"),
+                              nil); err == nil {
+
+    wireResponse, err = s.Session.Do(req)
+
+    if wireResponse != nil {
+      wireResponse.Session = s.Session
+    }
+
+  }
+
+  return wireResponse, err
+}
+
+// GET /session/:sessionId/element/:id/name
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/name
+//
+// Query for an element's tag name.
+func (s *WebElement) Name() (wireResponse *WireResponse, err error) {
+
+  var req *http.Request
+  if req, err = s.Session.GetRequest(s.BuildElementUrl("/session/:sessionid/element/:id/name"),
                               nil); err == nil {
 
     wireResponse, err = s.Session.Do(req)
@@ -339,7 +419,6 @@ func (s *WebElement) Text() (wireResponse *WireResponse, err error) {
 
   return wireResponse, err
 }
-
 
 
 

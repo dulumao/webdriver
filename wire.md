@@ -68,13 +68,13 @@ wire_element.go
 - /session/:sessionId/element/:id/value
 - /session/:sessionId/element/:id/name
 - /session/:sessionId/element/:id/clear
-/session/:sessionId/element/:id/selected
-/session/:sessionId/element/:id/enabled
+- /session/:sessionId/element/:id/selected
+- /session/:sessionId/element/:id/enabled
 - /session/:sessionId/element/:id/attribute/:name
 /session/:sessionId/element/:id/equals/:other
-/session/:sessionId/element/:id/displayed
-/session/:sessionId/element/:id/location
-/session/:sessionId/element/:id/location_in_view
+- /session/:sessionId/element/:id/displayed
+- /session/:sessionId/element/:id/location
+- /session/:sessionId/element/:id/location_in_view
 /session/:sessionId/element/:id/size
 /session/:sessionId/element/:id/css/:propertyName
 
