@@ -187,3 +187,37 @@ func TestSubElements(t *testing.T) {
 
 }
 
+////////////////////////////////////////////////////////////////
+func TestElementName(t *testing.T) {
+
+  var err error
+  var wireResponse *WireResponse
+  // var wireSubResponse *WireResponse
+  // var wireSubResponse2 *WireResponse
+  var webElement *WebElement
+
+  for _, v := range sessions {
+    if _, err = v.Url("http://localhost:8080/sub-elements.html"); err == nil {
+
+      sleepForSeconds(1)
+
+      if wireResponse, err = v.Element("id", "main-div-id"); err == nil && wireResponse.Success() {
+        if webElement, err = wireResponse.WebElement(); err == nil && !webElement.Blank() {
+          if wireResponse, err = webElement.Name(); err == nil && wireResponse.Success() {
+            if wireResponse.StringValue() != "div" {
+              t.Error("StringValue() should equal div: ", wireResponse.StringValue())
+            }
+          } else {
+            t.Error(err, wireResponse)
+          }
+        } else {
+          t.Error(err, webElement)
+        }
+      } else {
+        t.Error(err, wireResponse)
+      }
+
+    }
+  }
+
+}

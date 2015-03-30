@@ -152,6 +152,29 @@ func (s *WebElement) Text() (wireResponse *WireResponse, err error) {
   return wireResponse, err
 }
 
+// GET /session/:sessionId/element/:id/name
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/name
+//
+// Query for an element's tag name.
+func (s *WebElement) Name() (wireResponse *WireResponse, err error) {
+
+  var req *http.Request
+  if req, err = s.Session.GetRequest(s.BuildElementUrl("/session/:sessionid/element/:id/name"),
+                              nil); err == nil {
+
+    wireResponse, err = s.Session.Do(req)
+
+    if wireResponse != nil {
+      wireResponse.Session = s.Session
+    }
+
+  }
+
+  return wireResponse, err
+}
+
+
 
 
 
