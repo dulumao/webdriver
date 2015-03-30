@@ -110,6 +110,28 @@ func (s *WebElement) Click() (wireResponse *WireResponse, err error) {
   return wireResponse, err
 }
 
+// GET /session/:sessionId/element/:id/css/:propertyName
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/css/:propertyName
+//
+// Query the value of an element's computed CSS property. The CSS property to query should be specified using the CSS property name, not the JavaScript property name (e.g. background-color instead of backgroundColor).
+func (s *WebElement) CssProperty(name string) (wireResponse *WireResponse, err error) {
+
+  var req *http.Request
+  if req, err = s.Session.GetRequest(s.BuildElementUrl(
+                              fmt.Sprintf("/session/:sessionid/element/:id/css/%v", name)), nil); err == nil {
+
+    wireResponse, err = s.Session.Do(req)
+
+    if wireResponse != nil {
+      wireResponse.Session = s.Session
+    }
+
+  }
+
+  return wireResponse, err
+}
+
 // GET /session/:sessionId/element/:id/displayed
 //
 // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/displayed
@@ -363,6 +385,31 @@ func (s *WebElement) Selected() (wireResponse *WireResponse, err error) {
 
   var req *http.Request
   if req, err = s.Session.GetRequest(s.BuildElementUrl("/session/:sessionid/element/:id/selected"),
+                              nil); err == nil {
+
+    wireResponse, err = s.Session.Do(req)
+
+    if wireResponse != nil {
+      wireResponse.Session = s.Session
+    }
+
+  }
+
+  return wireResponse, err
+}
+
+// GET /session/:sessionId/element/:id/size
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/size
+//
+// Determine an element's size in pixels. The size will be returned as a JSON object with width and height properties.
+//
+//     Returns:
+//       {width:number, height:number} The width and height of the element, in pixels.
+func (s *WebElement) Size() (wireResponse *WireResponse, err error) {
+
+  var req *http.Request
+  if req, err = s.Session.GetRequest(s.BuildElementUrl("/session/:sessionid/element/:id/size"),
                               nil); err == nil {
 
     wireResponse, err = s.Session.Do(req)

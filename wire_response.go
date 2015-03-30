@@ -11,6 +11,12 @@ import (
 type (
 
   // Represents an X,Y coordinate.
+  Size struct {
+    Height      int `json:"height"`
+    Width       int `json:"width"`
+  }
+
+  // Represents an X,Y coordinate.
   Point struct {
     X     int `json:"x"`
     Y     int `json:"y"`
@@ -92,7 +98,7 @@ func (s *WireResponse) WebElements() (value []*WebElement, err error) {
   return value, err
 }
 
-// Convenience method to unmarshal the json.RawMessage Value to a string.
+// Convenience method to unmarshal the json.RawMessage Value to a Point.
 func (s *WireResponse) Point() (value *Point, err error) {
 
   value = &Point{}
@@ -106,6 +112,19 @@ func (s *WireResponse) Point() (value *Point, err error) {
   return value, err
 }
 
+// Convenience method to unmarshal the json.RawMessage Value to a Size.
+func (s *WireResponse) Size() (value *Size, err error) {
+
+  value = &Size{}
+
+  if s.Value != nil {
+    err = json.Unmarshal(s.Value, value)
+  } else {
+    err = errors.New("WireResponse.Value is nil")
+  }
+
+  return value, err
+}
 
 
 

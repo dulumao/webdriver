@@ -598,3 +598,75 @@ func TestLocation(t *testing.T) {
   }
 
 }
+
+////////////////////////////////////////////////////////////////
+func TestSize(t *testing.T) {
+
+  var err error
+  var wireResponse *WireResponse
+  var webElement *WebElement
+  var size *Size
+
+  for _, v := range sessions {
+    if _, err = v.Url("http://localhost:8080/form01.html"); err == nil {
+
+      sleepForSeconds(1)
+
+      if wireResponse, err = v.Element("id", "comments"); err == nil && wireResponse.Success() {
+        if webElement, err = wireResponse.WebElement(); err == nil && !webElement.Blank() {
+
+          if wireResponse, err = webElement.Size(); err == nil && wireResponse.Success() {
+            if size, err = wireResponse.Size(); err != nil {
+              t.Error(err, size)
+            } else {
+              t.Log("size", size)
+            }
+
+          } else {
+            t.Error(err, wireResponse)
+          }
+
+        } else {
+          t.Error(err, webElement)
+        }
+      } else {
+        t.Error(err, wireResponse)
+      }
+
+    }
+  }
+
+}
+
+////////////////////////////////////////////////////////////////
+func TestCssProperty(t *testing.T) {
+
+  var err error
+  var wireResponse *WireResponse
+  var webElement *WebElement
+
+  for _, v := range sessions {
+    if _, err = v.Url("http://localhost:8080/form01.html"); err == nil {
+
+      sleepForSeconds(1)
+
+      if wireResponse, err = v.Element("id", "comments"); err == nil && wireResponse.Success() {
+        if webElement, err = wireResponse.WebElement(); err == nil && !webElement.Blank() {
+
+          if wireResponse, err = webElement.CssProperty("display"); err == nil && wireResponse.Success() {
+            if wireResponse.StringValue() != "inline-block" {
+              t.Error("StringValue() should equal inline-block: ", wireResponse.StringValue())
+            }
+          }
+
+        } else {
+          t.Error(err, webElement)
+        }
+      } else {
+        t.Error(err, wireResponse)
+      }
+
+    }
+  }
+
+}

@@ -75,8 +75,8 @@ wire_element.go
 - /session/:sessionId/element/:id/displayed
 - /session/:sessionId/element/:id/location
 - /session/:sessionId/element/:id/location_in_view
-/session/:sessionId/element/:id/size
-/session/:sessionId/element/:id/css/:propertyName
+- /session/:sessionId/element/:id/size
+- /session/:sessionId/element/:id/css/:propertyName
 
 
 wire_storage.go
