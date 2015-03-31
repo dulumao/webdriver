@@ -203,3 +203,31 @@ func TestNav01(t *testing.T) {
   }
 
 }
+
+
+////////////////////////////////////////////////////////////////
+func TestKeys(t *testing.T) {
+
+  var err error
+  var wireResponse *WireResponse
+
+  // TODO: think of a better way to test keys being sent
+  for _, v := range sessions {
+    if _, err = v.Url("http://localhost:8080/longpage.html"); err == nil {
+
+      sleepForSeconds(1)
+
+      // keys := []string{PageDown, PageDown, PageDown, PageDown}
+      keys := []string{Control, End}
+
+      if wireResponse, err = v.Keys(keys); err == nil && wireResponse.Success() {
+
+      sleepForSeconds(4)
+      } else {
+        t.Error(err, wireResponse)
+      }
+
+    }
+  }
+
+}

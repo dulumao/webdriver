@@ -105,6 +105,24 @@ func (s *Wire) Forward() (wireResponse *WireResponse, err error) {
   return wireResponse, err
 }
 
+// POST /session/:sessionId/keys
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/keys
+//
+// Send a sequence of key strokes to the active element. This command is similar to the send keys command in every aspect except the implicit termination: The modifiers are not released at the end of the call. Rather, the state of the modifier keys is kept between calls, so mouse interactions can be performed while modifier keys are depressed.
+//
+func (s *Wire) Keys(value []string) (wireResponse *WireResponse, err error) {
+
+  var req *http.Request
+  if req, err = s.PostRequest("/session/:sessionid/keys", &Params{"value": value}); err == nil {
+
+    wireResponse, err = s.Do(req)
+
+  }
+
+  return wireResponse, err
+}
+
 // POST  /session/:sessionId/refresh
 //
 // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/refresh

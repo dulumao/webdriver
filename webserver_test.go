@@ -16,6 +16,7 @@ func startWebServer() {
   http.HandleFunc("/frame.html", handlerFrame)
   http.HandleFunc("/form01.html", handlerForm01)
   http.HandleFunc("/form01-post.html", handlerForm01Post)
+  http.HandleFunc("/longpage.html", handlerLongPage)
   http.HandleFunc("/sub-element.html", handlerSubElement)
   http.HandleFunc("/sub-elements.html", handlerSubElements)
   http.HandleFunc("/source.html", handlerSource)
@@ -78,7 +79,15 @@ func handlerForm01(w http.ResponseWriter, r *http.Request) {
 func handlerForm01Post(w http.ResponseWriter, r *http.Request) {
 
   t, _ := template.ParseFiles("templates/form01-post.html")
-fmt.Println("................................ someone clicked me")
+  t.Execute(w, nil)
+
+}
+
+////////////////////////////////////////////////////////////////
+func handlerLongPage(w http.ResponseWriter, r *http.Request) {
+
+  t, _ := template.ParseFiles("templates/longpage.html")
+
   t.Execute(w, nil)
 
 }
