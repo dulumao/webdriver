@@ -276,6 +276,152 @@ func TestGeoLocation(t *testing.T) {
 }
 
 
+////////////////////////////////////////////////////////////////
+func TestCookie(t *testing.T) {
+
+  var err error
+  var wireResponse *WireResponse
+  var cookies []*Cookie
+
+  // TODO: why chromedriver doesn't work and firefox does
+  for _, v := range sessions {
+    if _, err = v.Url("http://localhost:8080/cookies.html"); err == nil {
+    // if _, err = v.Url("http://www.google.com/"); err == nil {
+
+      sleepForSeconds(1)
+
+      if wireResponse, err = v.Cookie(); err == nil && wireResponse.Success() {
+
+        if cookies, err = wireResponse.Cookies(); err == nil {
+
+          if len(cookies) <= 0 {
+            t.Error("Server should have at least one cookie", wireResponse, cookies)
+          }
+
+        } else {
+          t.Error(err, wireResponse)
+        }
+
+      } else {
+        t.Error(err, wireResponse)
+      }
+
+    }
+  }
+
+}
+
+////////////////////////////////////////////////////////////////
+func TestSetCookie(t *testing.T) {
+
+  var err error
+  var wireResponse *WireResponse
+  // var cookies []*Cookie
+
+  // TODO: complete the testing
+  for _, v := range sessions {
+    if _, err = v.Url("http://localhost:8080/index.html"); err == nil {
+    // if _, err = v.Url("http://www.google.com/"); err == nil {
+
+      sleepForSeconds(1)
+
+      cookie := &Cookie{
+                   Domain: "localhost",
+                  // Expires: time.Date(2020, 11, 23, 1, 5, 3, 0, time.UTC),
+                     Name: "setmain",
+                     Path: "/",
+                    Value: "this-is-my-cookie-value-not-hard-to-decrypt",
+                }
+
+      if wireResponse, err = v.SetCookie(cookie); err == nil && wireResponse.Success() {
+
+        // if cookies, err = wireResponse.Cookies(); err == nil {
+
+        //   if len(cookies) <= 0 {
+        //     t.Error("Server should have at least one cookie", wireResponse, cookies)
+        //   }
+
+        // } else {
+        //   t.Error(err, wireResponse)
+        // }
+
+      } else {
+        t.Error(err, wireResponse)
+      }
+
+    }
+  }
+
+}
+
+////////////////////////////////////////////////////////////////
+func TestDeleteCookies(t *testing.T) {
+
+  var err error
+  var wireResponse *WireResponse
+
+  // TODO: complete the testing
+  for _, v := range sessions {
+    if _, err = v.Url("http://localhost:8080/index.html"); err == nil {
+    // if _, err = v.Url("http://www.google.com/"); err == nil {
+
+      sleepForSeconds(1)
+
+      if wireResponse, err = v.DeleteCookies(); err == nil && wireResponse.Success() {
+
+        // if cookies, err = wireResponse.Cookies(); err == nil {
+
+        //   if len(cookies) <= 0 {
+        //     t.Error("Server should have at least one cookie", wireResponse, cookies)
+        //   }
+
+        // } else {
+        //   t.Error(err, wireResponse)
+        // }
+
+      } else {
+        t.Error(err, wireResponse)
+      }
+
+    }
+  }
+
+}
+
+////////////////////////////////////////////////////////////////
+func TestDeleteCookie(t *testing.T) {
+
+  var err error
+  var wireResponse *WireResponse
+
+  // TODO: complete the testing
+  for _, v := range sessions {
+    if _, err = v.Url("http://localhost:8080/index.html"); err == nil {
+    // if _, err = v.Url("http://www.google.com/"); err == nil {
+
+      sleepForSeconds(1)
+
+      if wireResponse, err = v.DeleteCookie("main"); err == nil && wireResponse.Success() {
+
+        // if cookies, err = wireResponse.Cookies(); err == nil {
+
+        //   if len(cookies) <= 0 {
+        //     t.Error("Server should have at least one cookie", wireResponse, cookies)
+        //   }
+
+        // } else {
+        //   t.Error(err, wireResponse)
+        // }
+
+      } else {
+        t.Error(err, wireResponse)
+      }
+
+    }
+  }
+
+}
+
 
 
 

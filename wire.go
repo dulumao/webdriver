@@ -3,7 +3,7 @@ package webdriver
 import (
   // "bytes"
   // "encoding/json"
-  // "fmt"
+  "fmt"
   "net/http"
 )
 
@@ -43,6 +43,78 @@ func (s *Wire) Back() (wireResponse *WireResponse, err error) {
 
   var req *http.Request
   if req, err = s.PostRequest("/session/:sessionid/back", nil); err == nil {
+
+    wireResponse, err = s.Do(req)
+
+  }
+
+  return wireResponse, err
+}
+
+// GET /session/:sessionId/cookie
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie
+//
+// Retrieve all cookies visible to the current page.
+//
+func (s *Wire) Cookie() (wireResponse *WireResponse, err error) {
+
+  var req *http.Request
+  if req, err = s.GetRequest("/session/:sessionid/cookie", nil); err == nil {
+
+    wireResponse, err = s.Do(req)
+
+  }
+
+  return wireResponse, err
+}
+
+// DELETE /session/:sessionId/cookie/:name
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie/:name
+//
+// Delete the cookie with the given name. This command should be a no-op if there is no such cookie visible to the current page.
+//
+func (s *Wire) DeleteCookie(name string) (wireResponse *WireResponse, err error) {
+
+  var req *http.Request
+  if req, err = s.DeleteRequest(fmt.Sprintf("/session/:sessionid/cookie/%v", name), nil); err == nil {
+
+    wireResponse, err = s.Do(req)
+
+  }
+
+  return wireResponse, err
+}
+
+// DELETE /session/:sessionId/cookie
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie
+//
+// Delete all cookies visible to the current page.
+//
+func (s *Wire) DeleteCookies() (wireResponse *WireResponse, err error) {
+
+  var req *http.Request
+  if req, err = s.DeleteRequest("/session/:sessionid/cookie", nil); err == nil {
+
+    wireResponse, err = s.Do(req)
+
+  }
+
+  return wireResponse, err
+}
+
+// POST /session/:sessionId/cookie
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie
+//
+// Set a cookie. If the cookie path is not specified, it should be set to "/". Likewise, if the domain is omitted, it should default to the current page's domain.
+//
+func (s *Wire) SetCookie(value *Cookie) (wireResponse *WireResponse, err error) {
+
+  var req *http.Request
+  if req, err = s.PostRequest("/session/:sessionid/cookie", &Params{"cookie": value}); err == nil {
 
     wireResponse, err = s.Do(req)
 

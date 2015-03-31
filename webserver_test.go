@@ -5,12 +5,14 @@ import (
   // "testing"
   "html/template"
   "net/http"
+  "time"
 )
 
 ////////////////////////////////////////////////////////////////
 func startWebServer() {
 
   http.HandleFunc("/", handlerIndex)
+  http.HandleFunc("/cookies.html", handlerCookies)
   http.HandleFunc("/element.html", handlerElement)
   http.HandleFunc("/elements.html", handlerElements)
   http.HandleFunc("/frame.html", handlerFrame)
@@ -34,6 +36,26 @@ func startWebServer() {
 func handlerIndex(w http.ResponseWriter, r *http.Request) {
 
   t, _ := template.ParseFiles("templates/index.html")
+
+  t.Execute(w, nil)
+
+}
+
+////////////////////////////////////////////////////////////////
+func handlerCookies(w http.ResponseWriter, r *http.Request) {
+
+  t, _ := template.ParseFiles("templates/cookies.html")
+
+  http.SetCookie(w,
+    &http.Cookie{
+       Domain: "localhost",
+      Expires: time.Date(2020, 11, 23, 1, 5, 3, 0, time.UTC),
+     HttpOnly: true,
+         Name: "main",
+         Path: "/",
+        Value: "this-is-my-cookie-value-not-hard-to-decrypt",
+       Secure: false,
+    })
 
   t.Execute(w, nil)
 

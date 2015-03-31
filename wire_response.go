@@ -10,6 +10,16 @@ import (
 
 type (
 
+  // Represents a cookie.
+  Cookie struct {
+    Domain string `json:"domain"`
+    Expiry uint   `json:"expiry"`
+    Name   string `json:"name"`
+    Path   string `json:"path"`
+    Secure bool   `json:"secure"`
+    Value  string `json:"value"`
+  }
+
   // Geo location.
   Location struct {
     Altitude        int `json:"altitude"`
@@ -147,6 +157,19 @@ func (s *WireResponse) Size() (value *Size, err error) {
   return value, err
 }
 
+// Convenience method to unmarshal the json.RawMessage Value to a Cookie.
+func (s *WireResponse) Cookies() (value []*Cookie, err error) {
+
+  // value = &Cookie{}
+
+  if s.Value != nil {
+    err = json.Unmarshal(s.Value, &value)
+  } else {
+    err = errors.New("WireResponse.Value is nil")
+  }
+
+  return value, err
+}
 
 
 
