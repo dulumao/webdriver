@@ -11,7 +11,7 @@ type (
     NewSession(capabilities ...*Capabilities) (session *Session, err error)
     Run() error
     SetDefaults() error
-
+    GetSessions() *Sessions
   }
 
 )

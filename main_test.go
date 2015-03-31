@@ -42,7 +42,9 @@ func startChrome() {
 
   if err := clientChrome.Run(); err == nil {
 
-    clients = append(clients, clientChrome)
+    if !env_circle && !env_travis {
+      clients = append(clients, clientChrome)
+    }
 
     sleepForSeconds(2)
 

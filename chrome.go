@@ -138,7 +138,9 @@ func (s *Chrome) Close() (err error) {
   return err
 }
 
-
+func (s *Chrome) GetSessions() (*Sessions) {
+  return s.Sessions
+}
 
 
 

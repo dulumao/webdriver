@@ -170,7 +170,10 @@ func (s *Firefox) defaultUserJS() (values map[string]interface{}) {
           "webdriver_assume_untrusted_issuer":                      "true",
           "webdriver_enable_native_events":                         "false",
           "webdriver_unexpected_alert_behaviour":                   "\"dismiss\"",
+// "webdriver.firefox.logfile": "/tmp/firefox.log",
         }
+
+
 
   return values
 }

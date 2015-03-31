@@ -208,6 +208,9 @@ func (s *Firefox) Close() (err error) {
   return err
 }
 
+func (s *Firefox) GetSessions() (*Sessions) {
+  return s.Sessions
+}
 
 
 
