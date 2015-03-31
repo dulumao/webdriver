@@ -22,6 +22,40 @@ func (s *Wire) DeleteWindow() (wireResponse *WireResponse, err error) {
   return wireResponse, err
 }
 
+// POST /session/:sessionId/frame
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/frame
+//
+// Change focus to another frame on the page. If the frame id is null, the server should switch to the page's default content.
+func (s *Wire) Frame(id string) (wireResponse *WireResponse, err error) {
+
+  var req *http.Request
+  if req, err = s.PostRequest("/session/:sessionid/frame", &Params{"id": id}); err == nil {
+
+    wireResponse, err = s.Do(req)
+
+  }
+
+  return wireResponse, err
+}
+
+// POST /session/:sessionId/frame/parent
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/frame/parent
+//
+// Change focus to the parent context. If the current context is the top level browsing context, the context remains unchanged.
+func (s *Wire) FrameParent() (wireResponse *WireResponse, err error) {
+
+  var req *http.Request
+  if req, err = s.PostRequest("/session/:sessionid/frame/parent", nil); err == nil {
+
+    wireResponse, err = s.Do(req)
+
+  }
+
+  return wireResponse, err
+}
+
 // POST /session/:sessionId/window/:windowHandle/maximize
 //
 // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window/:windowHandle/maximize

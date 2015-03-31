@@ -48,8 +48,8 @@ wire_ime.go
 wire_window.go
 - /session/:sessionId/window_handle
 - /session/:sessionId/window_handles
-/session/:sessionId/frame
-/session/:sessionId/frame/parent
+- /session/:sessionId/frame
+- /session/:sessionId/frame/parent
 - /session/:sessionId/window
 - /session/:sessionId/window/:windowHandle/size
 - /session/:sessionId/window/:windowHandle/position

@@ -230,6 +230,37 @@ func TestWindowPosition(t *testing.T) {
 }
 
 
+////////////////////////////////////////////////////////////////
+func TestFrame(t *testing.T) {
+
+  var err error
+  var wireResponse *WireResponse
+
+  // TODO: find out why firefox server 500
+  // t.Skip()
+
+  for _, v := range sessions {
+    if _, err = v.Url("http://localhost:8080/frame.html"); err == nil {
+
+      sleepForSeconds(1)
+
+      if wireResponse, err = v.Frame("main-frame"); err == nil && wireResponse.Success() {
+
+        if wireResponse, err = v.FrameParent(); err == nil && wireResponse.Success() {
+
+        } else {
+          t.Error(err, wireResponse)
+        }
+
+      } else {
+        t.Error(err, wireResponse)
+      }
+
+    }
+  }
+
+}
+
 
 
 

@@ -13,6 +13,7 @@ func startWebServer() {
   http.HandleFunc("/", handlerIndex)
   http.HandleFunc("/element.html", handlerElement)
   http.HandleFunc("/elements.html", handlerElements)
+  http.HandleFunc("/frame.html", handlerFrame)
   http.HandleFunc("/form01.html", handlerForm01)
   http.HandleFunc("/form01-post.html", handlerForm01Post)
   http.HandleFunc("/sub-element.html", handlerSubElement)
@@ -50,6 +51,15 @@ func handlerElement(w http.ResponseWriter, r *http.Request) {
 func handlerElements(w http.ResponseWriter, r *http.Request) {
 
   t, _ := template.ParseFiles("templates/elements.html")
+
+  t.Execute(w, nil)
+
+}
+
+////////////////////////////////////////////////////////////////
+func handlerFrame(w http.ResponseWriter, r *http.Request) {
+
+  t, _ := template.ParseFiles("templates/frame.html")
 
   t.Execute(w, nil)
 
