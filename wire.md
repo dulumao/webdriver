@@ -52,8 +52,8 @@ wire_window.go
 /session/:sessionId/frame/parent
 - /session/:sessionId/window
 - /session/:sessionId/window/:windowHandle/size
-/session/:sessionId/window/:windowHandle/position
-/session/:sessionId/window/:windowHandle/maximize
+- /session/:sessionId/window/:windowHandle/position
+- /session/:sessionId/window/:windowHandle/maximize
 
 wire_element.go
 - /session/:sessionId/element
