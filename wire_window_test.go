@@ -5,7 +5,7 @@ import (
 )
 
 ////////////////////////////////////////////////////////////////
-func TestWindowMF(t *testing.T) {
+func TestWindow(t *testing.T) {
 
   var err error
   var wireResponse *WireResponse
@@ -115,6 +115,54 @@ func TestWindowHandles(t *testing.T) {
 
 }
 
+////////////////////////////////////////////////////////////////
+func TestWindowSize(t *testing.T) {
+
+  var err error
+  var size *Size
+  var windowHandle string
+  var wireResponse *WireResponse
+
+  for _, v := range sessions {
+    if _, err = v.Url("http://localhost:8080/form01.html"); err == nil {
+
+      sleepForSeconds(1)
+
+      if wireResponse, err = v.WindowHandle(); err == nil && wireResponse.Success() {
+        if wireResponse.StringValue() != "" {
+
+          windowHandle = wireResponse.StringValue()
+
+          if wireResponse, err = v.Size(windowHandle); err == nil && wireResponse.Success() {
+            if size, err = wireResponse.Size(); err == nil {
+
+              size.Height = 500
+              size.Width = 500
+
+              if wireResponse, err = v.SetSize(windowHandle, size); err == nil && wireResponse.Success() {
+              } else {
+                t.Error(err, wireResponse)
+              }
+
+            } else {
+              t.Error(err, wireResponse)
+            }
+
+          } else {
+            t.Error(err, wireResponse)
+          }
+
+        } else {
+          t.Error(err, wireResponse, "window handle seems to be empty")
+        }
+      } else {
+        t.Error(err, wireResponse)
+      }
+
+    }
+  }
+
+}
 
 
 

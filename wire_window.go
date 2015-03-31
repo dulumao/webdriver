@@ -1,8 +1,47 @@
 package webdriver
 
 import (
+  "fmt"
   "net/http"
 )
+
+// POST /session/:sessionId/window/:windowHandle/size
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window/:windowHandle/size
+//
+// Change the size of the specified window. If the :windowHandle URL parameter is "current", the currently active window will be resized.
+func (s *Wire) SetSize(windowHandle string, size *Size) (wireResponse *WireResponse, err error) {
+
+  var req *http.Request
+  if req, err = s.PostRequest(fmt.Sprintf("/session/:sessionid/window/%v/size", windowHandle),
+                                  &Params{"height": size.Height, "width": size.Width}); err == nil {
+
+    wireResponse, err = s.Do(req)
+
+  }
+
+  return wireResponse, err
+}
+
+// GET /session/:sessionId/window/:windowHandle/size
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window/:windowHandle/size
+//
+// Get the size of the specified window. If the :windowHandle URL parameter is "current", the size of the currently active window will be returned.
+//
+//     Returns:
+//       {width: number, height: number} The size of the window.
+func (s *Wire) Size(windowHandle string) (wireResponse *WireResponse, err error) {
+
+  var req *http.Request
+  if req, err = s.GetRequest(fmt.Sprintf("/session/:sessionid/window/%v/size", windowHandle), nil); err == nil {
+
+    wireResponse, err = s.Do(req)
+
+  }
+
+  return wireResponse, err
+}
 
 // POST /session/:sessionId/window
 //
