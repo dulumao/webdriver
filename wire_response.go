@@ -10,16 +10,23 @@ import (
 
 type (
 
-  // Represents an X,Y coordinate.
-  Size struct {
-    Height      int `json:"height"`
-    Width       int `json:"width"`
+  // Geo location.
+  Location struct {
+    Altitude        int `json:"altitude"`
+    Latitude        int `json:"latitude"`
+    Longitude       int `json:"longitude"`
   }
 
   // Represents an X,Y coordinate.
   Point struct {
     X     int `json:"x"`
     Y     int `json:"y"`
+  }
+
+  // Represents an X,Y coordinate.
+  Size struct {
+    Height      int `json:"height"`
+    Width       int `json:"width"`
   }
 
   // the standard Json returned from a server
@@ -91,6 +98,20 @@ func (s *WireResponse) WebElements() (value []*WebElement, err error) {
     for _, v := range value {
       v.Session = s.Session
     }
+  } else {
+    err = errors.New("WireResponse.Value is nil")
+  }
+
+  return value, err
+}
+
+// Convenience method to unmarshal the json.RawMessage Value to a Location.
+func (s *WireResponse) Location() (value *Location, err error) {
+
+  value = &Location{}
+
+  if s.Value != nil {
+    err = json.Unmarshal(s.Value, value)
   } else {
     err = errors.New("WireResponse.Value is nil")
   }

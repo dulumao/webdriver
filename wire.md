@@ -13,7 +13,7 @@ wire.go
 /session/:sessionId/cookie/:name
 - /session/:sessionId/forward
 - /session/:sessionId/keys
-/session/:sessionId/location
+- /session/:sessionId/location
 - /session/:sessionId/refresh
 - /session/:sessionId/source
 - /session/:sessionId/title

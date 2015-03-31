@@ -123,6 +123,42 @@ func (s *Wire) Keys(value []string) (wireResponse *WireResponse, err error) {
   return wireResponse, err
 }
 
+// GET /session/:sessionId/location
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/location
+//
+// Get the current geo location.
+//
+func (s *Wire) Location() (wireResponse *WireResponse, err error) {
+
+  var req *http.Request
+  if req, err = s.GetRequest("/session/:sessionid/location", nil); err == nil {
+
+    wireResponse, err = s.Do(req)
+
+  }
+
+  return wireResponse, err
+}
+
+// POST /session/:sessionId/location
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/location
+//
+// Set the current geo location.
+//
+func (s *Wire) SetLocation(value *Location) (wireResponse *WireResponse, err error) {
+
+  var req *http.Request
+  if req, err = s.PostRequest("/session/:sessionid/location", &Params{"location": value}); err == nil {
+
+    wireResponse, err = s.Do(req)
+
+  }
+
+  return wireResponse, err
+}
+
 // POST  /session/:sessionId/refresh
 //
 // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/refresh
