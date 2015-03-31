@@ -46,8 +46,8 @@ wire_ime.go
 /session/:sessionId/ime/activate
 
 wire_window.go
-/session/:sessionId/window_handle
-/session/:sessionId/window_handles
+- /session/:sessionId/window_handle
+- /session/:sessionId/window_handles
 /session/:sessionId/frame
 /session/:sessionId/frame/parent
 /session/:sessionId/window
