@@ -7,14 +7,19 @@ type (
 
   // A webdriver client that supports the Json Wire Protocol.  All clients should implement this interface.
   Client interface {
+
     Close() error
-    Session(capabilities ...*Capabilities) (session *Session, err error)
+
+    GetSessions() []*Session
+
     Run() error
+
+    Session(capabilities ...*Capabilities) (session *Session, err error)
+
     SetDefaults() error
-    // GetSessions() *Sessions
 
     Status() *Wire
+
   }
 
 )
-

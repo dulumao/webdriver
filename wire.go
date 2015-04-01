@@ -90,6 +90,16 @@ func (s *Wire) BuildFullUrl(url string) string {
 //   return wireResponse, err
 // }
 
+// Closes all of the active sessions.
+func (s *Wire) CloseSessions() *Wire {
+
+  for _, v := range s.Sessions {
+    v.DeleteSession()
+  }
+
+  return s
+}
+
 // // GET /session/:sessionId/cookie
 // //
 // // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie
@@ -175,16 +185,6 @@ func (s *Wire) DeleteSession() *Wire {
 
     s.Response, s.Error = s.Do(req)
 
-  }
-
-  return s
-}
-
-// Closes all of the active sessions.
-func (s *Wire) CloseSessions() *Wire {
-
-  for _, v := range s.Sessions {
-    v.DeleteSession()
   }
 
   return s
@@ -300,126 +300,6 @@ func (s *Wire) CloseSessions() *Wire {
 // }
 
 
-// // GET /sessions
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/sessions
-// //
-// // Returns a list of the currently active sessions. Each session will be returned as a list of JSON objects with the following keys:
-// //
-// //    Key              Type      Description
-// //    id               string    The session ID.
-// //    capabilities     object    An object describing the session's capabilities.
-// //
-// //    Returns:
-// //    {Array.<Object>} A list of the currently active sessions.
-// func (s *Wire) Sessions() (wireResponse *WireResponse, err error) {
-
-//   if req, err := s.GetRequest("/sessions", nil); err == nil {
-
-//     wireResponse, err = s.Do(req)
-
-//   }
-
-//   return wireResponse, err
-// }
-
-// // GET /session/:sessionId/source
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#GET_/session/:sessionId/source
-// //
-// // Get and return the browser's current page source as HTML.
-// // wireResponse.StringValue() will contain the entire source as HTML.
-// //
-// // Source will return a wireResponse struct.  Value will contain a json.RawMessage value
-// // returned from the server.  Firefox and chrome return different encodings, so, the raw
-// // bytes are left "as is" from the server.  You can use wireResponse.UnmarshalValue() to attempt
-// // to decode the value into a normal string.
-// func (s *Wire) Source() (wireResponse *WireResponse, err error) {
-
-//   if req, err := s.GetRequest("/session/:sessionid/source", nil); err == nil {
-
-//     wireResponse, err = s.Do(req)
-
-//   }
-
-//   return wireResponse, err
-// }
-
-// GET /status
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#GET_/status
-//
-// Query the status of the webdriver server.
-// func (s *Wire) Status() (wireResponse *WireResponse, err error) {
-func (s *Wire) Status() *Wire {
-
-  var req *http.Request
-  if req, s.Error = s.GetRequest("/status", nil); s.Error == nil {
-
-    s.Response, s.Error = s.Do(req)
-
-  }
-
-  return s
-}
-
-// Checks the values of the response from a webdriver server.  If the
-// http response code is 200 and the Status from the webdriver is 0, then,
-// the request is considered successful.
-func (s *Wire) Success() bool {
-  return s.Error == nil && s.Response.HttpStatusCode == 200 && s.Response.Status == 0
-}
-
-// Extracts a WireResponse.Value as a string.
-func (s *Wire) StringValue() (value string, err error) {
-
-  if s.Success() && s.Response.Value != nil {
-    value = string(bytes.Trim(s.Response.Value, "{}\""))
-  }
-
-  return value, s.Error
-}
-
-
-// GET /session/:sessionId/title
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#GET_/session/:sessionId/title
-//
-// Get the current page title.
-func (s *Wire) Title() *Wire {
-
-  var req *http.Request
-  if req, s.Error = s.GetRequest("/session/:sessionid/title", nil); s.Error == nil {
-
-    s.Response, s.Error = s.Do(req)
-
-  }
-
-  return s
-}
-
-// POST  /session/:sessionId/url
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/url
-//
-// Navigate to a new URL.
-//
-// Browser should navigate to the given url.  url is any valid http url
-// that you would normally enter in a browser.
-// 
-//      url - {string} The URL to navigate to.
-func (s *Wire) Url(url string) *Wire {
-
-  var req *http.Request
-  if req, s.Error = s.PostRequest("/session/:sessionid/url", &Params{"url": url}); s.Error == nil {
-
-    s.Response, s.Error = s.Do(req)
-
-  }
-
-  return s
-}
-
 // POST /session
 //
 // https://code.google.com/p/selenium/wiki/JsonWireProtocol#POST_/session
@@ -496,3 +376,123 @@ func (s *Wire) Session(values ...*Capabilities) (session *Session, err error) {
 
   return session, s.Error
 }
+
+// // GET /sessions
+// //
+// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/sessions
+// //
+// // Returns a list of the currently active sessions. Each session will be returned as a list of JSON objects with the following keys:
+// //
+// //    Key              Type      Description
+// //    id               string    The session ID.
+// //    capabilities     object    An object describing the session's capabilities.
+// //
+// //    Returns:
+// //    {Array.<Object>} A list of the currently active sessions.
+// func (s *Wire) Sessions() (wireResponse *WireResponse, err error) {
+
+//   if req, err := s.GetRequest("/sessions", nil); err == nil {
+
+//     wireResponse, err = s.Do(req)
+
+//   }
+
+//   return wireResponse, err
+// }
+
+// // GET /session/:sessionId/source
+// //
+// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#GET_/session/:sessionId/source
+// //
+// // Get and return the browser's current page source as HTML.
+// // wireResponse.StringValue() will contain the entire source as HTML.
+// //
+// // Source will return a wireResponse struct.  Value will contain a json.RawMessage value
+// // returned from the server.  Firefox and chrome return different encodings, so, the raw
+// // bytes are left "as is" from the server.  You can use wireResponse.UnmarshalValue() to attempt
+// // to decode the value into a normal string.
+// func (s *Wire) Source() (wireResponse *WireResponse, err error) {
+
+//   if req, err := s.GetRequest("/session/:sessionid/source", nil); err == nil {
+
+//     wireResponse, err = s.Do(req)
+
+//   }
+
+//   return wireResponse, err
+// }
+
+// GET /status
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#GET_/status
+//
+// Query the status of the webdriver server.
+// func (s *Wire) Status() (wireResponse *WireResponse, err error) {
+func (s *Wire) Status() *Wire {
+
+  var req *http.Request
+  if req, s.Error = s.GetRequest("/status", nil); s.Error == nil {
+
+    s.Response, s.Error = s.Do(req)
+
+  }
+
+  return s
+}
+
+// Extracts a WireResponse.Value as a string.
+func (s *Wire) StringValue() (value string, err error) {
+
+  if s.Success() && s.Response.Value != nil {
+    value = string(bytes.Trim(s.Response.Value, "{}\""))
+  }
+
+  return value, s.Error
+}
+
+// Checks the values of the response from a webdriver server.  If the
+// http response code is 200 and the Status from the webdriver is 0, then,
+// the request is considered successful.
+func (s *Wire) Success() bool {
+  return s.Error == nil && s.Response.HttpStatusCode == 200 && s.Response.Status == 0
+}
+
+// GET /session/:sessionId/title
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#GET_/session/:sessionId/title
+//
+// Get the current page title.
+func (s *Wire) Title() *Wire {
+
+  var req *http.Request
+  if req, s.Error = s.GetRequest("/session/:sessionid/title", nil); s.Error == nil {
+
+    s.Response, s.Error = s.Do(req)
+
+  }
+
+  return s
+}
+
+// POST  /session/:sessionId/url
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/url
+//
+// Navigate to a new URL.
+//
+// Browser should navigate to the given url.  url is any valid http url
+// that you would normally enter in a browser.
+// 
+//      url - {string} The URL to navigate to.
+func (s *Wire) Url(url string) *Wire {
+
+  var req *http.Request
+  if req, s.Error = s.PostRequest("/session/:sessionid/url", &Params{"url": url}); s.Error == nil {
+
+    s.Response, s.Error = s.Do(req)
+
+  }
+
+  return s
+}
+
