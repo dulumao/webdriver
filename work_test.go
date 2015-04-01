@@ -2,40 +2,25 @@ package webdriver
 
 import (
   // "log"
-  "testing"
+  // "testing"
 )
 
-////////////////////////////////////////////////////////////////
-func TestWork(t *testing.T) {
+// ////////////////////////////////////////////////////////////////
+// func TestWork(t *testing.T) {
 
-  var client Client
-  // var wire *Wire
+//   for _, session := range getSessions("chrome") {
+//     if session.Url("http://localhost:8080/index.html").Title(); session.Error == nil {
+//       if title, err := session.StringValue(); err == nil {
+//         if title != "index" {
+//           t.Error("title should equal index: ", title)
+//         }
+//       } else {
+//         t.Error("could not get title: ", err)
+//       }
+//     } else {
+//       t.Error("could not get title: ", session.Error)
+//     }
 
-  client = &Chrome{
-                      LogPath: "support/drivers/chromedriver.log",
-                      PathExec: "support/drivers/chromedriver",
-                      Verbose: true,
-                    }
+//   }
 
-  if err := client.Run(); err == nil {
-
-    defer client.Close()
-
-    if value, err := client.Status().StringValue(); err == nil {
-      t.Log("success!!", value)
-    } else {
-      t.Error("error: ", err)
-    }
-
-    if session, err := client.Session(); err == nil {
-      if session.Url("http://www.google.com/").Title(); session.Error == nil {
-        if title, err := session.StringValue(); err == nil {
-          t.Log("title", title)
-        }
-      }
-    }
-
-  }
-
-
-}
+// }

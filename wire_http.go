@@ -6,7 +6,6 @@ import (
   "fmt"
   "io/ioutil"
   "net/http"
-//   "strings"
 )
 
 // Convenience method that wraps NewRequest()

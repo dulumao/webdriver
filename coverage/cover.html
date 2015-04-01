@@ -56,25 +56,11 @@
 				
 				<option value="file0">github.com/webdriver/chrome.go (100.0%)</option>
 				
-				<option value="file1">github.com/webdriver/firefox.go (100.0%)</option>
+				<option value="file1">github.com/webdriver/tcp.go (100.0%)</option>
 				
-				<option value="file2">github.com/webdriver/firefox_extension.go (100.0%)</option>
+				<option value="file2">github.com/webdriver/wire.go (100.0%)</option>
 				
-				<option value="file3">github.com/webdriver/firefox_profile.go (100.0%)</option>
-				
-				<option value="file4">github.com/webdriver/session.go (100.0%)</option>
-				
-				<option value="file5">github.com/webdriver/tcp.go (100.0%)</option>
-				
-				<option value="file6">github.com/webdriver/web_element.go (100.0%)</option>
-				
-				<option value="file7">github.com/webdriver/wire.go (100.0%)</option>
-				
-				<option value="file8">github.com/webdriver/wire_element.go (100.0%)</option>
-				
-				<option value="file9">github.com/webdriver/wire_http.go (100.0%)</option>
-				
-				<option value="file10">github.com/webdriver/wire_response.go (100.0%)</option>
+				<option value="file3">github.com/webdriver/wire_http.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -114,8 +100,6 @@ type (
     Verbose bool
     WhiteList string
 
-    *Sessions
-
     *Wire
 
   }
@@ -130,10 +114,7 @@ func (s *Chrome) SetDefaults() (err error) <span class="cov8" title="1">{
   <span class="cov8" title="1">if s.Port == 0 </span><span class="cov8" title="1">{s.Port = 9515}</span>
   <span class="cov8" title="1">if s.Timeout == 0 </span><span class="cov8" title="1">{s.Timeout = 60}</span>
 
-  <span class="cov8" title="1">s.Sessions = &amp;Sessions{}
-  s.Sessions.SetDefaults()
-  s.Wire = &amp;Wire{}
-  s.Wire.SetDefaults()
+  <span class="cov8" title="1">s.Wire = &amp;Wire{}
 
   return err</span>
 }
@@ -165,7 +146,6 @@ func (s *Chrome) Run() (err error) <span class="cov8" title="1">{
 
     // shouldn't make a difference if UrlBase is blank or not
     s.BaseUrl = fmt.Sprintf("http://%v:%v%v", s.Host, s.Port, s.UrlBase)
-    s.Sessions.BaseUrl = fmt.Sprintf("http://%v:%v%v", s.Host, s.Port, s.UrlBase)
 
     err = waitForConnect(s.Host, s.Port, s.Timeout * float64(time.Second))
 
@@ -218,17 +198,17 @@ func (s *Chrome) Close() (err error) <span class="cov8" title="1">{
 
   if s.Process != nil </span><span class="cov8" title="1">{
 
-    for _, v := range s.Sessions.List </span><span class="cov8" title="1">{
-      v.Delete()
-    }</span>
+    s.CloseSessions()
 
-    <span class="cov8" title="1">s.Process.Kill()</span>
-  }
+    s.Process.Kill()
+  }</span>
 
   <span class="cov8" title="1">return err</span>
 }
 
-
+func (s *Chrome) GetSessions() ([]*Session) <span class="cov8" title="1">{
+  return s.Sessions
+}</span>
 
 
 
@@ -256,913 +236,6 @@ func (s *Chrome) Close() (err error) <span class="cov8" title="1">{
 </pre>
 		
 		<pre class="file" id="file1" style="display: none">package webdriver
-
-import (
-  "errors"
-  "fmt"
-  "log"
-  "io/ioutil"
-  "net"
-  "os"
-  "os/exec"
-  "os/user"
-  "path/filepath"
-  "strings"
-  "time"
-)
-
-type (
-
-  Firefox struct {
-    // will probably always be localhost and could have just hard coded
-    // it throughout the lib, however, using a struct
-    // field in case future may require changing it
-    DirPermissions os.FileMode
-    Extension *Extension
-    FilePermissions os.FileMode
-    Host string
-    LockingPort int
-    PathExec string
-    Port int
-    Process *os.Process
-    ProfileDir string
-    RemoveOnClose string
-    Timeout float64
-    UserJS string
-    UserJSPolicy string
-
-    *Sessions
-
-    *Wire
-
-  }
-
-)
-
-/************************************************/
-func (s *Firefox) SetDefaults() (err error) <span class="cov8" title="1">{
-
-  if s.DirPermissions == 0 </span><span class="cov8" title="1">{s.DirPermissions = 0770}</span>
-  <span class="cov8" title="1">if s.FilePermissions == 0 </span><span class="cov8" title="1">{s.FilePermissions = 0600}</span>
-  <span class="cov8" title="1">if s.Host == "" </span><span class="cov8" title="1">{s.Host = "localhost"}</span>
-  <span class="cov8" title="1">if s.LockingPort == 0 </span><span class="cov8" title="1">{s.LockingPort = 7054}</span>
-  <span class="cov8" title="1">if s.PathExec == "" </span><span class="cov8" title="1">{s.PathExec = "firefox"}</span>
-  <span class="cov8" title="1">if s.Port == 0 </span><span class="cov8" title="1">{s.Port = 7055}</span>
-  <span class="cov8" title="1">if s.Timeout == 0 </span><span class="cov8" title="1">{s.Timeout = 60}</span>
-  <span class="cov8" title="1">if s.UserJSPolicy == "" </span><span class="cov8" title="1">{s.UserJSPolicy = "merge"}</span>
-
-  <span class="cov8" title="1">log.Println("Firefox SetDefaults()")
-  s.Sessions = &amp;Sessions{}
-  s.Sessions.SetDefaults()
-  s.Wire = &amp;Wire{}
-  s.Wire.SetDefaults()
-
-  if s.Extension == nil </span><span class="cov8" title="1">{
-    s.Extension = &amp;Extension{}
-  }</span>
-
-  // a full path to the firefox extension file: webdriver.xpi is REQUIRED
-  <span class="cov8" title="1">if s.Extension.Path == "" </span><span class="cov8" title="1">{
-    err = errors.New("WARNING: You need to set the path to the location of the Selenium plugin extension.\nExample: client := &amp;webdriver.Firefox{Extension: &amp;webdriver.Extension{Path: \"~/webdriver.xpi\"}}")
-    log.Println(err)
-    return err
-  }</span>
-
-  // user may have defined it with a tilde to point to their home directory
-  // find out the absolute path to their home directory and search/replace the tilde with the absolute path.
-  <span class="cov8" title="1">if strings.HasPrefix(s.Extension.Path, "~") </span><span class="cov8" title="1">{
-    var currentUser *user.User
-
-    currentUser, err = user.Current()
-
-    s.Extension.Path = strings.Replace(s.Extension.Path, "~", currentUser.HomeDir, 1)
-    log.Println("Extension.Path has been set to: ", s.Extension.Path)
-  }</span>
-
-  <span class="cov8" title="1">if s.Extension.Policy == "" </span><span class="cov8" title="1">{s.Extension.Policy = "remove"}</span>
-  <span class="cov8" title="1">if s.Extension.ConfigPolicy == "" </span><span class="cov8" title="1">{s.Extension.ConfigPolicy = "remove"}</span>
-  <span class="cov8" title="1">if len(s.Extension.ConfigList) &lt;= 0 </span><span class="cov8" title="1">{
-    s.Extension.ConfigList = []string{
-                                "compatibility.ini",
-                                "extensions.cache",
-                                "extensions.ini",
-                                "extensions.json",
-                                "extensions.rdf",
-                                "extensions.sqlite",
-                                "extensions.sqlite-journal",
-    }
-  }</span>
-
-  // if the user has set the ProfileDir, then, it is up to them to set
-  // if the ProfileDir should be removed on close or not.
-  // the default is to leave it blank if ProfileDir is set.  this will
-  // prevent the ProfileDir from being deleted.
-  <span class="cov8" title="1">if s.ProfileDir == "" </span><span class="cov8" title="1">{
-
-    s.ProfileDir, err = ioutil.TempDir(os.TempDir(), "webdriver-firefox")
-
-      // we are using a temporary profile and directory.  set to RemoveOnClose to "remove"
-    // ONLY if it has NOT BEEN set already
-    if s.RemoveOnClose == "" </span><span class="cov8" title="1">{
-      s.RemoveOnClose = "remove"
-    }</span>
-
-}
-
-  <span class="cov8" title="1">s.Extension.BaseDir = filepath.Join(s.ProfileDir, "extensions")
-
-  log.Println("        Profile directory: ", s.ProfileDir)
-  log.Println("Extensions base directory: ", s.Extension.BaseDir)
-  log.Println("        Extensions Policy: ", s.Extension.Policy)
-  log.Println("  Extensions ConfigPolicy: ", s.Extension.ConfigPolicy)
-
-  return err</span>
-}
-
-/************************************************/
-func (s *Firefox) Run() (err error) <span class="cov8" title="1">{
-
-  var listener net.Listener
-  if err = s.SetDefaults(); err == nil </span><span class="cov8" title="1">{
-
-    log.Println("Waiting for lock at: ", s.Host, s.LockingPort)
-    if listener, err = waitForLock(s.Host, s.LockingPort, s.Timeout * float64(time.Second)); err == nil </span><span class="cov8" title="1">{
-
-      defer listener.Close()
-
-      log.Println("Lock succeeded!!")
-
-      if s.Port, err = findNextAvailablePort(s.Host, s.Port, s.Timeout * float64(time.Second)); err == nil </span><span class="cov8" title="1">{
-
-        log.Println("Firefox extension should listen at: ", s.Host, s.Port)
-
-        if err = s.configProfile(); err == nil </span><span class="cov8" title="1">{
-
-          cmd := exec.Command(s.PathExec,
-                              "-silent",
-                              "-no-remote",
-                              "-profile",
-                              s.ProfileDir)
-
-          // run is suppose to wait until the process has finished
-          log.Println("Starting firefox in -silent mode (as per the spec)")
-          cmd.Run()
-
-          cmd = exec.Command(s.PathExec,
-                              "-no-remote",
-                              "-foreground",
-                              "-profile",
-                              s.ProfileDir)
-
-          log.Println("All systems Go!!  Starting Firefox... (for real this time)")
-          cmd.Start()
-
-          s.Process = cmd.Process
-
-          log.Println("Firefox started pid: ", s.Process.Pid)
-
-          log.Println("Waiting to connect to webdriver at: ", s.Host, s.Port)
-          err = waitForConnect(s.Host, s.Port, s.Timeout * float64(time.Second))
-
-          s.BaseUrl = fmt.Sprintf("http://%v:%v/hub", s.Host, s.Port)
-          s.Sessions.BaseUrl = fmt.Sprintf("http://%v:%v/hub", s.Host, s.Port)
-
-          log.Println("Look Mom, no hands!! Firefox should now be running with webdriver at: ", s.BaseUrl)
-        }</span>
-
-      }
-
-    }
-
-  }
-
-  <span class="cov8" title="1">return err</span>
-}
-
-// Kills the currently running webdriver if it is running.
-func (s *Firefox) Close() (err error) <span class="cov8" title="1">{
-
-    log.Println("Close()")
-
-  if s.Process != nil </span><span class="cov8" title="1">{
-    log.Println("Close() killing process")
-    s.Process.Kill()
-
-    time.Sleep(2 * time.Second)
-  }</span>
-
-  <span class="cov8" title="1">log.Println("RemoveOnClose: ", s.RemoveOnClose)
-
-  if s.RemoveOnClose == "remove" </span><span class="cov8" title="1">{
-
-    if _, err = os.Stat(s.ProfileDir); err == nil </span><span class="cov8" title="1">{
-
-      log.Println("RemoveOnClose: YES ", s.RemoveOnClose, s.ProfileDir)
-      err = os.RemoveAll(s.ProfileDir)
-
-    }</span>
-
-  }
-
-  <span class="cov8" title="1">return err</span>
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</pre>
-		
-		<pre class="file" id="file2" style="display: none">package webdriver
-
-import (
-  "archive/zip"
-  "encoding/xml"
-  "errors"
-  "fmt"
-  "log"
-  "io"
-  "io/ioutil"
-  "os"
-  "path/filepath"
-  "strings"
-)
-
-type (
-
-  Extension struct {
-    BaseDir string
-    ConfigList []string
-    ConfigPolicy string
-    Path string
-    Name string
-    Policy string
-    TargetPath string
-  }
-
-  InstallManifest struct {
-    Description InstallManifestDescription
-  }
-
-  InstallManifestDescription struct {
-    ID string `xml:"id"`
-  }
-
-)
-
-// Installs the webdriver.xpi extension into the current firefox profile directory.
-func (s *Firefox) installExtension() error <span class="cov8" title="1">{
-
-  var err error
-
-  log.Println("installExtension()...")
-
-  // verifies the profile directory exists.  if not, creates it
-  // also, verifies profiledir/extensions exists.  if not, creates it
-  // then, if the policy is to remove the extension; it is removed.
-  if err = s.verifyExtensionsPath(); err == nil &amp;&amp; s.Extension.Policy == "remove" </span><span class="cov8" title="1">{
-
-    // directories exist and the policy is to remove and install the extension
-    if s.Extension.Name, err = s.extractExtensionName(); err == nil </span><span class="cov8" title="1">{
-
-      if err = s.prepareExtensionTarget(); err == nil </span><span class="cov8" title="1">{
-
-        // just return the error.  no need to if logic, etc.
-        err = s.extractExtensionContents()
-
-      }</span>
-
-    }
-
-  }
-
-  <span class="cov8" title="1">return err</span>
-}
-
-func (s *Firefox) verifyExtensionsPath() (err error) <span class="cov8" title="1">{
-
-// The target ProfileDir and the extensions subdirectory need to exist
-// in order to install and use the webdriver plugin.  So, verifyExtensionsPath
-// will test for the existence of the full path to the extensions directory
-// and attempt to create it if it does not exist.  That would create the ProfileDir
-// as well during the process thus killing two birds with one stone.
-//
-// Returns and error if there is a problem, otherwise, returns nil
-  log.Println("verifyExtensionsPath() verifying profile and extensions directory exists: ", s.Extension.BaseDir)
-
-  // check if the full path to the extensions directory exists
-  if _, err = os.Stat(s.Extension.BaseDir); err != nil </span><span class="cov8" title="1">{
-
-    log.Println("profile / extensions directory DOES NOT exist.  attempting to created it")
-    // the full path to the extensions directory DOES NOT exist
-    // attempt to create it with MkdirAll.  That way, the ProfileDir
-    // will be created as well if it does not exist (two birds one stone)
-    err = os.MkdirAll(s.Extension.BaseDir, s.DirPermissions)
-    if err != nil </span><span class="cov8" title="1">{
-      buffer := fmt.Sprintf("verifyExtensionsPath() =&gt; %v DOES NOT exist and unable to create\n", s.Extension.BaseDir)
-      buffer = fmt.Sprint("%v%v", buffer, err.Error())
-      err = errors.New(buffer)
-      log.Println(err)
-    }</span><span class="cov8" title="1"> else {
-      log.Println("Directory created! ", s.Extension.BaseDir)
-    }</span>
-  }<span class="cov8" title="1"> else {
-    log.Println("verifyExtensionsPath() profile directory ALREADY exists", s.Extension.BaseDir)
-  }</span>
-
-  <span class="cov8" title="1">return err</span>
-}
-
-
-
-
-// Extracts the entire contents of webdriver.xpi
-func (s *Firefox) extractExtensionContents() (err error) <span class="cov8" title="1">{
-
-  log.Println("Installing the extension at: ", s.Extension.TargetPath)
-
-  var zipFile *zip.ReadCloser
-  total := 0
-
-  if _, err = os.Stat(s.Extension.Path); err == nil </span><span class="cov8" title="1">{
-    if zipFile, err = zip.OpenReader(s.Extension.Path); err == nil </span><span class="cov8" title="1">{
-      defer zipFile.Close()
-
-      for _, f := range zipFile.File </span><span class="cov8" title="1">{
-
-        if err = s.writeExtensionFile(f); err != nil </span><span class="cov8" title="1">{
-          break</span>
-        }
-
-        <span class="cov8" title="1">total += 1</span>
-
-      }
-
-    }
-  }
-
-  <span class="cov8" title="1">log.Println("Total files installed: ", total)
-
-  return err</span>
-}
-
-// Writes the contents of a single file contained in webdriver.xpi
-func (s *Firefox) writeExtensionFile(f *zip.File) (err error) <span class="cov8" title="1">{
-
-  // seperated this into a function so I could use defer, etc.
-  var file io.ReadCloser
-
-  if file, err = f.Open(); err == nil </span><span class="cov8" title="1">{
-    defer file.Close()
-
-    targetFileSpec := filepath.Join(s.Extension.TargetPath, f.Name)
-    if f.FileInfo().IsDir() </span><span class="cov8" title="1">{
-      err = os.MkdirAll(targetFileSpec, s.DirPermissions)
-    }</span><span class="cov8" title="1"> else {
-
-      var targetFile *os.File
-      if targetFile, err = os.OpenFile(targetFileSpec,
-                                        os.O_WRONLY | os.O_CREATE,
-                                        s.FilePermissions); err == nil </span><span class="cov8" title="1">{
-
-        defer targetFile.Close()
-        _, err = io.Copy(targetFile, file)
-
-      }</span>
-
-    }
-
-  }
-
-  <span class="cov8" title="1">return err</span>
-}
-
-// Extracts the name of the extension from within install.rdf
-// which is a file contained in webdriver.xpi
-func (s *Firefox) extractExtensionName() (extensionName string, err error) <span class="cov8" title="1">{
-
-  var zipFile *zip.ReadCloser
-  var file io.ReadCloser
-
-  if _, err = os.Stat(s.Extension.Path); err == nil </span><span class="cov8" title="1">{
-    // there is a file named install.rdf within the webdriver extension
-    // the contents of that file contain the plugin name
-    // open the zip archive (webdriver extension) and
-    // extract the contents of of install.rdf to obtain the file name
-    if zipFile, err = zip.OpenReader(s.Extension.Path); err == nil </span><span class="cov8" title="1">{
-      defer zipFile.Close()
-
-      for _, f := range zipFile.File </span><span class="cov8" title="1">{
-
-        if extensionName == "" </span><span class="cov8" title="1">{
-          if strings.ToLower(f.Name) == "install.rdf" </span><span class="cov8" title="1">{
-
-            if file, err = f.Open(); err == nil </span><span class="cov8" title="1">{
-
-              var buffer []byte
-              if buffer, err = ioutil.ReadAll(file); err == nil </span><span class="cov8" title="1">{
-
-                manifest := InstallManifest{}
-                if err = xml.Unmarshal(buffer, &amp;manifest); err == nil </span><span class="cov8" title="1">{
-                  extensionName = manifest.Description.ID
-                }</span>
-              }
-
-              <span class="cov8" title="1">file.Close()</span>
-
-            }
-          }
-        }<span class="cov8" title="1"> else {
-          break</span>
-        }
-      }
-
-    }
-  }
-
-  <span class="cov8" title="1">return extensionName, err</span>
-}
-
-// Prepares the extension target installation directory.  if it exists, then,
-// it is removed and created again.
-func (s *Firefox) prepareExtensionTarget() (err error) <span class="cov8" title="1">{
-
-  s.Extension.TargetPath = filepath.Join(s.Extension.BaseDir, s.Extension.Name)
-  log.Println("Preparing the extension target installation directory: ", s.Extension.TargetPath)
-
-  if _, err2 := os.Stat(s.Extension.TargetPath); err2 == nil </span><span class="cov8" title="1">{
-
-    err = os.RemoveAll(s.Extension.TargetPath)
-
-  }</span>
-
-  <span class="cov8" title="1">if err == nil </span><span class="cov8" title="1">{
-
-    err = os.MkdirAll(s.Extension.TargetPath, s.DirPermissions)
-    if err != nil </span><span class="cov8" title="1">{
-      buffer := fmt.Sprintf("prepareExtensionTarget() =&gt; %v unable to create extension target directory\n", s.Extension.TargetPath)
-      buffer = fmt.Sprint("%v%v", buffer, err.Error())
-      err = errors.New(buffer)
-    }</span>
-
-  }
-
-  <span class="cov8" title="1">return err</span>
-}
-
-// The spec recommends removing the following files:
-//      compatibility.ini
-//      extensions.cache
-//      extensions.ini
-//      extensions.json
-//      extensions.rdf
-//      extensions.sqlite
-//      extensions.sqlite-journal
-//
-// By default, removeExtensionConfig() will remove the above list.  You can add / remove
-// files to / from the list, however, it will ONLY remove files in the root of the extensions
-// directory.
-//
-// You have the option of bypassing by setting Extension.ConfigPolicy = ""
-func (s *Firefox) removeExtensionConfig() (err error) <span class="cov8" title="1">{
-
-  if s.Extension.ConfigPolicy == "remove" </span><span class="cov8" title="1">{
-
-    for _, v := range s.Extension.ConfigList </span><span class="cov8" title="1">{
-
-      if err == nil </span><span class="cov8" title="1">{
-        targetFileSpec := filepath.Join(s.ProfileDir, v)
-        // nil means the file/directory exists
-        if _, err2 := os.Stat(targetFileSpec); err2 == nil </span><span class="cov8" title="1">{
-          err = os.Remove(targetFileSpec)
-        }</span>
-      }
-    }
-
-  }
-
-  <span class="cov8" title="1">return err</span>
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</pre>
-		
-		<pre class="file" id="file3" style="display: none">package webdriver
-
-import (
-  "bufio"
-  "errors"
-  "fmt"
-  "log"
-  "os"
-  "path/filepath"
-  "strings"
-)
-
-// Configures the Firefox profile directory.  Installs the extension.  Copies in user.js settings, etc.
-func (s *Firefox) configProfile() (err error) <span class="cov8" title="1">{
-
-  log.Println("Configuring profile...")
-
-  if err = s.installExtension(); err == nil </span><span class="cov8" title="1">{
-
-    if err = s.removeExtensionConfig(); err == nil </span><span class="cov8" title="1">{
-
-      // builds the contents of the user.js file
-      var userJS map[string]interface{}
-      if userJS, err = s.buildUserJS(); err == nil </span><span class="cov8" title="1">{
-
-        // this is how we are telling webdriver which port to use
-        userJS["webdriver_firefox_port"] = s.Port
-
-        targetFileSpec := filepath.Join(s.ProfileDir, "user.js")
-
-        var file *os.File
-
-        if file, err = os.OpenFile(targetFileSpec, os.O_WRONLY | os.O_CREATE, s.FilePermissions); err == nil </span><span class="cov8" title="1">{
-
-          defer file.Close()
-
-          log.Println("configProfile() writing user.js to: ", targetFileSpec)
-
-          for k, v := range userJS </span><span class="cov8" title="1">{
-            file.WriteString(fmt.Sprintf("user_pref(\"%v\", %v);\n", k, v))
-          }</span>
-
-        }
-
-      }
-
-    }
-  }
-
-  <span class="cov8" title="1">return err</span>
-}
-
-// Parses the contents of a user.js file into a map.  Developer has the option to use a custom
-// user.js file.  Setting Firefox.UserJS to a full path to a file will cause buildUserJS() to load
-// the contents of that file.  if Firefox.UserJSPolicy is set to "merge", then, the contents of the
-// custom user.js file is merged with the default values.  If Firefox.UserJSPolicy is set to anything
-// other than "merge", the contents of the custom user.js are used "as is".  However, regardless of the
-// configuration, webdriver_firefox_port is ALWAYS assigned during configProfile()
-func (s *Firefox) buildUserJS() (values map[string]interface{}, err error) <span class="cov8" title="1">{
-
-  values = s.defaultUserJS()
-
-  if s.UserJS != "" </span><span class="cov8" title="1">{
-
-    log.Println("buildUserJS() user.js set to: ", s.UserJS)
-
-    var userJS map[string]interface{}
-
-    if userJS, err = s.parseUserJS(); err == nil </span><span class="cov8" title="1">{
-
-      log.Println("buildUserJS() user.js parsed ok")
-      // this means a valid UserJS file was found and parsed
-
-      if s.UserJSPolicy == "merge" </span><span class="cov8" title="1">{
-
-        log.Println("buildUserJS() merging user.js with default values")
-
-        for k, v := range userJS </span><span class="cov8" title="1">{
-          values[k] = v
-        }</span>
-
-      }<span class="cov8" title="1"> else {
-        log.Println("buildUserJS() overwriting default values with user.js")
-        values = userJS
-      }</span>
-
-    }<span class="cov8" title="1"> else {
-      log.Println("buildUserJS() could not read: ", s.UserJS, err)
-    }</span>
-
-  }<span class="cov8" title="1"> else {
-    log.Println("buildUserJS() user.js not set.  using default values")
-  }</span>
-
-  <span class="cov8" title="1">return values, err</span>
-}
-
-// Parses the contents of a user.js file into a map.
-func (s *Firefox) defaultUserJS() (values map[string]interface{}) <span class="cov8" title="1">{
-  values = map[string]interface{}{
-          "app.update.auto":                                        "false",
-          "app.update.enabled":                                     "false",
-          // "browser.cache.disk.capacity":                            "0",
-          // "browser.cache.disk.enable":                              "false",
-          // "browser.cache.memory.enable":                            "true",
-          // "browser.dom.window.dump.enabled":                        "true",
-          "browser.download.manager.showWhenStarting":              "false",
-          "browser.EULA.3.accepted":                                "true",
-          "browser.EULA.override":                                  "true",
-          "browser.link.open_external":                             "2",
-          "browser.link.open_newwindow":                            "2",
-          "browser.newtab.url":                                     "\"about:blank\"",
-          // "browser.newtabpage.enabled":                             "false",
-          "browser.offline":                                        "false",
-          "browser.safebrowsing.enabled":                           "false",
-          "browser.safebrowsing.malware.enabled":                   "false",
-          "browser.search.update":                                  "false",
-          "browser.sessionstore.resume_from_crash":                 "false",
-          "browser.shell.checkDefaultBrowser":                      "false",
-          "browser.startup.homepage":                               "\"about:blank\"",
-          // "browser.startup.homepage_override.mstone":               "ignore",
-          "browser.startup.page":                                   "0",
-          // "browser.tabs.insertRelatedAfterCurrent":                 "false",
-          "browser.tabs.warnOnClose":                               "false",
-          "browser.tabs.warnOnOpen":                                "false",
-
-          "datareporting.healthreport.service.enabled":             "false",
-          "datareporting.healthreport.uploadEnabled":               "false",
-          "datareporting.healthreport.service.firstRun":            "false",
-          "datareporting.healthreport.logging.consoleEnabled":      "false",
-          "datareporting.policy.dataSubmissionEnabled":             "false",
-          "datareporting.policy.dataSubmissionPolicyAccepted":      "false",
-
-          "devtools.errorconsole.enabled":                          "true",
-          "dom.disable_open_during_load":                           "false",
-          // "dom.max_chrome_script_run_time":                         "30",
-          // "dom.max_script_run_time":                                "30",
-          // "dom.report_all_js_exceptions":                           "true",
-          "extensions.autoDisableScopes":                           "10",
-          "extensions.blocklist.enabled":                           "false",
-          "extensions.logging.enabled":                             "true",
-          "extensions.update.enabled":                              "false",
-          "extensions.update.notifyUser":                           "false",
-          // "javascript.options.showInConsole":                       "true",
-          // "network.http.max-connections-per-server":                "10",
-          "network.http.phishy-userpass-length":                    "255",
-          "network.manage-offline-status":                          "false",
-          "offline-apps.allow_by_default":                          "true",
-          "prompts.tab_modal.enabled":                              "false",
-          "security.csp.enable":                                    "false",
-          "security.fileuri.origin_policy":                         "3",
-          "security.fileuri.strict_origin_policy":                  "false",
-          "security.warn_entering_secure":                          "false",
-          "security.warn_entering_secure.show_once":                "false",
-          "security.warn_entering_weak":                            "false",
-          "security.warn_entering_weak.show_once":                  "false",
-          "security.warn_leaving_secure":                           "false",
-          "security.warn_leaving_secure.show_once":                 "false",
-          "security.warn_submit_insecure":                          "false",
-          // "security.warn_submit_insecure.show_once":                "false",
-          "security.warn_viewing_mixed":                            "false",
-          "security.warn_viewing_mixed.show_once":                  "false",
-          "signon.rememberSignons":                                 "false",
-          "startup.homepage_welcome_url":                           "\"about:blank\"",
-          "toolkit.networkmanager.disable":                         "true",
-          "toolkit.telemetry.enabled":                              "false",
-          "toolkit.telemetry.prompted":                             "2",
-          "toolkit.telemetry.rejected":                             "true",
-          "webdriver_accept_untrusted_certs":                       "true",
-          "webdriver_assume_untrusted_issuer":                      "true",
-          "webdriver_enable_native_events":                         "false",
-          "webdriver_unexpected_alert_behaviour":                   "\"dismiss\"",
-        }
-
-  return values
-}</span>
-
-// Parses the contents of a user.js file into a map.
-func (s *Firefox) parseUserJS() (values map[string]interface{}, err error) <span class="cov8" title="1">{
-
-  values = make(map[string]interface{})
-
-  if _, err = os.Stat(s.UserJS); err == nil </span><span class="cov8" title="1">{
-
-    log.Println("Parsing user.js file at: ", s.UserJS)
-
-    // sample
-    // user_pref("browser.startup.homepage", "about:blank");
-    // user_pref("dom.max_chrome_script_run_time", 30);
-    // user_pref("dom.max_script_run_time", 30);
-    // user_pref("dom.report_all_js_exceptions", true);
-    // user_pref("javascript.options.showInConsole", true);
-    // user_pref("network.http.max-connections-per-server", 10);
-
-    var file *os.File
-    if file, err = os.Open(s.UserJS); err == nil </span><span class="cov8" title="1">{
-
-      defer file.Close()
-
-      scanner := bufio.NewScanner(file)
-      for scanner.Scan() </span><span class="cov8" title="1">{
-
-        // get the full line
-        buffer := scanner.Text()
-
-        // strip away user_pref("
-        buffer = strings.Replace(buffer, "user_pref(\"", "", 1)
-
-        // if the string ends with ), slice it and remove the last )
-        if strings.HasSuffix(buffer, ")") </span><span class="cov8" title="1">{
-          buffer = buffer[0:len(buffer) - 1]
-        }</span>
-
-        // if the string ends with ), slice it and remove the last );
-        <span class="cov8" title="1">if strings.HasSuffix(buffer, ");") </span><span class="cov8" title="1">{
-          buffer = buffer[0:len(buffer) - 2]
-        }</span>
-
-        // now, should have something like:
-        // browser.startup.homepage", "about:blank"
-        // dom.max_chrome_script_run_time", 30
-        // dom.max_script_run_time", 30
-        // dom.report_all_js_exceptions", true
-
-        // split the string into two pieces based on ",
-        <span class="cov8" title="1">pair := strings.Split(buffer, "\",")
-
-        key := strings.Trim(pair[0], " ")
-        value := strings.Trim(pair[1], " ")
-
-        values[key] = value</span>
-      }
-
-      <span class="cov8" title="1">err = scanner.Err()</span>
-
-    }
-
-  }<span class="cov8" title="1"> else {
-    err = errors.New("parseUserJS() =&gt; UserJS file not found:")
-    log.Println("parseUserJS() =&gt; UserJS file not found: ", s.UserJS)
-  }</span>
-
-  <span class="cov8" title="1">return values, err</span>
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</pre>
-		
-		<pre class="file" id="file4" style="display: none">package webdriver
-
-import (
-  "encoding/json"
-)
-
-type (
-
-  Sessions struct {
-
-    List []*Session
-
-    *Wire
-
-  }
-
-  Session struct {
-
-    ActualCapabilities *ActualCapabilities
-
-    *Wire
-
-  }
-
-)
-
-func (s *Sessions) SetDefaults() (err error) <span class="cov8" title="1">{
-
-  s.Wire = &amp;Wire{}
-  s.Wire.SetDefaults()
-
-  return err
-}</span>
-
-func (s *Session) SetDefaults() (err error) <span class="cov8" title="1">{
-
-  s.Wire = &amp;Wire{}
-  s.Wire.SetDefaults()
-
-  return err
-}</span>
-
-// Creates a new session for a Client.  An JsonWireProtocol call is made
-// to establish a session with a server.  The new session is added to the
-// list of active sessions and returned to the caller.
-//
-// Capabilities are optional, however, it you define them, then, you must
-// pass them in a specific order to this method.  Desired first, then, Required.
-// Capabilities are currently implemented as a simple map and quite frankly
-// I high doubt there will be much need to even support passing capabilities.
-// However, it is in the spec, so, there is minimal support for it.
-//
-//      session, err := client.NewSession(
-//               &amp;webdriver.Capabilities{"Platform": "Linux"}, // desired
-//               &amp;webdriver.Capabilities{})                    // required
-//
-// When a new session is created, the server will return the actual capabilities
-// currently supported.  An ActualCapabilities struct is created and attached
-// to the returned session.
-func (s *Sessions) NewSession(capabilities ...*Capabilities) (session *Session, err error) <span class="cov8" title="1">{
-
-  // make the API call to establish a new session
-  // if there is an error it is returned
-  var wireResponse *WireResponse
-  if wireResponse, err = s.Session(capabilities...); err == nil </span><span class="cov8" title="1">{
-
-    // seems like everything went as planned.
-    // create a new session and initialize it.
-    session = &amp;Session{}
-    session.SetDefaults()
-
-    // setting the BaseUrl on the session is critical for http requests
-    session.BaseUrl = s.BaseUrl
-
-    // the Session ID returned during the API call.
-    session.SessionID = wireResponse.SessionID
-
-    // add the newly created session to the list of sessions
-    s.List = append(s.List, session)
-
-    // extract the actual capabilities from the response and attach
-    // them to the session
-    capabilities := &amp;ActualCapabilities{}
-    if err = json.Unmarshal(wireResponse.Value, capabilities); err == nil </span><span class="cov8" title="1">{
-
-      session.ActualCapabilities = capabilities
-
-    }</span>
-
-
-  }
-
-  <span class="cov8" title="1">return session, err</span>
-}
-
-
-</pre>
-		
-		<pre class="file" id="file5" style="display: none">package webdriver
 
 import (
   "errors"
@@ -1280,173 +353,14 @@ func findNextAvailablePort(host string, port int, timeout float64) (newPort int,
 }
 </pre>
 		
-		<pre class="file" id="file6" style="display: none">package webdriver
+		<pre class="file" id="file2" style="display: none">package webdriver
 
 import (
-  // "fmt"
+  "bytes"
+  "encoding/json"
+  "fmt"
   "net/http"
   "strings"
-)
-
-type (
-
-  // WebElement - An object in the WebDriver API that represents a DOM element on the page.
-  //
-  // WebElement JSON Object - The JSON representation of a WebElement for transmission over the wire.
-  //     Key Type  Description
-  //     ELEMENT string  The opaque ID assigned to the element by the server. This ID should be used in all subsequent commands issued against the element.
-  WebElement struct {
-    Session             *Session
-    Value               string `json:"element"`
-  }
-
-)
-
-// BuildElementUrl() is similar to BuildFullUrl(), except it simply does a search / replace
-// on the :id value of the current WebElement.  Relies on the current value of Value as the element :id.
-//
-//   // given:
-//     Value = "{my-hex-value-or-some-custom-id-value}"
-//
-//   // the following call
-//   BuildElement("/session/:sessionid/element/:id/text")
-//
-//   // would produce
-//   /session/:sessionid/element/{my-hex-value-or-some-custom-id-value}/text
-func (s *WebElement) BuildElementUrl(url string) string <span class="cov8" title="1">{
-  return strings.Replace(url, ":id", s.Value, -1)
-}</span>
-
-// POST /session/:sessionId/element/:id/element
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/element
-//
-// Search for an element on the page, starting from the identified element. The located element will be returned as a WebElement JSON object. The table below lists the locator strategies that each server should support. Each locator must return the first matching element located in the DOM.
-//
-//    Strategy              Description
-//      class name          Returns an element whose class name contains the search value; compound class names are not permitted.
-//      css selector        Returns an element matching a CSS selector.
-//      id                  Returns an element whose ID attribute matches the search value.
-//      name                Returns an element whose NAME attribute matches the search value.
-//      link text           Returns an anchor element whose visible text matches the search value.
-//      partial link text   Returns an anchor element whose visible text partially matches the search value.
-//      tag name            Returns an element whose tag name matches the search value.
-//      xpath               Returns an element matching an XPath expression.
-//
-//    JSON Parameters:
-//      using - {string} The locator strategy to use.
-//      value - {string} The The search target.
-//
-//    Returns:
-//      {ELEMENT:string} A WebElement JSON object for the located element.
-//
-//    Potential Errors:
-//      NoSuchWindow - If the currently selected window has been closed.
-//      NoSuchElement - If the element cannot be found.
-//      XPathLookupError - If using XPath and the input expression is invalid
-func (s *WebElement) Element(using string, value string) (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  var req *http.Request
-  if req, err = s.Session.PostRequest(s.BuildElementUrl("/session/:sessionid/element/:id/element"),
-                              &amp;Params{"using": using, "value": value}); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Session.Do(req)
-
-    if wireResponse != nil </span><span class="cov8" title="1">{
-      wireResponse.Session = s.Session
-    }</span>
-
-  }
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
-
-// POST /session/:sessionId/element/:id/elements
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/elements
-//
-// Search for multiple elements on the page, starting from the identified element. The located elements will be returned as a WebElement JSON objects. The table below lists the locator strategies that each server should support. Elements should be returned in the order located in the DOM.
-//
-//    Strategy              Description
-//      class name          Returns an element whose class name contains the search value; compound class names are not permitted.
-//      css selector        Returns an element matching a CSS selector.
-//      id                  Returns an element whose ID attribute matches the search value.
-//      name                Returns an element whose NAME attribute matches the search value.
-//      link text           Returns an anchor element whose visible text matches the search value.
-//      partial link text   Returns an anchor element whose visible text partially matches the search value.
-//      tag name            Returns an element whose tag name matches the search value.
-//      xpath               Returns an element matching an XPath expression.
-//
-//    JSON Parameters:
-//      using - {string} The locator strategy to use.
-//      value - {string} The The search target.
-//
-//    Returns:
-//      {Array.&lt;{ELEMENT:string}&gt;} A list of WebElement JSON objects for the located elements.
-//
-//    Potential Errors:
-//      NoSuchWindow - If the currently selected window has been closed.
-//      NoSuchElement - If the element cannot be found.
-//      XPathLookupError - If using XPath and the input expression is invalid
-func (s *WebElement) Elements(using string, value string) (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  var req *http.Request
-  if req, err = s.Session.PostRequest(s.BuildElementUrl("/session/:sessionid/element/:id/elements"),
-                              &amp;Params{"using": using, "value": value}); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Session.Do(req)
-
-    if wireResponse != nil </span><span class="cov8" title="1">{
-      wireResponse.Session = s.Session
-    }</span>
-
-  }
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
-
-// GET /session/:sessionId/element/:id/text
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/text
-//
-// Returns the visible text for the element.
-func (s *WebElement) Text() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  var req *http.Request
-  if req, err = s.Session.GetRequest(s.BuildElementUrl("/session/:sessionid/element/:id/text"),
-                              nil); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Session.Do(req)
-
-    if wireResponse != nil </span><span class="cov8" title="1">{
-      wireResponse.Session = s.Session
-    }</span>
-
-  }
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
-
-
-
-
-
-
-
-
-
-
-
-
-</pre>
-		
-		<pre class="file" id="file7" style="display: none">package webdriver
-
-import (
-  // "bytes"
-  // "encoding/json"
-  // "fmt"
-  "net/http"
 )
 
 type (
@@ -1455,419 +369,28 @@ type (
   // to the http get, post, methods.
   Params map[string]interface{}
 
+  Session struct {
+
+    ActualCapabilities *ActualCapabilities
+
+    *Wire
+
+  }
+
   // Represents all of the data and methods for the JsonWireProtocol API.
   // Include this in your client and make API calls.
   //
   // All JsonWireProtocol commands are attached to this struct.
   Wire struct {
 
-    *WireHTTP
-
-  }
-
-)
-
-// Sets the default values for a *WireHTTP.
-func (s *Wire) SetDefaults() (err error) <span class="cov8" title="1">{
-
-  s.WireHTTP = &amp;WireHTTP{}
-
-  return err
-}</span>
-
-// POST  /session/:sessionId/back
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/back
-//
-// Navigate forwards in the browser history, if possible.
-//
-func (s *Wire) Back() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  var req *http.Request
-  if req, err = s.PostRequest("/session/:sessionid/back", nil); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Do(req)
-
-  }</span>
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
-
-// DELETE /session/:sessionid
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId
-//
-// Delete the session.
-//
-func (s *Wire) Delete() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  if req, err := s.DeleteRequest("/session/:sessionid", nil); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Do(req)
-
-  }</span>
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
-
-// GET /session/:sessionid
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId
-//
-// Retrieve the capabilities of the specified session.
-//
-//    Returns:
-//    {object} An object describing the session's capabilities.
-func (s *Wire) GetSession() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  if req, err := s.GetRequest("/session/:sessionid", nil); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Do(req)
-
-  }</span>
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
-
-// POST  /session/:sessionId/forward
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/forward
-//
-// Navigate forwards in the browser history, if possible.
-//
-func (s *Wire) Forward() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  var req *http.Request
-  if req, err = s.PostRequest("/session/:sessionid/forward", nil); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Do(req)
-
-  }</span>
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
-
-// POST  /session/:sessionId/refresh
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/refresh
-//
-// Refresh the current page.
-//
-func (s *Wire) Refresh() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  var req *http.Request
-  if req, err = s.PostRequest("/session/:sessionid/refresh", nil); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Do(req)
-
-  }</span>
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
-
-// POST /session
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#POST_/session
-//
-// See webdriver.NewSession() for more detail.
-func (s *Wire) Session(capabilities ...*Capabilities) (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  // capabilities are optioinal to the newSession method, but,
-  // not optional to the server.
-  // desired needs to be first in line, then, required.
-  // know a better way?  I'm all ears...
-  x := map[string]*Capabilities{}
-  if len(capabilities) &gt; 0 &amp;&amp; capabilities[0] != nil </span><span class="cov8" title="1">{
-    x["desiredCapabilities"] = capabilities[0]
-  }</span><span class="cov8" title="1"> else {
-    x["desiredCapabilities"] = &amp;Capabilities{}
-  }</span>
-
-  <span class="cov8" title="1">if len(capabilities) &gt; 1 &amp;&amp; capabilities[1] != nil </span><span class="cov8" title="1">{
-    x["requiredCapabilities"] = capabilities[1]
-  }</span><span class="cov8" title="1"> else {
-    x["requiredCapabilities"] = &amp;Capabilities{}
-  }</span>
-
-  // physically make the API call.
-  <span class="cov8" title="1">var req *http.Request
-  if req, err = s.PostRequest("/session", x); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Do(req)
-
-  }</span>
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
-
-// GET /sessions
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/sessions
-//
-// Returns a list of the currently active sessions. Each session will be returned as a list of JSON objects with the following keys:
-//
-//    Key              Type      Description
-//    id               string    The session ID.
-//    capabilities     object    An object describing the session's capabilities.
-//
-//    Returns:
-//    {Array.&lt;Object&gt;} A list of the currently active sessions.
-func (s *Wire) Sessions() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  if req, err := s.GetRequest("/sessions", nil); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Do(req)
-
-  }</span>
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
-
-// GET /session/:sessionId/source
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#GET_/session/:sessionId/source
-//
-// Get and return the browser's current page source as HTML.
-// wireResponse.StringValue() will contain the entire source as HTML.
-//
-// Source will return a wireResponse struct.  Value will contain a json.RawMessage value
-// returned from the server.  Firefox and chrome return different encodings, so, the raw
-// bytes are left "as is" from the server.  You can use wireResponse.UnmarshalValue() to attempt
-// to decode the value into a normal string.
-func (s *Wire) Source() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  if req, err := s.GetRequest("/session/:sessionid/source", nil); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Do(req)
-
-  }</span>
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
-
-// GET /status
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#GET_/status
-//
-// Query the status of the webdriver server.
-func (s *Wire) Status() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  if req, err := s.GetRequest("/status", nil); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Do(req)
-
-  }</span>
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
-
-// GET /session/:sessionId/title
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#GET_/session/:sessionId/title
-//
-// Get the current page title.
-func (s *Wire) Title() (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  if req, err := s.GetRequest("/session/:sessionid/title", nil); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Do(req)
-
-  }</span>
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
-
-// POST  /session/:sessionId/url
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/url
-//
-// Navigate to a new URL.
-//
-// Browser should navigate to the given url.  url is any valid http url
-// that you would normally enter in a browser.
-// 
-//      url - {string} The URL to navigate to.
-func (s *Wire) Url(url string) (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  var req *http.Request
-  if req, err = s.PostRequest("/session/:sessionid/url",
-                              &amp;Params{"url": url}); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Do(req)
-
-  }</span>
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</pre>
-		
-		<pre class="file" id="file8" style="display: none">package webdriver
-
-import (
-  "net/http"
-)
-
-// POST /session/:sessionId/element
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element
-//
-// Search for an element on the page, starting from the document root. The located element will be returned as a WebElement JSON object. The table below lists the locator strategies that each server should support. Each locator must return the first matching element located in the DOM.
-//
-//    Strategy              Description
-//      class name          Returns an element whose class name contains the search value; compound class names are not permitted.
-//      css selector        Returns an element matching a CSS selector.
-//      id                  Returns an element whose ID attribute matches the search value.
-//      name                Returns an element whose NAME attribute matches the search value.
-//      link text           Returns an anchor element whose visible text matches the search value.
-//      partial link text   Returns an anchor element whose visible text partially matches the search value.
-//      tag name            Returns an element whose tag name matches the search value.
-//      xpath               Returns an element matching an XPath expression.
-//
-//    JSON Parameters:
-//      using - {string} The locator strategy to use.
-//      value - {string} The The search target.
-//
-//    Returns:
-//      {ELEMENT:string} A WebElement JSON object for the located element.
-//
-//    Potential Errors:
-//      NoSuchWindow - If the currently selected window has been closed.
-//      NoSuchElement - If the element cannot be found.
-//      XPathLookupError - If using XPath and the input expression is invalid
-func (s *Session) Element(using string, value string) (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  var req *http.Request
-  if req, err = s.PostRequest("/session/:sessionid/element",
-                              &amp;Params{"using": using, "value": value}); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Do(req)
-    if wireResponse != nil </span><span class="cov8" title="1">{
-      wireResponse.Session = s
-    }</span>
-
-  }
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
-
-// POST /session/:sessionId/elements
-//
-// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/elements
-//
-// Search for multiple elements on the page, starting from the document root. The located elements will be returned as a WebElement JSON objects. The table below lists the locator strategies that each server should support. Elements should be returned in the order located in the DOM.
-//
-//    Strategy              Description
-//      class name          Returns an element whose class name contains the search value; compound class names are not permitted.
-//      css selector        Returns an element matching a CSS selector.
-//      id                  Returns an element whose ID attribute matches the search value.
-//      name                Returns an element whose NAME attribute matches the search value.
-//      link text           Returns an anchor element whose visible text matches the search value.
-//      partial link text   Returns an anchor element whose visible text partially matches the search value.
-//      tag name            Returns an element whose tag name matches the search value.
-//      xpath               Returns an element matching an XPath expression.
-//
-//    JSON Parameters:
-//      using - {string} The locator strategy to use.
-//      value - {string} The The search target.
-//
-//    Returns:
-//      {Array.&lt;{ELEMENT:string}&gt;} A list of WebElement JSON objects for the located elements.
-//
-//    Potential Errors:
-//      NoSuchWindow - If the currently selected window has been closed.
-//      XPathLookupError - If using XPath and the input expression is invalid
-func (s *Session) Elements(using string, value string) (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
-
-  var req *http.Request
-  if req, err = s.PostRequest("/session/:sessionid/elements",
-                              &amp;Params{"using": using, "value": value}); err == nil </span><span class="cov8" title="1">{
-
-    wireResponse, err = s.Do(req)
-
-    if wireResponse != nil </span><span class="cov8" title="1">{
-      wireResponse.Session = s
-    }</span>
-
-  }
-
-  <span class="cov8" title="1">return wireResponse, err</span>
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</pre>
-		
-		<pre class="file" id="file9" style="display: none">package webdriver
-
-import (
-  "bytes"
-  "encoding/json"
-  "fmt"
-  "io/ioutil"
-  "net/http"
-  "strings"
-)
-
-type (
-
-  WireHTTP struct {
-
     // a url pointing to a running server supporting the JsonWireProtocol.
     // typically, http://localhost:7055 for firefox.
     BaseUrl string
+
+    // represents the most recent error
+    Error error
+
+    Response *WireResponse
 
     // represents a JsonWireProtocol Session ID.
     // The Session struct includes *WireHTTP, so, SessionID is available
@@ -1880,22 +403,478 @@ type (
     // By default, SessionID is "", so, there should be no impact
     // for API calls that do not require a :sessionid
     SessionID string
+
+    Sessions []*Session
+
   }
 
 )
 
+// Builds a complete url for a request including host and port.
+// Relies on the current value of BaseUrl and SessionID.
+//
+//   // given:
+//     BaseUrl = "http://localhost:7055"
+//     SessionID = "my-session-id"
+//
+//   // the following call
+//   BuildFullUrl("/session/:sessionid/forward")
+//
+//   // would produce
+//   http://localhost:7055/session/my-session-id/forward
+//
+func (s *Wire) BuildFullUrl(url string) string <span class="cov8" title="1">{
+  return fmt.Sprintf("%v%v", s.BaseUrl, strings.Replace(url, ":sessionid", s.SessionID, -1))
+}</span>
+
+// // POST  /session/:sessionId/back
+// //
+// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/back
+// //
+// // Navigate forwards in the browser history, if possible.
+// //
+// func (s *Wire) Back() (wireResponse *WireResponse, err error) {
+
+//   var req *http.Request
+//   if req, err = s.PostRequest("/session/:sessionid/back", nil); err == nil {
+
+//     wireResponse, err = s.Do(req)
+
+//   }
+
+//   return wireResponse, err
+// }
+
+// Closes all of the active sessions.
+func (s *Wire) CloseSessions() *Wire <span class="cov8" title="1">{
+
+  for _, v := range s.Sessions </span><span class="cov8" title="1">{
+    v.DeleteSession()
+  }</span>
+
+  <span class="cov8" title="1">return s</span>
+}
+
+// // GET /session/:sessionId/cookie
+// //
+// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie
+// //
+// // Retrieve all cookies visible to the current page.
+// //
+// func (s *Wire) Cookie() (wireResponse *WireResponse, err error) {
+
+//   var req *http.Request
+//   if req, err = s.GetRequest("/session/:sessionid/cookie", nil); err == nil {
+
+//     wireResponse, err = s.Do(req)
+
+//   }
+
+//   return wireResponse, err
+// }
+
+// // DELETE /session/:sessionId/cookie/:name
+// //
+// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie/:name
+// //
+// // Delete the cookie with the given name. This command should be a no-op if there is no such cookie visible to the current page.
+// //
+// func (s *Wire) DeleteCookie(name string) (wireResponse *WireResponse, err error) {
+
+//   var req *http.Request
+//   if req, err = s.DeleteRequest(fmt.Sprintf("/session/:sessionid/cookie/%v", name), nil); err == nil {
+
+//     wireResponse, err = s.Do(req)
+
+//   }
+
+//   return wireResponse, err
+// }
+
+// // DELETE /session/:sessionId/cookie
+// //
+// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie
+// //
+// // Delete all cookies visible to the current page.
+// //
+// func (s *Wire) DeleteCookies() (wireResponse *WireResponse, err error) {
+
+//   var req *http.Request
+//   if req, err = s.DeleteRequest("/session/:sessionid/cookie", nil); err == nil {
+
+//     wireResponse, err = s.Do(req)
+
+//   }
+
+//   return wireResponse, err
+// }
+
+// // POST /session/:sessionId/cookie
+// //
+// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie
+// //
+// // Set a cookie. If the cookie path is not specified, it should be set to "/". Likewise, if the domain is omitted, it should default to the current page's domain.
+// //
+// func (s *Wire) SetCookie(value *Cookie) (wireResponse *WireResponse, err error) {
+
+//   var req *http.Request
+//   if req, err = s.PostRequest("/session/:sessionid/cookie", &amp;Params{"cookie": value}); err == nil {
+
+//     wireResponse, err = s.Do(req)
+
+//   }
+
+//   return wireResponse, err
+// }
+
+// DELETE /session/:sessionid
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId
+//
+// Delete the session.
+//
+func (s *Wire) DeleteSession() *Wire <span class="cov8" title="1">{
+
+  var req *http.Request
+  if req, s.Error = s.DeleteRequest("/session/:sessionid", nil); s.Error == nil </span><span class="cov8" title="1">{
+
+    s.Response, s.Error = s.Do(req)
+
+  }</span>
+
+  <span class="cov8" title="1">return s</span>
+}
+
+// // GET /session/:sessionid
+// //
+// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId
+// //
+// // Retrieve the capabilities of the specified session.
+// //
+// //    Returns:
+// //    {object} An object describing the session's capabilities.
+// func (s *Wire) GetSession() (wireResponse *WireResponse, err error) {
+
+//   if req, err := s.GetRequest("/session/:sessionid", nil); err == nil {
+
+//     wireResponse, err = s.Do(req)
+
+//   }
+
+//   return wireResponse, err
+// }
+
+// // POST  /session/:sessionId/forward
+// //
+// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/forward
+// //
+// // Navigate forwards in the browser history, if possible.
+// //
+// func (s *Wire) Forward() (wireResponse *WireResponse, err error) {
+
+//   var req *http.Request
+//   if req, err = s.PostRequest("/session/:sessionid/forward", nil); err == nil {
+
+//     wireResponse, err = s.Do(req)
+
+//   }
+
+//   return wireResponse, err
+// }
+
+// // POST /session/:sessionId/keys
+// //
+// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/keys
+// //
+// // Send a sequence of key strokes to the active element. This command is similar to the send keys command in every aspect except the implicit termination: The modifiers are not released at the end of the call. Rather, the state of the modifier keys is kept between calls, so mouse interactions can be performed while modifier keys are depressed.
+// //
+// func (s *Wire) Keys(value []string) (wireResponse *WireResponse, err error) {
+
+//   var req *http.Request
+//   if req, err = s.PostRequest("/session/:sessionid/keys", &amp;Params{"value": value}); err == nil {
+
+//     wireResponse, err = s.Do(req)
+
+//   }
+
+//   return wireResponse, err
+// }
+
+// // GET /session/:sessionId/location
+// //
+// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/location
+// //
+// // Get the current geo location.
+// //
+// func (s *Wire) Location() (wireResponse *WireResponse, err error) {
+
+//   var req *http.Request
+//   if req, err = s.GetRequest("/session/:sessionid/location", nil); err == nil {
+
+//     wireResponse, err = s.Do(req)
+
+//   }
+
+//   return wireResponse, err
+// }
+
+// // POST /session/:sessionId/location
+// //
+// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/location
+// //
+// // Set the current geo location.
+// //
+// func (s *Wire) SetLocation(value *Location) (wireResponse *WireResponse, err error) {
+
+//   var req *http.Request
+//   if req, err = s.PostRequest("/session/:sessionid/location", &amp;Params{"location": value}); err == nil {
+
+//     wireResponse, err = s.Do(req)
+
+//   }
+
+//   return wireResponse, err
+// }
+
+// // POST  /session/:sessionId/refresh
+// //
+// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/refresh
+// //
+// // Refresh the current page.
+// //
+// func (s *Wire) Refresh() (wireResponse *WireResponse, err error) {
+
+//   var req *http.Request
+//   if req, err = s.PostRequest("/session/:sessionid/refresh", nil); err == nil {
+
+//     wireResponse, err = s.Do(req)
+
+//   }
+
+//   return wireResponse, err
+// }
+
+
+// POST /session
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#POST_/session
+//
+// See webdriver.NewSession() for more detail.
+//
+// Creates a new session for a Client.  An JsonWireProtocol call is made
+// to establish a session with a server.  The new session is added to the
+// list of active sessions and returned to the caller.
+//
+// Capabilities are optional, however, it you define them, then, you must
+// pass them in a specific order to this method.  Desired first, then, Required.
+// Capabilities are currently implemented as a simple map and quite frankly
+// I high doubt there will be much need to even support passing capabilities.
+// However, it is in the spec, so, there is minimal support for it.
+//
+//      session, err := client.NewSession(
+//               &amp;webdriver.Capabilities{"Platform": "Linux"}, // desired
+//               &amp;webdriver.Capabilities{})                    // required
+//
+// When a new session is created, the server will return the actual capabilities
+// currently supported.  An ActualCapabilities struct is created and attached
+// to the returned session.
+func (s *Wire) Session(values ...*Capabilities) (session *Session, err error) <span class="cov8" title="1">{
+
+  // capabilities are optioinal to the newSession method, but,
+  // not optional to the server.
+  // desired needs to be first in line, then, required.
+  // know a better way?  I'm all ears...
+  capabilities := map[string]*Capabilities{
+    "desiredCapabilities": &amp;Capabilities{},
+    "requiredCapabilities": &amp;Capabilities{},
+  }
+
+  if len(values) &gt; 0 &amp;&amp; values[0] != nil </span><span class="cov8" title="1">{
+    capabilities["desiredCapabilities"] = values[0]
+  }</span>
+
+  <span class="cov8" title="1">if len(values) &gt; 1 &amp;&amp; values[1] != nil </span><span class="cov8" title="1">{
+    capabilities["requiredCapabilities"] = values[1]
+  }</span>
+
+  <span class="cov8" title="1">var req *http.Request
+  if req, s.Error = s.PostRequest("/session", capabilities); s.Error == nil </span><span class="cov8" title="1">{
+
+    if s.Response, s.Error = s.Do(req); s.Success() </span><span class="cov8" title="1">{
+
+      // seems like everything went as planned.
+      // create a new session and initialize it.
+      session = &amp;Session{}
+      session.Wire = &amp;Wire{}
+
+      // setting the BaseUrl on the session is critical for http requests
+      session.BaseUrl = s.BaseUrl
+
+      // the Session ID returned during the API call.
+      session.SessionID = s.Response.SessionID
+
+      // extract the actual capabilities from the response and attach
+      // them to the session
+      actualCapabilities := &amp;ActualCapabilities{}
+      if s.Error = json.Unmarshal(s.Response.Value, actualCapabilities); s.Error == nil </span><span class="cov8" title="1">{
+
+        session.ActualCapabilities = actualCapabilities
+
+        // add the newly created session to the list of sessions
+        s.Sessions = append(s.Sessions, session)
+
+      }</span>
+
+    }
+
+  }
+
+  <span class="cov8" title="1">return session, s.Error</span>
+}
+
+// // GET /sessions
+// //
+// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/sessions
+// //
+// // Returns a list of the currently active sessions. Each session will be returned as a list of JSON objects with the following keys:
+// //
+// //    Key              Type      Description
+// //    id               string    The session ID.
+// //    capabilities     object    An object describing the session's capabilities.
+// //
+// //    Returns:
+// //    {Array.&lt;Object&gt;} A list of the currently active sessions.
+// func (s *Wire) Sessions() (wireResponse *WireResponse, err error) {
+
+//   if req, err := s.GetRequest("/sessions", nil); err == nil {
+
+//     wireResponse, err = s.Do(req)
+
+//   }
+
+//   return wireResponse, err
+// }
+
+// // GET /session/:sessionId/source
+// //
+// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#GET_/session/:sessionId/source
+// //
+// // Get and return the browser's current page source as HTML.
+// // wireResponse.StringValue() will contain the entire source as HTML.
+// //
+// // Source will return a wireResponse struct.  Value will contain a json.RawMessage value
+// // returned from the server.  Firefox and chrome return different encodings, so, the raw
+// // bytes are left "as is" from the server.  You can use wireResponse.UnmarshalValue() to attempt
+// // to decode the value into a normal string.
+// func (s *Wire) Source() (wireResponse *WireResponse, err error) {
+
+//   if req, err := s.GetRequest("/session/:sessionid/source", nil); err == nil {
+
+//     wireResponse, err = s.Do(req)
+
+//   }
+
+//   return wireResponse, err
+// }
+
+// GET /status
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#GET_/status
+//
+// Query the status of the webdriver server.
+// func (s *Wire) Status() (wireResponse *WireResponse, err error) {
+func (s *Wire) Status() *Wire <span class="cov8" title="1">{
+
+  var req *http.Request
+  if req, s.Error = s.GetRequest("/status", nil); s.Error == nil </span><span class="cov8" title="1">{
+
+    s.Response, s.Error = s.Do(req)
+
+  }</span>
+
+  <span class="cov8" title="1">return s</span>
+}
+
+// Extracts a WireResponse.Value as a string.
+func (s *Wire) StringValue() (value string, err error) <span class="cov8" title="1">{
+
+  if s.Success() &amp;&amp; s.Response.Value != nil </span><span class="cov8" title="1">{
+    value = string(bytes.Trim(s.Response.Value, "{}\""))
+  }</span>
+
+  <span class="cov8" title="1">return value, s.Error</span>
+}
+
+// Checks the values of the response from a webdriver server.  If the
+// http response code is 200 and the Status from the webdriver is 0, then,
+// the request is considered successful.
+func (s *Wire) Success() bool <span class="cov8" title="1">{
+  return s.Error == nil &amp;&amp; s.Response.HttpStatusCode == 200 &amp;&amp; s.Response.Status == 0
+}</span>
+
+// GET /session/:sessionId/title
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#GET_/session/:sessionId/title
+//
+// Get the current page title.
+func (s *Wire) Title() *Wire <span class="cov8" title="1">{
+
+  var req *http.Request
+  if req, s.Error = s.GetRequest("/session/:sessionid/title", nil); s.Error == nil </span><span class="cov8" title="1">{
+
+    s.Response, s.Error = s.Do(req)
+
+  }</span>
+
+  <span class="cov8" title="1">return s</span>
+}
+
+// POST  /session/:sessionId/url
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/url
+//
+// Navigate to a new URL.
+//
+// Browser should navigate to the given url.  url is any valid http url
+// that you would normally enter in a browser.
+// 
+//      url - {string} The URL to navigate to.
+func (s *Wire) Url(url string) *Wire <span class="cov8" title="1">{
+
+  var req *http.Request
+  if req, s.Error = s.PostRequest("/session/:sessionid/url", &amp;Params{"url": url}); s.Error == nil </span><span class="cov8" title="1">{
+
+    s.Response, s.Error = s.Do(req)
+
+  }</span>
+
+  <span class="cov8" title="1">return s</span>
+}
+
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package webdriver
+
+import (
+  "bytes"
+  "encoding/json"
+  "fmt"
+  "io/ioutil"
+  "net/http"
+)
+
 // Convenience method that wraps NewRequest()
-func (s *WireHTTP) DeleteRequest(url string, payload interface{}) (req *http.Request, err error) <span class="cov8" title="1">{
+func (s *Wire) DeleteRequest(url string, payload interface{}) (req *http.Request, err error) <span class="cov8" title="1">{
   return s.NewRequest("DELETE", url, payload)
 }</span>
 
 // Convenience method that wraps NewRequest()
-func (s *WireHTTP) GetRequest(url string, payload interface{}) (req *http.Request, err error) <span class="cov8" title="1">{
+func (s *Wire) GetRequest(url string, payload interface{}) (req *http.Request, err error) <span class="cov8" title="1">{
   return s.NewRequest("GET", url, payload)
 }</span>
 
 // Convenience method that wraps NewRequest()
-func (s *WireHTTP) PostRequest(url string, payload interface{}) (req *http.Request, err error) <span class="cov8" title="1">{
+func (s *Wire) PostRequest(url string, payload interface{}) (req *http.Request, err error) <span class="cov8" title="1">{
   return s.NewRequest("POST", url, payload)
 }</span>
 
@@ -1910,7 +889,7 @@ func (s *WireHTTP) PostRequest(url string, payload interface{}) (req *http.Reque
 //
 // payload - JSON values to be included in the request.
 //
-func (s *WireHTTP) NewRequest(method string, url string, payload interface{}) (req *http.Request, err error) <span class="cov8" title="1">{
+func (s *Wire) NewRequest(method string, url string, payload interface{}) (req *http.Request, err error) <span class="cov8" title="1">{
 
   var body []byte
 
@@ -1935,34 +914,20 @@ func (s *WireHTTP) NewRequest(method string, url string, payload interface{}) (r
   <span class="cov8" title="1">return req, err</span>
 }
 
-// Builds a complete url for a request including host and port.
-// Relies on the current value of BaseUrl and SessionID.
-//
-//   // given:
-//     BaseUrl = "http://localhost:7055"
-//     SessionID = "my-session-id"
-//
-//   // the following call
-//   BuildFullUrl("/session/:sessionid/forward")
-//
-//   // would produce
-//   http://localhost:7055/session/my-session-id/forward
-//
-func (s *WireHTTP) BuildFullUrl(url string) string <span class="cov8" title="1">{
-  return fmt.Sprintf("%v%v", s.BaseUrl, strings.Replace(url, ":sessionid", s.SessionID, -1))
-}</span>
-
 // Submits a request to a JsonWireProtocol server (selenium webdriver)
 // and reads the response back into a WireResponse if the server
 // responds with status code 200.
-func (s *WireHTTP) Do(req *http.Request) (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
+func (s *Wire) Do(req *http.Request) (wireResponse *WireResponse, err error) <span class="cov8" title="1">{
+
+  // never be nil
+  wireResponse = &amp;WireResponse{}
 
   var resp *http.Response
   if resp, err = http.DefaultClient.Do(req); err == nil </span><span class="cov8" title="1">{
 
-    wireResponse = &amp;WireResponse{}
-
     fmt.Println("status: ", resp.StatusCode)
+
+    wireResponse.HttpStatusCode = resp.StatusCode
 
     // looking at the code for the Do method of the DefaultClient in the
     // http package.  It looks like I shouldn't have to be concerned with
@@ -1983,97 +948,6 @@ func (s *WireHTTP) Do(req *http.Request) (wireResponse *WireResponse, err error)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</pre>
-		
-		<pre class="file" id="file10" style="display: none">package webdriver
-
-import (
-  "bytes"
-  "encoding/json"
-  // "fmt"
-  // "net/http"
-)
-
-type (
-
-  // the standard Json returned from a server
-  WireResponse struct {
-    Name                  string `json:"name"`
-    Session                       *Session
-    SessionID             string `json:"sessionId"`
-    Status                   int `json:"status"`
-    Value        json.RawMessage `json:"value"`
-
-  }
-
-)
-
-// Convenience method to extract a WireResponse.Value as a string.
-func (s *WireResponse) StringValue() (value string) <span class="cov8" title="1">{
-
-  if s.Value != nil </span><span class="cov8" title="1">{
-    value = string(bytes.Trim(s.Value, "{}\""))
-  }</span>
-
-  <span class="cov8" title="1">return value</span>
-}
-
-// Convenience method to unmarshal the json.RawMessage Value to a string.
-func (s *WireResponse) UnmarshalValue() (value string, err error) <span class="cov8" title="1">{
-
-  if s.Value != nil </span><span class="cov8" title="1">{
-    err = json.Unmarshal(s.Value, &amp;value)
-  }</span>
-
-  <span class="cov8" title="1">return value, err</span>
-}
-
-// Convenience method to unmarshal the json.RawMessage Value to a string.
-func (s *WireResponse) WebElement() (value *WebElement, err error) <span class="cov8" title="1">{
-
-  if s.Value != nil </span><span class="cov8" title="1">{
-    err = json.Unmarshal(s.Value, &amp;value)
-    value.Session = s.Session
-  }</span>
-
-  <span class="cov8" title="1">return value, err</span>
-}
-
-// Convenience method to unmarshal the json.RawMessage Value to a string.
-func (s *WireResponse) WebElements() (value []*WebElement, err error) <span class="cov8" title="1">{
-
-  if s.Value != nil </span><span class="cov8" title="1">{
-    err = json.Unmarshal(s.Value, &amp;value)
-    for _, v := range value </span><span class="cov8" title="1">{
-      v.Session = s.Session
-    }</span>
-  }
-
-  <span class="cov8" title="1">return value, err</span>
-}
 
 
 

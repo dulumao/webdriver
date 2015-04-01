@@ -70,7 +70,7 @@ func TestBuildOptions(t *testing.T) {
 ////////////////////////////////////////////////////////////////
 // starts another chrome webdriver on another port, then, shuts it down
 // to call Close() and Delete() on All of it's sessions.
-func TestCloseRestartChrome(t *testing.T) {
+func TestCreateDestroySessionWithCapabilities(t *testing.T) {
 
   if !no_chrome {
     client := &Chrome{
@@ -82,7 +82,17 @@ func TestCloseRestartChrome(t *testing.T) {
 
     if err := client.Run(); err == nil {
 
-      if _, err := client.NewSession(); err != nil {
+      if session, err := client.Session(&Capabilities{"Platform": "Linux"}, &Capabilities{"Platform": "Linux"}); err == nil {
+
+        if len(client.GetSessions()) <= 0 {
+          t.Error("client should have at least one session")
+        }
+
+        if wire := session.DeleteSession(); wire.Error != nil {
+          t.Error("could not delete session: ", wire.Error)
+        }
+
+      } else {
         t.Error(err)
       }
 
@@ -93,21 +103,21 @@ func TestCloseRestartChrome(t *testing.T) {
 
 }
 
-////////////////////////////////////////////////////////////////
-func TestDeleteSessionWithCapabilities(t *testing.T) {
+// ////////////////////////////////////////////////////////////////
+// func TestDeleteSessionWithCapabilities(t *testing.T) {
 
-  if !no_chrome {
-    if s, err := clientChrome.NewSession(
-                                  &Capabilities{"Platform": "Linux"},
-                                  &Capabilities{"Platform": "Linux"},
-                              ); err == nil {
-      s.Delete()
-    } else {
-      t.Error("Couldn't create new session")
-    }
-  }
+//   // if !no_chrome {
+//   //   if s, err := clientChrome.NewSession(
+//   //                                 &Capabilities{"Platform": "Linux"},
+//   //                                 &Capabilities{"Platform": "Linux"},
+//   //                             ); err == nil {
+//   //     s.Delete()
+//   //   } else {
+//   //     t.Error("Couldn't create new session")
+//   //   }
+//   // }
 
-}
+// }
 
 
 
