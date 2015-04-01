@@ -1,0 +1,26 @@
+chrome-errors.txt
+[3.003][INFO]: Launching chrome: /opt/google/chrome/google-chrome --disable-background-networking --disable-client-side-
+phishing-detection --disable-component-update --disable-default-apps --disable-hang-monitor --disable-prompt-on-repost -
+-disable-sync --disable-web-resources --enable-logging --ignore-certificate-errors --load-extension=/tmp/.com.google.Chr
+ome.ihsJyu/internal --log-level=0 --metrics-recording-only --no-first-run --password-store=basic --remote-debugging-port
+=12518 --safebrowsing-disable-auto-update --safebrowsing-disable-download-protection --test-type=webdriver --use-mock-ke
+ychain --user-data-dir=/tmp/.com.google.Chrome.yStTxV data:,
+[3.003][DEBUG]: DevTools request: http://127.0.0.1:12518/json/version
+Cannot chdir into /proc/ directory: Permission denied
+[0401/151612:ERROR:setuid_sandbox_client.cc(195)] Failed to read from chroot pipe: No such file or directory
+[3.130][DEBUG]: DevTools request failed
+[3.180][DEBUG]: DevTools request: http://127.0.0.1:12518/json/version
+[3.180][DEBUG]: DevTools request failed
+[3.231][DEBUG]: DevTools request: http://127.0.0.1:12518/json/version
+[3.231][DEBUG]: DevTools request failed
+[1:1:0401/151612:ERROR:nacl_fork_delegate_linux.cc(296)] Bad NaCl helper startup ack (0 bytes)
+Cannot chdir into /proc/ directory: Permission denied
+[1:1:0401/151612:ERROR:setuid_sandbox_client.cc(195)] Failed to read from chroot pipe: No such file or directory
+[3.281][DEBUG]: DevTools request: http://127.0.0.1:12518/json/version
+[3.282][DEBUG]: DevTools request failed
+[3.332][DEBUG]: DevTools request: http://127.0.0.1:12518/json/version
+[3.332][DEBUG]: DevTools request failed
+[3.382][DEBUG]: DevTools request: http://127.0.0.1:12518/json/version
+[3.383][DEBUG]: DevTools request failed
+[3.433][DEBUG]: DevTools request: http://127.0.0.1:12518/json/version
+[3.433][DEBUG]: DevTools request failed

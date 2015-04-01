@@ -34,8 +34,6 @@ type (
     UserJS string
     UserJSPolicy string
 
-    *Sessions
-
     *Wire
 
   }
@@ -54,10 +52,7 @@ func (s *Firefox) SetDefaults() (err error) {
   if s.UserJSPolicy == "" {s.UserJSPolicy = "merge"}
 
   log.Println("Firefox SetDefaults()")
-  s.Sessions = &Sessions{}
-  s.Sessions.SetDefaults()
   s.Wire = &Wire{}
-  s.Wire.SetDefaults()
 
   if s.Extension == nil {
     s.Extension = &Extension{}
@@ -166,7 +161,6 @@ func (s *Firefox) Run() (err error) {
           err = waitForConnect(s.Host, s.Port, s.Timeout * float64(time.Second))
 
           s.BaseUrl = fmt.Sprintf("http://%v:%v/hub", s.Host, s.Port)
-          s.Sessions.BaseUrl = fmt.Sprintf("http://%v:%v/hub", s.Host, s.Port)
 
           log.Println("Look Mom, no hands!! Firefox should now be running with webdriver at: ", s.BaseUrl)
         }
@@ -186,7 +180,11 @@ func (s *Firefox) Close() (err error) {
     log.Println("Close()")
 
   if s.Process != nil {
+
+    s.CloseSessions()
+
     log.Println("Close() killing process")
+
     s.Process.Kill()
 
     time.Sleep(2 * time.Second)
@@ -208,10 +206,9 @@ func (s *Firefox) Close() (err error) {
   return err
 }
 
-func (s *Firefox) GetSessions() (*Sessions) {
+func (s *Firefox) GetSessions() ([]*Session) {
   return s.Sessions
 }
-
 
 
 

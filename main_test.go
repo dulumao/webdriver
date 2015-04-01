@@ -80,34 +80,42 @@ func startChrome() {
 
 }
 
-// ////////////////////////////////////////////////////////////////
-// func startFirefox() {
+////////////////////////////////////////////////////////////////
+func startFirefox() {
 
-//   clientFirefox = &Firefox{
-//                       // ProfileDir: "/tmp/mywebdriver",
-//                       // UserJS: "user.js",
-//                       // RemoveOnClose: "none",
-//                       Extension: &Extension{
-//                         Path: "support/drivers/webdriver.xpi",
-//                       },
-//                     }
+  if os.Getenv("NOFIREFOX") != "" {
+    no_firefox = true
+  } else {
 
-//   if err := clientFirefox.Run(); err == nil {
+    client := &Firefox{
+                      // ProfileDir: "/tmp/mywebdriver",
+                      // UserJS: "user.js",
+                      // RemoveOnClose: "none",
+                      Extension: &Extension{
+                        Path: "support/drivers/webdriver.xpi",
+                      },
+                    }
 
-//     clients = append(clients, clientFirefox)
+    if err := client.Run(); err == nil {
 
-//     sleepForSeconds(2)
+      clients = append(clients, client)
 
-//     if sessionFirefox, err = clientFirefox.NewSession(); err != nil {
-//       log.Println("firefox", err)
-//     } else {
-//       sessions = append(sessions, sessionFirefox)
-//       log.Println("added firefox to list:", len(sessions), sessionFirefox)
-//     }
+      sleepForSeconds(2)
 
-//   }
+      if session, err := client.Session(); err == nil {
 
-// }
+        sessions["firefox"] = session
+        log.Println("added firefox to session list")
+
+      } else {
+        log.Println("cannot establish firefox session: ", err)
+      }
+
+
+    }
+  }
+
+}
 
 ////////////////////////////////////////////////////////////////
 func TestMain(m *testing.M) {
@@ -131,11 +139,7 @@ func TestMain(m *testing.M) {
 
   startChrome()
 
-  // if os.Getenv("NOFIREFOX") != "" {
-  //   no_firefox = true
-  // } else {
-  //   startFirefox()
-  // }
+  startFirefox()
 
   go startWebServer()
 

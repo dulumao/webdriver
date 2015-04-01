@@ -32,7 +32,7 @@ func TestGetStatus(t *testing.T) {
 ////////////////////////////////////////////////////////////////
 func TestGetTitle(t *testing.T) {
 
-  for _, session := range getSessions("chrome") {
+  for _, session := range getSessions() {
     if session.Url("http://localhost:8080/index.html").Title(); session.Error == nil {
       if title, err := session.StringValue(); err == nil {
         if title != "index" {
