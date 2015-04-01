@@ -24,8 +24,6 @@ type (
     Verbose bool
     WhiteList string
 
-    *Sessions
-
     *Wire
 
   }
@@ -40,10 +38,7 @@ func (s *Chrome) SetDefaults() (err error) {
   if s.Port == 0 {s.Port = 9515}
   if s.Timeout == 0 {s.Timeout = 60}
 
-  s.Sessions = &Sessions{}
-  s.Sessions.SetDefaults()
   s.Wire = &Wire{}
-  s.Wire.SetDefaults()
 
   return err
 }
@@ -75,7 +70,6 @@ func (s *Chrome) Run() (err error) {
 
     // shouldn't make a difference if UrlBase is blank or not
     s.BaseUrl = fmt.Sprintf("http://%v:%v%v", s.Host, s.Port, s.UrlBase)
-    s.Sessions.BaseUrl = fmt.Sprintf("http://%v:%v%v", s.Host, s.Port, s.UrlBase)
 
     err = waitForConnect(s.Host, s.Port, s.Timeout * float64(time.Second))
 
@@ -128,9 +122,7 @@ func (s *Chrome) Close() (err error) {
 
   if s.Process != nil {
 
-    for _, v := range s.Sessions.List {
-      v.Delete()
-    }
+    s.CloseSessions()
 
     s.Process.Kill()
   }
@@ -138,9 +130,9 @@ func (s *Chrome) Close() (err error) {
   return err
 }
 
-func (s *Chrome) GetSessions() (*Sessions) {
-  return s.Sessions
-}
+// func (s *Chrome) GetSessions() (*Sessions) {
+//   return s.Sessions
+// }
 
 
 
