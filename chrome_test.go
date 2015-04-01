@@ -72,7 +72,7 @@ func TestBuildOptions(t *testing.T) {
 // to call Close() and Delete() on All of it's sessions.
 func TestCreateDestroyChromeSessionWithCapabilities(t *testing.T) {
 
-  if !no_chrome {
+  if !no_chrome && !env_circle {
     client := &Chrome{
                         LogPath: "support/drivers/chromedriver.log",
                         PathExec: "support/drivers/chromedriver",
