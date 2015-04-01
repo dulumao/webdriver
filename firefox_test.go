@@ -1,7 +1,6 @@
 package webdriver
 
 import (
-  // "fmt"
   "os"
   "path/filepath"
   "testing"
@@ -88,7 +87,7 @@ func TestFirefoxExtensionPathToHomeDir(t *testing.T) {
 ////////////////////////////////////////////////////////////////
 // starts another firefox webdriver on another port, then, shuts it down
 // to call Close() and Delete() on All of it's sessions.
-func TestCloseRestartFirefox(t *testing.T) {
+func TestCreateDestroyFirefoxSession(t *testing.T) {
 
   if !no_firefox {
     client := &Firefox{
@@ -99,7 +98,17 @@ func TestCloseRestartFirefox(t *testing.T) {
 
     if err := client.Run(); err == nil {
 
-      if _, err := client.NewSession(); err != nil {
+      if session, err := client.Session(&Capabilities{"Platform": "Linux"}, &Capabilities{"Platform": "Linux"}); err == nil {
+
+        if len(client.GetSessions()) <= 0 {
+          t.Error("client should have at least one session")
+        }
+
+        if wire := session.DeleteSession(); wire.Error != nil {
+          t.Error("could not delete session: ", wire.Error)
+        }
+
+      } else {
         t.Error(err)
       }
 

@@ -65,10 +65,10 @@ func startChrome() {
       if session, err := client.Session(); err == nil {
 
         // rigging the tests for now
-        // if !env_circle {
+        if !env_circle {
           sessions["chrome"] = session
           log.Println("added chrome to session list")
-        // }
+        }
 
       } else {
         log.Println("cannot establish chrome session: ", err)
