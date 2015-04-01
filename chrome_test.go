@@ -72,54 +72,36 @@ func TestBuildOptions(t *testing.T) {
 // to call Close() and Delete() on All of it's sessions.
 func TestCreateDestroySessionWithCapabilities(t *testing.T) {
 
-  if !no_chrome {
-    client := &Chrome{
-                        LogPath: "support/drivers/chromedriver.log",
-                        PathExec: "support/drivers/chromedriver",
-                        Verbose: true,
-                        Port: 9516,
-                      }
+  // if !no_chrome {
+  //   client := &Chrome{
+  //                       LogPath: "support/drivers/chromedriver.log",
+  //                       PathExec: "support/drivers/chromedriver",
+  //                       Verbose: true,
+  //                       Port: 9516,
+  //                     }
 
-    if err := client.Run(); err == nil {
+  //   if err := client.Run(); err == nil {
 
-      if session, err := client.Session(&Capabilities{"Platform": "Linux"}, &Capabilities{"Platform": "Linux"}); err == nil {
+  //     if session, err := client.Session(&Capabilities{"Platform": "Linux"}, &Capabilities{"Platform": "Linux"}); err == nil {
 
-        if len(client.GetSessions()) <= 0 {
-          t.Error("client should have at least one session")
-        }
+  //       if len(client.GetSessions()) <= 0 {
+  //         t.Error("client should have at least one session")
+  //       }
 
-        if wire := session.DeleteSession(); wire.Error != nil {
-          t.Error("could not delete session: ", wire.Error)
-        }
+  //       if wire := session.DeleteSession(); wire.Error != nil {
+  //         t.Error("could not delete session: ", wire.Error)
+  //       }
 
-      } else {
-        t.Error(err)
-      }
+  //     } else {
+  //       t.Error(err)
+  //     }
 
-      client.Close()
+  //     client.Close()
 
-    }
-  }
+  //   }
+  // }
 
 }
-
-// ////////////////////////////////////////////////////////////////
-// func TestDeleteSessionWithCapabilities(t *testing.T) {
-
-//   // if !no_chrome {
-//   //   if s, err := clientChrome.NewSession(
-//   //                                 &Capabilities{"Platform": "Linux"},
-//   //                                 &Capabilities{"Platform": "Linux"},
-//   //                             ); err == nil {
-//   //     s.Delete()
-//   //   } else {
-//   //     t.Error("Couldn't create new session")
-//   //   }
-//   // }
-
-// }
-
-
 
 
 
