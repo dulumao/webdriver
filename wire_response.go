@@ -57,19 +57,6 @@ type (
 //   return value, err
 // }
 
-// // Convenience method to unmarshal the json.RawMessage Value to a Location.
-// func (s *WireResponse) Location() (value *Location, err error) {
-
-//   value = &Location{}
-
-//   if s.Value != nil {
-//     err = json.Unmarshal(s.Value, value)
-//   } else {
-//     err = errors.New("WireResponse.Value is nil")
-//   }
-
-//   return value, err
-// }
 
 // // Convenience method to unmarshal the json.RawMessage Value to a Point.
 // func (s *WireResponse) Point() (value *Point, err error) {
@@ -92,20 +79,6 @@ type (
 
 //   if s.Value != nil {
 //     err = json.Unmarshal(s.Value, value)
-//   } else {
-//     err = errors.New("WireResponse.Value is nil")
-//   }
-
-//   return value, err
-// }
-
-// // Convenience method to unmarshal the json.RawMessage Value to a Cookie.
-// func (s *WireResponse) Cookies() (value []*Cookie, err error) {
-
-//   // value = &Cookie{}
-
-//   if s.Value != nil {
-//     err = json.Unmarshal(s.Value, &value)
 //   } else {
 //     err = errors.New("WireResponse.Value is nil")
 //   }

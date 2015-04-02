@@ -304,8 +304,7 @@ func TestGeoLocation(t *testing.T) {
 
         if session.Location(); session.Success() {
 
-          var location *Location
-          if err := json.Unmarshal(session.Response.Value, &location); err == nil {
+          if location, err := session.GetLocation(); err == nil {
             if location.Altitude != 0 {
               t.Error("Altitude should be zero: ", location.Altitude)
             }

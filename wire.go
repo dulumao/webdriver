@@ -149,6 +149,16 @@ func (s *Wire) Cookie() *Wire {
   return s
 }
 
+// Convenience method to unmarshal the json.RawMessage Value to a Cookie.
+func (s *Wire) Cookies() (value []*Cookie, err error) {
+
+  if s.Success() && s.Response.Value != nil {
+    s.Error = json.Unmarshal(s.Response.Value, &value)
+  }
+
+  return value, s.Error
+}
+
 // DELETE /session/:sessionId/cookie/:name
 //
 // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie/:name
@@ -294,6 +304,18 @@ func (s *Wire) Location() *Wire {
   }
 
   return s
+}
+
+// Convenience method to unmarshal the json.RawMessage Value to a Location.
+func (s *Wire) GetLocation() (value *Location, err error) {
+
+  value = &Location{}
+
+  if s.Success() && s.Response.Value != nil {
+    s.Error = json.Unmarshal(s.Response.Value, value)
+  }
+
+  return value, s.Error
 }
 
 // POST /session/:sessionId/location
@@ -480,16 +502,6 @@ func (s *Wire) StringValue() (value string, err error) {
 
   if s.Success() && s.Response.Value != nil {
     value = string(bytes.Trim(s.Response.Value, "{}\""))
-  }
-
-  return value, s.Error
-}
-
-// Convenience method to unmarshal the json.RawMessage Value to a Cookie.
-func (s *Wire) Cookies() (value []*Cookie, err error) {
-
-  if s.Success() && s.Response.Value != nil {
-    s.Error = json.Unmarshal(s.Response.Value, &value)
   }
 
   return value, s.Error
