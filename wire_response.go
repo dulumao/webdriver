@@ -58,19 +58,6 @@ type (
 // }
 
 
-// // Convenience method to unmarshal the json.RawMessage Value to a Point.
-// func (s *WireResponse) Point() (value *Point, err error) {
-
-//   value = &Point{}
-
-//   if s.Value != nil {
-//     err = json.Unmarshal(s.Value, value)
-//   } else {
-//     err = errors.New("WireResponse.Value is nil")
-//   }
-
-//   return value, err
-// }
 
 
 
