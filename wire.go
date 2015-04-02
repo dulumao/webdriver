@@ -137,6 +137,8 @@ func (s *Wire) CloseSessions() *Wire {
 //
 func (s *Wire) Cookie() *Wire {
 
+  // TODO: ALL of the cookie related code needs to be fully tested.
+  // will revisit later.
   var req *http.Request
   if req, s.Error = s.GetRequest("/session/:sessionid/cookie", nil); s.Error == nil {
 

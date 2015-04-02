@@ -8,40 +8,6 @@ import (
   "testing"
 )
 
-////////////////////////////////////////////////////////////////
-func TestCookie(t *testing.T) {
-
-  var err error
-  var wireResponse *WireResponse
-  var cookies []*Cookie
-
-  // TODO: why chromedriver doesn't work and firefox does
-  for _, v := range sessions {
-    if _, err = v.Url("http://localhost:8080/cookies.html"); err == nil {
-    // if _, err = v.Url("http://www.google.com/"); err == nil {
-
-      sleepForSeconds(1)
-
-      if wireResponse, err = v.Cookie(); err == nil && wireResponse.Success() {
-
-        if cookies, err = wireResponse.Cookies(); err == nil {
-
-          if len(cookies) <= 0 {
-            t.Error("Server should have at least one cookie", wireResponse, cookies)
-          }
-
-        } else {
-          t.Error(err, wireResponse)
-        }
-
-      } else {
-        t.Error(err, wireResponse)
-      }
-
-    }
-  }
-
-}
 
 ////////////////////////////////////////////////////////////////
 func TestSetCookie(t *testing.T) {

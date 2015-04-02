@@ -9,8 +9,8 @@ wire.go
 - /sessions
 - /session/:sessionId
 - /session/:sessionId/back
-        - /session/:sessionId/cookie
-        - /session/:sessionId/cookie/:name
+- /session/:sessionId/cookie
+- /session/:sessionId/cookie/:name
 - /session/:sessionId/forward
 - /session/:sessionId/keys
 - /session/:sessionId/location
