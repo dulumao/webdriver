@@ -60,42 +60,6 @@ func TestUrlSourceTitle(t *testing.T) {
 
 }
 
-////////////////////////////////////////////////////////////////
-func TestSessions(t *testing.T) {
-
-  for _, v := range sessions {
-
-    sleepForSeconds(1)
-
-    // TODO revisit this test later
-    // should respond with an array of sessions
-    if _, err := v.Sessions(); err == nil {
-    // if wireResponse, err := v.Sessions(); err == nil {
-      // if wireResponse != nil {
-      // }
-    }
-
-    // status is another tough one.
-    // not all webdrivers will respond the same
-    // revisit later
-    if wireResponse, err := v.Status(); err == nil {
-      if wireResponse != nil {
-
-        var value map[string]interface{}
-        if err = json.Unmarshal(wireResponse.Value, &value); err != nil {
-          t.Error(err)
-        } else {
-          if value == nil {
-            t.Error("Status should have at least repsonded with something.")
-          }
-        }
-
-      }
-    }
-
-  }
-
-}
 
 ////////////////////////////////////////////////////////////////
 func TestNav01(t *testing.T) {

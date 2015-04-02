@@ -377,28 +377,30 @@ func (s *Wire) Session(values ...*Capabilities) (session *Session, err error) {
   return session, s.Error
 }
 
-// // GET /sessions
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/sessions
-// //
-// // Returns a list of the currently active sessions. Each session will be returned as a list of JSON objects with the following keys:
-// //
-// //    Key              Type      Description
-// //    id               string    The session ID.
-// //    capabilities     object    An object describing the session's capabilities.
-// //
-// //    Returns:
-// //    {Array.<Object>} A list of the currently active sessions.
-// func (s *Wire) Sessions() (wireResponse *WireResponse, err error) {
+// GET /sessions
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/sessions
+//
+// Returns a list of the currently active sessions. Each session will be returned as a list of JSON objects with the following keys:
+//
+//    Key              Type      Description
+//    id               string    The session ID.
+//    capabilities     object    An object describing the session's capabilities.
+//
+//    Returns:
+//    {Array.<Object>} A list of the currently active sessions.
+func (s *Wire) WireSessions() *Wire {
 
-//   if req, err := s.GetRequest("/sessions", nil); err == nil {
+  var req *http.Request
+  if req, s.Error = s.GetRequest("/sessions", nil); s.Error == nil {
 
-//     wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
-//   }
+  }
 
-//   return wireResponse, err
-// }
+  return s
+}
+
 
 // // GET /session/:sessionId/source
 // //

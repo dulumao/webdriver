@@ -20,6 +20,8 @@ type (
 
     Status() *Wire
 
+    WireSessions() *Wire
+
   }
 
 )

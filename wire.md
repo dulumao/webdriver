@@ -7,15 +7,15 @@ wire.go
 - /status
 - /session
 - /sessions
-- /session/:sessionId
-- /session/:sessionId/back
-- /session/:sessionId/cookie
-- /session/:sessionId/cookie/:name
-- /session/:sessionId/forward
-- /session/:sessionId/keys
-- /session/:sessionId/location
-- /session/:sessionId/refresh
-- /session/:sessionId/source
+        - /session/:sessionId
+        - /session/:sessionId/back
+        - /session/:sessionId/cookie
+        - /session/:sessionId/cookie/:name
+        - /session/:sessionId/forward
+        - /session/:sessionId/keys
+        - /session/:sessionId/location
+        - /session/:sessionId/refresh
+        - /session/:sessionId/source
 - /session/:sessionId/title
 - /session/:sessionId/url
 
@@ -46,37 +46,37 @@ wire_ime.go
 /session/:sessionId/ime/activate
 
 wire_window.go
-- /session/:sessionId/window_handle
-- /session/:sessionId/window_handles
-- /session/:sessionId/frame
-- /session/:sessionId/frame/parent
-- /session/:sessionId/window
-- /session/:sessionId/window/:windowHandle/size
-- /session/:sessionId/window/:windowHandle/position
-- /session/:sessionId/window/:windowHandle/maximize
+        - /session/:sessionId/window_handle
+        - /session/:sessionId/window_handles
+        - /session/:sessionId/frame
+        - /session/:sessionId/frame/parent
+        - /session/:sessionId/window
+        - /session/:sessionId/window/:windowHandle/size
+        - /session/:sessionId/window/:windowHandle/position
+        - /session/:sessionId/window/:windowHandle/maximize
 
 wire_element.go
-- /session/:sessionId/element
-- /session/:sessionId/elements
-- /session/:sessionId/element/active
-/session/:sessionId/element/:id     (json wire doc says command reserved for future use.  not implementing)
-- /session/:sessionId/element/:id/element
-- /session/:sessionId/element/:id/elements
-- /session/:sessionId/element/:id/click
-- /session/:sessionId/element/:id/submit
-- /session/:sessionId/element/:id/text
-- /session/:sessionId/element/:id/value
-- /session/:sessionId/element/:id/name
-- /session/:sessionId/element/:id/clear
-- /session/:sessionId/element/:id/selected
-- /session/:sessionId/element/:id/enabled
-- /session/:sessionId/element/:id/attribute/:name
-/session/:sessionId/element/:id/equals/:other
-- /session/:sessionId/element/:id/displayed
-- /session/:sessionId/element/:id/location
-- /session/:sessionId/element/:id/location_in_view
-- /session/:sessionId/element/:id/size
-- /session/:sessionId/element/:id/css/:propertyName
+        - /session/:sessionId/element
+        - /session/:sessionId/elements
+        - /session/:sessionId/element/active
+        /session/:sessionId/element/:id     (json wire doc says command reserved for future use.  not implementing)
+        - /session/:sessionId/element/:id/element
+        - /session/:sessionId/element/:id/elements
+        - /session/:sessionId/element/:id/click
+        - /session/:sessionId/element/:id/submit
+        - /session/:sessionId/element/:id/text
+        - /session/:sessionId/element/:id/value
+        - /session/:sessionId/element/:id/name
+        - /session/:sessionId/element/:id/clear
+        - /session/:sessionId/element/:id/selected
+        - /session/:sessionId/element/:id/enabled
+        - /session/:sessionId/element/:id/attribute/:name
+        /session/:sessionId/element/:id/equals/:other
+        - /session/:sessionId/element/:id/displayed
+        - /session/:sessionId/element/:id/location
+        - /session/:sessionId/element/:id/location_in_view
+        - /session/:sessionId/element/:id/size
+        - /session/:sessionId/element/:id/css/:propertyName
 
 
 wire_storage.go
