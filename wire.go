@@ -72,23 +72,23 @@ func (s *Wire) BuildFullUrl(url string) string {
   return fmt.Sprintf("%v%v", s.BaseUrl, strings.Replace(url, ":sessionid", s.SessionID, -1))
 }
 
-// // POST  /session/:sessionId/back
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/back
-// //
-// // Navigate forwards in the browser history, if possible.
-// //
-// func (s *Wire) Back() (wireResponse *WireResponse, err error) {
+// POST  /session/:sessionId/back
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/back
+//
+// Navigate forwards in the browser history, if possible.
+//
+func (s *Wire) Back() *Wire {
 
-//   var req *http.Request
-//   if req, err = s.PostRequest("/session/:sessionid/back", nil); err == nil {
+  var req *http.Request
+  if req, s.Error = s.PostRequest("/session/:sessionid/back", nil); s.Error == nil {
 
-//     wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
-//   }
+  }
 
-//   return wireResponse, err
-// }
+  return s
+}
 
 // Closes all of the active sessions.
 func (s *Wire) CloseSessions() *Wire {
@@ -190,42 +190,43 @@ func (s *Wire) DeleteSession() *Wire {
   return s
 }
 
-// // GET /session/:sessionid
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId
-// //
-// // Retrieve the capabilities of the specified session.
-// //
-// //    Returns:
-// //    {object} An object describing the session's capabilities.
-// func (s *Wire) GetSession() (wireResponse *WireResponse, err error) {
+// GET /session/:sessionid
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId
+//
+// Retrieve the capabilities of the specified session.
+//
+//    Returns:
+//    {object} An object describing the session's capabilities.
+func (s *Wire) GetSession() *Wire {
 
-//   if req, err := s.GetRequest("/session/:sessionid", nil); err == nil {
+  var req *http.Request
+  if req, s.Error = s.GetRequest("/session/:sessionid", nil); s.Error == nil {
 
-//     wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
-//   }
+  }
 
-//   return wireResponse, err
-// }
+  return s
+}
 
-// // POST  /session/:sessionId/forward
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/forward
-// //
-// // Navigate forwards in the browser history, if possible.
-// //
-// func (s *Wire) Forward() (wireResponse *WireResponse, err error) {
+// POST  /session/:sessionId/forward
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/forward
+//
+// Navigate forwards in the browser history, if possible.
+//
+func (s *Wire) Forward() *Wire {
 
-//   var req *http.Request
-//   if req, err = s.PostRequest("/session/:sessionid/forward", nil); err == nil {
+  var req *http.Request
+  if req, s.Error = s.PostRequest("/session/:sessionid/forward", nil); s.Error == nil {
 
-//     wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
-//   }
+  }
 
-//   return wireResponse, err
-// }
+  return s
+}
 
 // // POST /session/:sessionId/keys
 // //
@@ -281,24 +282,23 @@ func (s *Wire) DeleteSession() *Wire {
 //   return wireResponse, err
 // }
 
-// // POST  /session/:sessionId/refresh
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/refresh
-// //
-// // Refresh the current page.
-// //
-// func (s *Wire) Refresh() (wireResponse *WireResponse, err error) {
+// POST  /session/:sessionId/refresh
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/refresh
+//
+// Refresh the current page.
+//
+func (s *Wire) Refresh() *Wire {
 
-//   var req *http.Request
-//   if req, err = s.PostRequest("/session/:sessionid/refresh", nil); err == nil {
+  var req *http.Request
+  if req, s.Error = s.PostRequest("/session/:sessionid/refresh", nil); s.Error == nil {
 
-//     wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
-//   }
+  }
 
-//   return wireResponse, err
-// }
-
+  return s
+}
 
 // POST /session
 //
@@ -402,27 +402,28 @@ func (s *Wire) WireSessions() *Wire {
 }
 
 
-// // GET /session/:sessionId/source
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#GET_/session/:sessionId/source
-// //
-// // Get and return the browser's current page source as HTML.
-// // wireResponse.StringValue() will contain the entire source as HTML.
-// //
-// // Source will return a wireResponse struct.  Value will contain a json.RawMessage value
-// // returned from the server.  Firefox and chrome return different encodings, so, the raw
-// // bytes are left "as is" from the server.  You can use wireResponse.UnmarshalValue() to attempt
-// // to decode the value into a normal string.
-// func (s *Wire) Source() (wireResponse *WireResponse, err error) {
+// GET /session/:sessionId/source
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#GET_/session/:sessionId/source
+//
+// Get and return the browser's current page source as HTML.
+// wireResponse.StringValue() will contain the entire source as HTML.
+//
+// Source will return a wireResponse struct.  Value will contain a json.RawMessage value
+// returned from the server.  Firefox and chrome return different encodings, so, the raw
+// bytes are left "as is" from the server.  You can use wireResponse.UnmarshalValue() to attempt
+// to decode the value into a normal string.
+func (s *Wire) Source() *Wire {
 
-//   if req, err := s.GetRequest("/session/:sessionid/source", nil); err == nil {
+  var req *http.Request
+  if req, s.Error = s.GetRequest("/session/:sessionid/source", nil); s.Error == nil {
 
-//     wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
-//   }
+  }
 
-//   return wireResponse, err
-// }
+  return s
+}
 
 // GET /status
 //
@@ -447,6 +448,16 @@ func (s *Wire) StringValue() (value string, err error) {
 
   if s.Success() && s.Response.Value != nil {
     value = string(bytes.Trim(s.Response.Value, "{}\""))
+  }
+
+  return value, s.Error
+}
+
+// Convenience method to unmarshal the json.RawMessage Value to a string.
+func (s *Wire) UnmarshalValue() (value string, err error) {
+
+  if s.Success() && s.Response.Value != nil {
+    s.Error = json.Unmarshal(s.Response.Value, &value)
   }
 
   return value, s.Error
