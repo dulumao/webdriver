@@ -1,4 +1,4 @@
-[2.997][INFO]: COMMAND InitSession {
+[3.001][INFO]: COMMAND InitSession {
    "desiredCapabilities": {
 
    },
@@ -6,7 +6,7 @@
 
    }
 }
-[2.998][INFO]: Populating Preferences file: {
+[3.002][INFO]: Populating Preferences file: {
    "alternate_error_pages": {
       "enabled": false
    },
@@ -57,7 +57,7 @@
       "enabled": false
    }
 }
-[2.998][INFO]: Populating Local State file: {
+[3.002][INFO]: Populating Local State file: {
    "background_mode": {
       "enabled": false
    },
@@ -67,108 +67,104 @@
       }
    }
 }
-[2.999][INFO]: Launching chrome: /usr/bin/chromium-browser --disable-background-networking --disable-client-side-phishing-detection --disable-component-update --disable-default-apps --disable-hang-monitor --disable-prompt-on-repost --disable-sync --disable-web-resources --enable-logging --ignore-certificate-errors --load-extension=/tmp/.com.google.Chrome.9L2IzN/internal --log-level=0 --metrics-recording-only --no-first-run --password-store=basic --remote-debugging-port=12502 --safebrowsing-disable-auto-update --safebrowsing-disable-download-protection --test-type=webdriver --use-mock-keychain --user-data-dir=/tmp/.com.google.Chrome.HhPD5Y data:,
-[2.999][DEBUG]: DevTools request: http://127.0.0.1:12502/json/version
-[3.083][DEBUG]: DevTools request failed
-[3.133][DEBUG]: DevTools request: http://127.0.0.1:12502/json/version
-[3.133][DEBUG]: DevTools request failed
-[3.183][DEBUG]: DevTools request: http://127.0.0.1:12502/json/version
-[3.184][DEBUG]: DevTools request failed
-[3.234][DEBUG]: DevTools request: http://127.0.0.1:12502/json/version
-[3.234][DEBUG]: DevTools request failed
-[3.285][DEBUG]: DevTools request: http://127.0.0.1:12502/json/version
-[3.285][DEBUG]: DevTools request failed
-[3.335][DEBUG]: DevTools request: http://127.0.0.1:12502/json/version
-[3.336][DEBUG]: DevTools request failed
-[3.386][DEBUG]: DevTools request: http://127.0.0.1:12502/json/version
-[3.386][DEBUG]: DevTools request failed
-[3.436][DEBUG]: DevTools request: http://127.0.0.1:12502/json/version
-[3.437][DEBUG]: DevTools request failed
-[3.487][DEBUG]: DevTools request: http://127.0.0.1:12502/json/version
-[3.488][DEBUG]: DevTools request failed
-[3.538][DEBUG]: DevTools request: http://127.0.0.1:12502/json/version
-[3.539][DEBUG]: DevTools request failed
-[3.589][DEBUG]: DevTools request: http://127.0.0.1:12502/json/version
-[3.590][DEBUG]: DevTools request failed
-[3.640][DEBUG]: DevTools request: http://127.0.0.1:12502/json/version
-[3.641][DEBUG]: DevTools request failed
-[3.691][DEBUG]: DevTools request: http://127.0.0.1:12502/json/version
-[3.691][DEBUG]: DevTools request failed
-[3.741][DEBUG]: DevTools request: http://127.0.0.1:12502/json/version
-[3.834][DEBUG]: DevTools response: {
+[3.003][INFO]: Launching chrome: /usr/bin/chromium-browser --disable-background-networking --disable-client-side-phishing-detection --disable-component-update --disable-default-apps --disable-hang-monitor --disable-prompt-on-repost --disable-sync --disable-web-resources --enable-logging --ignore-certificate-errors --load-extension=/tmp/.com.google.Chrome.N0MJoF/internal --log-level=0 --metrics-recording-only --no-first-run --password-store=basic --remote-debugging-port=12004 --safebrowsing-disable-auto-update --safebrowsing-disable-download-protection --test-type=webdriver --use-mock-keychain --user-data-dir=/tmp/.com.google.Chrome.08Y2Yo data:,
+[3.003][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
+[3.086][DEBUG]: DevTools request failed
+[3.136][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
+[3.136][DEBUG]: DevTools request failed
+[3.186][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
+[3.187][DEBUG]: DevTools request failed
+[3.239][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
+[3.240][DEBUG]: DevTools request failed
+[3.290][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
+[3.290][DEBUG]: DevTools request failed
+[3.341][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
+[3.341][DEBUG]: DevTools request failed
+[3.391][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
+[3.392][DEBUG]: DevTools request failed
+[3.442][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
+[3.443][DEBUG]: DevTools request failed
+[3.493][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
+[3.494][DEBUG]: DevTools request failed
+[3.544][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
+[3.545][DEBUG]: DevTools request failed
+[3.595][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
+[3.595][DEBUG]: DevTools request failed
+[3.645][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
+[3.646][DEBUG]: DevTools request failed
+[3.696][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
+[3.696][DEBUG]: DevTools request failed
+[3.746][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
+[3.819][DEBUG]: DevTools response: {
    "Browser": "Chrome/41.0.2272.76",
    "Protocol-Version": "1.1",
    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/41.0.2272.76 Chrome/41.0.2272.76 Safari/537.36",
    "WebKit-Version": "537.36 (@191030)"
 }
 
-[3.834][DEBUG]: DevTools request: http://127.0.0.1:12502/json
-[3.837][DEBUG]: DevTools response: [ {
+[3.819][DEBUG]: DevTools request: http://127.0.0.1:12004/json
+[3.824][DEBUG]: DevTools response: [ {
    "description": "",
-   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=127.0.0.1:12502/devtools/page/A93C263C-0CF6-4481-8A4F-AEFAEB54C052",
+   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=127.0.0.1:12004/devtools/page/19064913-83BA-4495-9DAD-B17B4A10C891",
    "faviconUrl": "chrome://extension-icon/aapnijgdinlhnhlmodcfapnahmbfebeb/24/1",
-   "id": "A93C263C-0CF6-4481-8A4F-AEFAEB54C052",
+   "id": "19064913-83BA-4495-9DAD-B17B4A10C891",
    "title": "Chrome Automation Extension",
    "type": "background_page",
    "url": "chrome-extension://aapnijgdinlhnhlmodcfapnahmbfebeb/_generated_background_page.html",
-   "webSocketDebuggerUrl": "ws://127.0.0.1:12502/devtools/page/A93C263C-0CF6-4481-8A4F-AEFAEB54C052"
+   "webSocketDebuggerUrl": "ws://127.0.0.1:12004/devtools/page/19064913-83BA-4495-9DAD-B17B4A10C891"
 }, {
    "description": "",
-   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=127.0.0.1:12502/devtools/page/C87420C6-5EBC-4DBB-A720-419ABE377E3B",
-   "id": "C87420C6-5EBC-4DBB-A720-419ABE377E3B",
+   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=127.0.0.1:12004/devtools/page/F1065105-029D-47E6-8C60-B1BB9CF77123",
+   "id": "F1065105-029D-47E6-8C60-B1BB9CF77123",
    "title": "",
    "type": "page",
    "url": "data:,",
-   "webSocketDebuggerUrl": "ws://127.0.0.1:12502/devtools/page/C87420C6-5EBC-4DBB-A720-419ABE377E3B"
+   "webSocketDebuggerUrl": "ws://127.0.0.1:12004/devtools/page/F1065105-029D-47E6-8C60-B1BB9CF77123"
 } ]
 
-[3.837][DEBUG]: DevTools request: http://127.0.0.1:12502/json
-[3.838][DEBUG]: DevTools response: [ {
+[3.824][DEBUG]: DevTools request: http://127.0.0.1:12004/json
+[3.825][DEBUG]: DevTools response: [ {
    "description": "",
-   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=127.0.0.1:12502/devtools/page/A93C263C-0CF6-4481-8A4F-AEFAEB54C052",
+   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=127.0.0.1:12004/devtools/page/19064913-83BA-4495-9DAD-B17B4A10C891",
    "faviconUrl": "chrome://extension-icon/aapnijgdinlhnhlmodcfapnahmbfebeb/24/1",
-   "id": "A93C263C-0CF6-4481-8A4F-AEFAEB54C052",
+   "id": "19064913-83BA-4495-9DAD-B17B4A10C891",
    "title": "Chrome Automation Extension",
    "type": "background_page",
    "url": "chrome-extension://aapnijgdinlhnhlmodcfapnahmbfebeb/_generated_background_page.html",
-   "webSocketDebuggerUrl": "ws://127.0.0.1:12502/devtools/page/A93C263C-0CF6-4481-8A4F-AEFAEB54C052"
+   "webSocketDebuggerUrl": "ws://127.0.0.1:12004/devtools/page/19064913-83BA-4495-9DAD-B17B4A10C891"
 }, {
    "description": "",
-   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=127.0.0.1:12502/devtools/page/C87420C6-5EBC-4DBB-A720-419ABE377E3B",
-   "id": "C87420C6-5EBC-4DBB-A720-419ABE377E3B",
+   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=127.0.0.1:12004/devtools/page/F1065105-029D-47E6-8C60-B1BB9CF77123",
+   "id": "F1065105-029D-47E6-8C60-B1BB9CF77123",
    "title": "",
    "type": "page",
    "url": "data:,",
-   "webSocketDebuggerUrl": "ws://127.0.0.1:12502/devtools/page/C87420C6-5EBC-4DBB-A720-419ABE377E3B"
+   "webSocketDebuggerUrl": "ws://127.0.0.1:12004/devtools/page/F1065105-029D-47E6-8C60-B1BB9CF77123"
 } ]
 
-[3.838][DEBUG]: DEVTOOLS COMMAND Console.enable (id=1) {
+[3.830][DEBUG]: DEVTOOLS COMMAND Console.enable (id=1) {
 
 }
-[3.838][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=2) {
+[3.836][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=2) {
 
 }
-[3.838][DEBUG]: DEVTOOLS COMMAND Runtime.enable (id=3) {
+[3.837][DEBUG]: DEVTOOLS COMMAND Runtime.enable (id=3) {
 
 }
-[3.838][DEBUG]: DEVTOOLS COMMAND Page.enable (id=4) {
+[3.837][DEBUG]: DEVTOOLS COMMAND Page.enable (id=4) {
 
 }
-[3.838][DEBUG]: DEVTOOLS COMMAND Page.enable (id=5) {
+[3.837][DEBUG]: DEVTOOLS COMMAND Page.enable (id=5) {
 
 }
-[3.866][DEBUG]: DEVTOOLS RESPONSE Console.enable (id=1) {
+ATTENTION: default value of option force_s3tc_enable overridden by environment.
+[11821:11821:0402/042658:ERROR:sandbox_linux.cc(325)] InitializeSandbox() called with multiple threads in process gpu-process
+[3.947][DEBUG]: DEVTOOLS RESPONSE Console.enable (id=1) {
 
 }
-[3.867][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
-
-}
-[3.867][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=6) {
-
-}
-[3.867][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=2) {
+[3.948][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=2) {
    "root": {
-      "baseURL": "",
+      "baseURL": "data:,",
       "childNodeCount": 1,
       "children": [ {
          "attributes": [  ],
@@ -183,7 +179,7 @@
             "nodeValue": ""
          }, {
             "attributes": [  ],
-            "childNodeCount": 0,
+            "childNodeCount": 1,
             "localName": "body",
             "nodeId": 4,
             "nodeName": "BODY",
@@ -196,7 +192,7 @@
          "nodeType": 1,
          "nodeValue": ""
       } ],
-      "documentURL": "",
+      "documentURL": "data:,",
       "localName": "",
       "nodeId": 1,
       "nodeName": "#document",
@@ -205,54 +201,46 @@
       "xmlVersion": ""
    }
 }
-[3.867][DEBUG]: DEVTOOLS RESPONSE Runtime.enable (id=3) {
-
-}
-[3.867][DEBUG]: DEVTOOLS RESPONSE Page.enable (id=4) {
-
-}
-[3.867][DEBUG]: DEVTOOLS RESPONSE Page.enable (id=5) {
-
-}
-[3.876][DEBUG]: DEVTOOLS EVENT Page.frameNavigated {
-   "frame": {
-      "id": "4.2",
-      "loaderId": "4.1",
-      "mimeType": "text/plain",
-      "securityOrigin": "://",
-      "url": "data:,"
-   }
-}
-[3.876][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
-
-}
-[3.876][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
+[3.948][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
    "context": {
-      "frameId": "4.2",
+      "frameId": "4.1",
       "id": 1,
       "isPageContext": true,
       "name": "",
       "origin": "://"
    }
 }
-ATTENTION: default value of option force_s3tc_enable overridden by environment.
-[11048:11048:0402/041010:ERROR:sandbox_linux.cc(325)] InitializeSandbox() called with multiple threads in process gpu-process
-[3.955][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
-   "timestamp": 1427965810.96031
-}
-[3.956][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
-   "frameId": "4.2"
-}
-[3.956][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
+[3.948][DEBUG]: DEVTOOLS RESPONSE Runtime.enable (id=3) {
 
 }
-[3.956][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=7) {
+[3.948][DEBUG]: DEVTOOLS RESPONSE Page.enable (id=4) {
 
 }
-[3.956][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
-   "timestamp": 1427965810.96066
+[3.948][DEBUG]: DEVTOOLS RESPONSE Page.enable (id=5) {
+
 }
-[3.956][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=6) {
+[3.948][DEBUG]: DEVTOOLS COMMAND Page.enable (id=6) {
+
+}
+[3.949][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
+   "timestamp": 1427966818.77094
+}
+[3.949][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
+   "frameId": "4.1"
+}
+[3.949][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
+
+}
+[3.949][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=7) {
+
+}
+[3.949][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
+   "timestamp": 1427966818.77138
+}
+[3.954][DEBUG]: DEVTOOLS RESPONSE Page.enable (id=6) {
+
+}
+[3.954][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=7) {
    "root": {
       "baseURL": "data:,",
       "childNodeCount": 1,
@@ -291,56 +279,11 @@ ATTENTION: default value of option force_s3tc_enable overridden by environment.
       "xmlVersion": ""
    }
 }
-[3.959][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=7) {
-   "root": {
-      "baseURL": "data:,",
-      "childNodeCount": 1,
-      "children": [ {
-         "attributes": [  ],
-         "childNodeCount": 2,
-         "children": [ {
-            "attributes": [  ],
-            "childNodeCount": 0,
-            "localName": "head",
-            "nodeId": 11,
-            "nodeName": "HEAD",
-            "nodeType": 1,
-            "nodeValue": ""
-         }, {
-            "attributes": [  ],
-            "childNodeCount": 1,
-            "localName": "body",
-            "nodeId": 12,
-            "nodeName": "BODY",
-            "nodeType": 1,
-            "nodeValue": ""
-         } ],
-         "localName": "html",
-         "nodeId": 10,
-         "nodeName": "HTML",
-         "nodeType": 1,
-         "nodeValue": ""
-      } ],
-      "documentURL": "data:,",
-      "localName": "",
-      "nodeId": 9,
-      "nodeName": "#document",
-      "nodeType": 9,
-      "nodeValue": "",
-      "xmlVersion": ""
-   }
-}
-[3.959][DEBUG]: DEVTOOLS COMMAND Page.enable (id=8) {
-
-}
-[3.960][DEBUG]: DEVTOOLS RESPONSE Page.enable (id=8) {
-
-}
-[3.960][DEBUG]: DEVTOOLS COMMAND Runtime.evaluate (id=9) {
+[3.954][DEBUG]: DEVTOOLS COMMAND Runtime.evaluate (id=8) {
    "expression": "(function() { // Copyright (c) 2012 The Chromium Authors. All rights reserved.\n// Use of this source code is governed by a BSD-style license that can be\n// found in the LICENSE file.\n\n/**\n * Enum f...",
    "returnByValue": true
 }
-[3.971][DEBUG]: DEVTOOLS RESPONSE Runtime.evaluate (id=9) {
+[3.960][DEBUG]: DEVTOOLS RESPONSE Runtime.evaluate (id=8) {
    "result": {
       "type": "object",
       "value": {
@@ -350,13 +293,13 @@ ATTENTION: default value of option force_s3tc_enable overridden by environment.
    },
    "wasThrown": false
 }
-[3.972][INFO]: RESPONSE InitSession {
+[3.960][INFO]: RESPONSE InitSession {
    "acceptSslCerts": true,
    "applicationCacheEnabled": false,
    "browserConnectionEnabled": false,
    "browserName": "chrome",
    "chrome": {
-      "userDataDir": "/tmp/.com.google.Chrome.HhPD5Y"
+      "userDataDir": "/tmp/.com.google.Chrome.08Y2Yo"
    },
    "cssSelectorsEnabled": true,
    "databaseEnabled": false,
@@ -372,36 +315,36 @@ ATTENTION: default value of option force_s3tc_enable overridden by environment.
    "version": "41.0.2272.76",
    "webStorageEnabled": true
 }
-[3.973][INFO]: COMMAND Navigate {
+[3.961][INFO]: COMMAND Navigate {
    "url": "http://localhost:8080/index.html"
 }
-[3.973][INFO]: Waiting for pending navigations...
-[3.973][INFO]: Done waiting for pending navigations
-[3.973][DEBUG]: DEVTOOLS COMMAND Page.navigate (id=10) {
+[3.961][INFO]: Waiting for pending navigations...
+[3.961][INFO]: Done waiting for pending navigations
+[3.961][DEBUG]: DEVTOOLS COMMAND Page.navigate (id=9) {
    "url": "http://localhost:8080/index.html"
 }
-[3.999][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
+[3.991][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
 
 }
-[3.999][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=11) {
+[3.991][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=10) {
 
 }
-[3.999][DEBUG]: DEVTOOLS EVENT Runtime.executionContextsCleared {
+[3.991][DEBUG]: DEVTOOLS EVENT Runtime.executionContextsCleared {
 
 }
-[3.999][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
+[3.991][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
 
 }
-[3.999][DEBUG]: DEVTOOLS RESPONSE Page.navigate (id=10) {
+[3.992][DEBUG]: DEVTOOLS RESPONSE Page.navigate (id=9) {
    "frameId": "18.1"
 }
-[3.999][DEBUG]: DEVTOOLS COMMAND Runtime.evaluate (id=12) {
+[3.992][DEBUG]: DEVTOOLS COMMAND Runtime.evaluate (id=11) {
    "expression": "document.URL"
 }
-[4.000][DEBUG]: DEVTOOLS EVENT Page.frameStartedLoading {
+[3.992][DEBUG]: DEVTOOLS EVENT Page.frameStartedLoading {
    "frameId": "18.1"
 }
-[4.000][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=11) {
+[3.995][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=10) {
    "root": {
       "baseURL": "",
       "childNodeCount": 1,
@@ -440,7 +383,7 @@ ATTENTION: default value of option force_s3tc_enable overridden by environment.
       "xmlVersion": ""
    }
 }
-[4.014][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
+[4.008][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
    "context": {
       "frameId": "18.1",
       "id": 1,
@@ -449,15 +392,15 @@ ATTENTION: default value of option force_s3tc_enable overridden by environment.
       "origin": "://"
    }
 }
-[4.014][DEBUG]: DEVTOOLS RESPONSE Runtime.evaluate (id=12) {
+[4.008][DEBUG]: DEVTOOLS RESPONSE Runtime.evaluate (id=11) {
    "result": {
       "type": "string",
       "value": ""
    },
    "wasThrown": false
 }
-[4.014][INFO]: Waiting for pending navigations...
-[4.021][DEBUG]: DEVTOOLS EVENT Page.frameNavigated {
+[4.008][INFO]: Waiting for pending navigations...
+[4.015][DEBUG]: DEVTOOLS EVENT Page.frameNavigated {
    "frame": {
       "id": "18.1",
       "loaderId": "18.2",
@@ -466,26 +409,25 @@ ATTENTION: default value of option force_s3tc_enable overridden by environment.
       "url": "http://localhost:8080/index.html"
    }
 }
-[4.021][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
+[4.015][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
 
 }
-[4.030][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
-   "timestamp": 1427965811.04498
+[4.025][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
+   "timestamp": 1427966818.84427
 }
-[4.030][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
+[4.025][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
    "frameId": "18.1"
 }
-[4.030][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
+[4.025][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
 
 }
-[4.030][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=13) {
+[4.025][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=12) {
 
 }
-[4.030][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
-   "timestamp": 1427965811.04999
+[4.025][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
+   "timestamp": 1427966818.85303
 }
-[11002:11041:0402/041011:ERROR:channel.cc(305)] RawChannel read error (connection broken)
-[4.035][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=13) {
+[4.026][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=12) {
    "root": {
       "baseURL": "http://localhost:8080/index.html",
       "childNodeCount": 1,
@@ -524,40 +466,40 @@ ATTENTION: default value of option force_s3tc_enable overridden by environment.
       "xmlVersion": ""
    }
 }
-[4.035][INFO]: Done waiting for pending navigations
-[4.035][INFO]: RESPONSE Navigate
-[5.037][INFO]: COMMAND SetGeolocation {
+[4.026][INFO]: Done waiting for pending navigations
+[4.026][INFO]: RESPONSE Navigate
+[5.027][INFO]: COMMAND SetGeolocation {
    "location": {
       "altitude": 0,
       "latitude": 50,
       "longitude": 70
    }
 }
-[5.037][INFO]: Waiting for pending navigations...
-[5.037][INFO]: Done waiting for pending navigations
-[5.037][DEBUG]: DEVTOOLS COMMAND Page.setGeolocationOverride (id=14) {
+[5.027][INFO]: Waiting for pending navigations...
+[5.027][INFO]: Done waiting for pending navigations
+[5.027][DEBUG]: DEVTOOLS COMMAND Page.setGeolocationOverride (id=13) {
    "accuracy": 100.0,
    "latitude": 50.0,
    "longitude": 70.0
 }
-[5.038][DEBUG]: DEVTOOLS RESPONSE Page.setGeolocationOverride (id=14) {
+[5.028][DEBUG]: DEVTOOLS RESPONSE Page.setGeolocationOverride (id=13) {
 
 }
-[5.038][INFO]: Waiting for pending navigations...
-[5.038][INFO]: Done waiting for pending navigations
-[5.038][INFO]: RESPONSE SetGeolocation
-[6.039][INFO]: COMMAND GetGeolocation {
+[5.028][INFO]: Waiting for pending navigations...
+[5.028][INFO]: Done waiting for pending navigations
+[5.028][INFO]: RESPONSE SetGeolocation
+[6.030][INFO]: COMMAND GetGeolocation {
 
 }
-[6.039][INFO]: RESPONSE GetGeolocation {
+[6.030][INFO]: RESPONSE GetGeolocation {
    "accuracy": 100.0,
    "altitude": 0.0,
    "latitude": 50.0,
    "longitude": 70.0
 }
-[6.040][INFO]: COMMAND Quit {
+[6.031][INFO]: COMMAND Quit {
 
 }
-[6.091][INFO]: RESPONSE Quit
-[6.091][DEBUG]: Log type 'driver' lost 0 entries on destruction
-[6.091][DEBUG]: Log type 'browser' lost 0 entries on destruction
+[6.081][INFO]: RESPONSE Quit
+[6.081][DEBUG]: Log type 'driver' lost 0 entries on destruction
+[6.081][DEBUG]: Log type 'browser' lost 0 entries on destruction

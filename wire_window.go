@@ -10,16 +10,16 @@ import (
 // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window
 //
 // Close the current window.
-func (s *Wire) DeleteWindow() (wireResponse *WireResponse, err error) {
+func (s *Wire) DeleteWindow() *Wire {
 
   var req *http.Request
-  if req, err = s.DeleteRequest("/session/:sessionid/window", nil); err == nil {
+  if req, s.Error = s.DeleteRequest("/session/:sessionid/window", nil); s.Error == nil {
 
-    wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
   }
 
-  return wireResponse, err
+  return s
 }
 
 // POST /session/:sessionId/frame
@@ -27,16 +27,16 @@ func (s *Wire) DeleteWindow() (wireResponse *WireResponse, err error) {
 // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/frame
 //
 // Change focus to another frame on the page. If the frame id is null, the server should switch to the page's default content.
-func (s *Wire) Frame(id string) (wireResponse *WireResponse, err error) {
+func (s *Wire) Frame(id string) *Wire {
 
   var req *http.Request
-  if req, err = s.PostRequest("/session/:sessionid/frame", &Params{"id": id}); err == nil {
+  if req, s.Error = s.PostRequest("/session/:sessionid/frame", &Params{"id": id}); s.Error == nil {
 
-    wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
   }
 
-  return wireResponse, err
+  return s
 }
 
 // POST /session/:sessionId/frame/parent
@@ -44,16 +44,16 @@ func (s *Wire) Frame(id string) (wireResponse *WireResponse, err error) {
 // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/frame/parent
 //
 // Change focus to the parent context. If the current context is the top level browsing context, the context remains unchanged.
-func (s *Wire) FrameParent() (wireResponse *WireResponse, err error) {
+func (s *Wire) FrameParent() *Wire {
 
   var req *http.Request
-  if req, err = s.PostRequest("/session/:sessionid/frame/parent", nil); err == nil {
+  if req, s.Error = s.PostRequest("/session/:sessionid/parent", nil); s.Error == nil {
 
-    wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
   }
 
-  return wireResponse, err
+  return s
 }
 
 // POST /session/:sessionId/window/:windowHandle/maximize
@@ -61,16 +61,16 @@ func (s *Wire) FrameParent() (wireResponse *WireResponse, err error) {
 // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window/:windowHandle/maximize
 //
 // Maximize the specified window if not already maximized. If the :windowHandle URL parameter is "current", the currently active window will be maximized.
-func (s *Wire) Maximize(windowHandle string) (wireResponse *WireResponse, err error) {
+func (s *Wire) Maximize(windowHandle string) *Wire {
 
   var req *http.Request
-  if req, err = s.PostRequest(fmt.Sprintf("/session/:sessionid/window/%v/maximize", windowHandle), nil); err == nil {
+  if req, s.Error = s.PostRequest(fmt.Sprintf("/session/:sessionid/window/%v/maximize", windowHandle), nil); s.Error == nil {
 
-    wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
   }
 
-  return wireResponse, err
+  return s
 }
 
 // GET /session/:sessionId/window/:windowHandle/position
@@ -81,16 +81,16 @@ func (s *Wire) Maximize(windowHandle string) (wireResponse *WireResponse, err er
 //
 //     Returns:
 //       {x: number, y: number} The X and Y coordinates for the window, relative to the upper left corner of the screen.
-func (s *Wire) Position(windowHandle string) (wireResponse *WireResponse, err error) {
+func (s *Wire) Position(windowHandle string) *Wire {
 
   var req *http.Request
-  if req, err = s.GetRequest(fmt.Sprintf("/session/:sessionid/window/%v/position", windowHandle), nil); err == nil {
+  if req, s.Error = s.GetRequest(fmt.Sprintf("/session/:sessionid/window/%v/position", windowHandle), nil); s.Error == nil {
 
-    wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
   }
 
-  return wireResponse, err
+  return s
 }
 
 // POST /session/:sessionId/window/:windowHandle/position
@@ -98,17 +98,17 @@ func (s *Wire) Position(windowHandle string) (wireResponse *WireResponse, err er
 // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window/:windowHandle/position
 //
 // Change the position of the specified window. If the :windowHandle URL parameter is "current", the currently active window will be moved.
-func (s *Wire) SetPosition(windowHandle string, point *Point) (wireResponse *WireResponse, err error) {
+func (s *Wire) SetPosition(windowHandle string, point *Point) *Wire {
 
   var req *http.Request
-  if req, err = s.PostRequest(fmt.Sprintf("/session/:sessionid/window/%v/position", windowHandle),
-                                  &Params{"x": point.X, "y": point.Y}); err == nil {
+  if req, s.Error = s.PostRequest(fmt.Sprintf("/session/:sessionid/window/%v/position", windowHandle),
+                                  &Params{"x": point.X, "y": point.Y}); s.Error == nil {
 
-    wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
   }
 
-  return wireResponse, err
+  return s
 }
 
 // POST /session/:sessionId/window/:windowHandle/size
@@ -116,17 +116,17 @@ func (s *Wire) SetPosition(windowHandle string, point *Point) (wireResponse *Wir
 // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window/:windowHandle/size
 //
 // Change the size of the specified window. If the :windowHandle URL parameter is "current", the currently active window will be resized.
-func (s *Wire) SetSize(windowHandle string, size *Size) (wireResponse *WireResponse, err error) {
+func (s *Wire) SetSize(windowHandle string, size *Size) *Wire {
 
   var req *http.Request
-  if req, err = s.PostRequest(fmt.Sprintf("/session/:sessionid/window/%v/size", windowHandle),
-                                  &Params{"height": size.Height, "width": size.Width}); err == nil {
+  if req, s.Error = s.PostRequest(fmt.Sprintf("/session/:sessionid/window/%v/size", windowHandle),
+                                  &Params{"height": size.Height, "width": size.Width}); s.Error == nil {
 
-    wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
   }
 
-  return wireResponse, err
+  return s
 }
 
 // GET /session/:sessionId/window/:windowHandle/size
@@ -137,16 +137,16 @@ func (s *Wire) SetSize(windowHandle string, size *Size) (wireResponse *WireRespo
 //
 //     Returns:
 //       {width: number, height: number} The size of the window.
-func (s *Wire) Size(windowHandle string) (wireResponse *WireResponse, err error) {
+func (s *Wire) Size(windowHandle string) *Wire {
 
   var req *http.Request
-  if req, err = s.GetRequest(fmt.Sprintf("/session/:sessionid/window/%v/size", windowHandle), nil); err == nil {
+  if req, s.Error = s.GetRequest(fmt.Sprintf("/session/:sessionid/window/%v/size", windowHandle), nil); s.Error == nil {
 
-    wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
   }
 
-  return wireResponse, err
+  return s
 }
 
 // POST /session/:sessionId/window
@@ -157,16 +157,16 @@ func (s *Wire) Size(windowHandle string) (wireResponse *WireResponse, err error)
 //
 //     JSON Parameters:
 //       name - {string} The window to change focus to.
-func (s *Wire) Window(name string) (wireResponse *WireResponse, err error) {
+func (s *Wire) Window(name string) *Wire {
 
   var req *http.Request
-  if req, err = s.PostRequest("/session/:sessionid/window", &Params{"name": name}); err == nil {
+  if req, s.Error = s.PostRequest("/session/:sessionid/window", &Params{"name": name}); s.Error == nil {
 
-    wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
   }
 
-  return wireResponse, err
+  return s
 }
 
 // GET /session/:sessionId/window_handle
@@ -177,16 +177,16 @@ func (s *Wire) Window(name string) (wireResponse *WireResponse, err error) {
 //
 //      Returns:
 //        {string} The current window handle.
-func (s *Wire) WindowHandle() (wireResponse *WireResponse, err error) {
+func (s *Wire) WindowHandle() *Wire {
 
   var req *http.Request
-  if req, err = s.GetRequest("/session/:sessionid/window_handle", nil); err == nil {
+  if req, s.Error = s.GetRequest("/session/:sessionid/window_handle", nil); s.Error == nil {
 
-    wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
   }
 
-  return wireResponse, err
+  return s
 }
 
 // GET /session/:sessionId/window_handles
@@ -197,16 +197,16 @@ func (s *Wire) WindowHandle() (wireResponse *WireResponse, err error) {
 //
 //      Returns:
 //        {Array.<string>} A list of window handles.
-func (s *Wire) WindowHandles() (wireResponse *WireResponse, err error) {
+func (s *Wire) WindowHandles() *Wire {
 
   var req *http.Request
-  if req, err = s.GetRequest("/session/:sessionid/window_handles", nil); err == nil {
+  if req, s.Error = s.GetRequest("/session/:sessionid/window_handles", nil); s.Error == nil {
 
-    wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
   }
 
-  return wireResponse, err
+  return s
 }
 
 

@@ -376,7 +376,7 @@ func TestCookie(t *testing.T) {
 
         sleepForSeconds(1)
 
-        if cookies, err := session.Cookies(); err == nil {
+        if cookies, err := session.GetCookies(); err == nil {
           if len(cookies) <= 0 {
             t.Error("should have returned at least one cookie", cookies)
             t.Log(session.StringValue())

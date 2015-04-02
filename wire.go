@@ -150,7 +150,7 @@ func (s *Wire) Cookie() *Wire {
 }
 
 // Convenience method to unmarshal the json.RawMessage Value to a Cookie.
-func (s *Wire) Cookies() (value []*Cookie, err error) {
+func (s *Wire) GetCookies() (value []*Cookie, err error) {
 
   if s.Success() && s.Response.Value != nil {
     s.Error = json.Unmarshal(s.Response.Value, &value)
