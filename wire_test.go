@@ -334,7 +334,69 @@ func TestGeoLocation(t *testing.T) {
 
 }
 
+////////////////////////////////////////////////////////////////
+func TestKeys(t *testing.T) {
 
+  // keys := []string{PageDown, PageDown, PageDown, PageDown}
+  keys := []string{Control, End}
+
+  // TODO: figure out why this does not work with Firefox.  It should
+  for _, session := range getSessions() {
+    if session.Url("http://localhost:8080/longpage.html"); session.Error == nil {
+
+      sleepForSeconds(1)
+
+      if session.Keys(keys); session.Error == nil {
+
+        sleepForSeconds(1)
+        // sleepForSeconds(4)
+
+      } else {
+        t.Error("could not send keys : ", session.Error)
+      }
+
+    } else {
+      t.Error("could not get url: ", session.Error)
+    }
+
+  }
+
+}
+
+////////////////////////////////////////////////////////////////
+func TestCookie(t *testing.T) {
+
+  // TODO: why chromedriver doesn't work and firefox does
+  for _, session := range getSessions("firefox") {
+    if session.Url("http://localhost:8080/cookies.html"); session.Success() {
+    // if session.Url("http://www.google.com/"); session.Success() {
+
+      sleepForSeconds(1)
+
+      if session.Cookie(); session.Success() {
+
+        sleepForSeconds(1)
+
+        if cookies, err := session.Cookies(); err == nil {
+          if len(cookies) <= 0 {
+            t.Error("should have returned at least one cookie", cookies)
+            t.Log(session.StringValue())
+          }
+        } else {
+          t.Error("cookie: ", err, cookies)
+        }
+
+      } else {
+        t.Error("could not get source: ", session.Error)
+      }
+
+    } else {
+      t.Error("could not get url: ", session.Error)
+    }
+
+  }
+
+}
 
 
 

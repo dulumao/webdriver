@@ -10,27 +10,15 @@ import (
 
 type (
 
-//   // Represents a cookie.
-//   Cookie struct {
-//     Domain string `json:"domain"`
-//     Expiry uint   `json:"expiry"`
-//     Name   string `json:"name"`
-//     Path   string `json:"path"`
-//     Secure bool   `json:"secure"`
-//     Value  string `json:"value"`
-//   }
-
-//   // Represents an X,Y coordinate.
-//   Point struct {
-//     X     int `json:"x"`
-//     Y     int `json:"y"`
-//   }
-
-//   // Represents an X,Y coordinate.
-//   Size struct {
-//     Height      int `json:"height"`
-//     Width       int `json:"width"`
-//   }
+  // Represents a cookie.
+  Cookie struct {
+    Domain string `json:"domain"`
+    Expiry uint   `json:"expiry"`
+    Name   string `json:"name"`
+    Path   string `json:"path"`
+    Secure bool   `json:"secure"`
+    Value  string `json:"value"`
+  }
 
   // Geo location.
   Location struct {
@@ -43,12 +31,24 @@ type (
   // to the http get, post, methods.
   Params map[string]interface{}
 
+  // Represents an X,Y coordinate.
+  Point struct {
+    X     int `json:"x"`
+    Y     int `json:"y"`
+  }
+
   Session struct {
 
     ActualCapabilities *ActualCapabilities
 
     *Wire
 
+  }
+
+  // Represents an X,Y coordinate.
+  Size struct {
+    Height      int `json:"height"`
+    Width       int `json:"width"`
   }
 
   // Represents all of the data and methods for the JsonWireProtocol API.
@@ -129,77 +129,78 @@ func (s *Wire) CloseSessions() *Wire {
   return s
 }
 
-// // GET /session/:sessionId/cookie
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie
-// //
-// // Retrieve all cookies visible to the current page.
-// //
-// func (s *Wire) Cookie() (wireResponse *WireResponse, err error) {
+// GET /session/:sessionId/cookie
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie
+//
+// Retrieve all cookies visible to the current page.
+//
+func (s *Wire) Cookie() *Wire {
 
-//   var req *http.Request
-//   if req, err = s.GetRequest("/session/:sessionid/cookie", nil); err == nil {
+  var req *http.Request
+  if req, s.Error = s.GetRequest("/session/:sessionid/cookie", nil); s.Error == nil {
 
-//     wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
-//   }
+  }
 
-//   return wireResponse, err
-// }
+  return s
+}
 
-// // DELETE /session/:sessionId/cookie/:name
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie/:name
-// //
-// // Delete the cookie with the given name. This command should be a no-op if there is no such cookie visible to the current page.
-// //
-// func (s *Wire) DeleteCookie(name string) (wireResponse *WireResponse, err error) {
+// DELETE /session/:sessionId/cookie/:name
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie/:name
+//
+// Delete the cookie with the given name. This command should be a no-op if there is no such cookie visible to the current page.
+//
+func (s *Wire) DeleteCookie(name string) *Wire {
 
-//   var req *http.Request
-//   if req, err = s.DeleteRequest(fmt.Sprintf("/session/:sessionid/cookie/%v", name), nil); err == nil {
+  var req *http.Request
+  if req, s.Error = s.DeleteRequest(fmt.Sprintf("/session/:sessionid/cookie/%v", name), nil); s.Error == nil {
 
-//     wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
-//   }
+  }
 
-//   return wireResponse, err
-// }
+  return s
+}
 
-// // DELETE /session/:sessionId/cookie
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie
-// //
-// // Delete all cookies visible to the current page.
-// //
-// func (s *Wire) DeleteCookies() (wireResponse *WireResponse, err error) {
+// DELETE /session/:sessionId/cookie
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie
+//
+// Delete all cookies visible to the current page.
+//
+func (s *Wire) DeleteCookies() *Wire {
 
-//   var req *http.Request
-//   if req, err = s.DeleteRequest("/session/:sessionid/cookie", nil); err == nil {
+  var req *http.Request
+  if req, s.Error = s.DeleteRequest("/session/:sessionid/cookie", nil); s.Error == nil {
 
-//     wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
-//   }
+  }
 
-//   return wireResponse, err
-// }
+  return s
+}
 
-// // POST /session/:sessionId/cookie
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie
-// //
-// // Set a cookie. If the cookie path is not specified, it should be set to "/". Likewise, if the domain is omitted, it should default to the current page's domain.
-// //
-// func (s *Wire) SetCookie(value *Cookie) (wireResponse *WireResponse, err error) {
 
-//   var req *http.Request
-//   if req, err = s.PostRequest("/session/:sessionid/cookie", &Params{"cookie": value}); err == nil {
+// POST /session/:sessionId/cookie
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie
+//
+// Set a cookie. If the cookie path is not specified, it should be set to "/". Likewise, if the domain is omitted, it should default to the current page's domain.
+//
+func (s *Wire) SetCookie(value *Cookie) *Wire {
 
-//     wireResponse, err = s.Do(req)
+  var req *http.Request
+  if req, s.Error = s.PostRequest("/session/:sessionid/cookie", &Params{"cookie": value}); s.Error == nil {
 
-//   }
+    s.Response, s.Error = s.Do(req)
 
-//   return wireResponse, err
-// }
+  }
+
+  return s
+}
 
 // DELETE /session/:sessionid
 //
@@ -257,23 +258,23 @@ func (s *Wire) Forward() *Wire {
   return s
 }
 
-// // POST /session/:sessionId/keys
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/keys
-// //
-// // Send a sequence of key strokes to the active element. This command is similar to the send keys command in every aspect except the implicit termination: The modifiers are not released at the end of the call. Rather, the state of the modifier keys is kept between calls, so mouse interactions can be performed while modifier keys are depressed.
-// //
-// func (s *Wire) Keys(value []string) (wireResponse *WireResponse, err error) {
+// POST /session/:sessionId/keys
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/keys
+//
+// Send a sequence of key strokes to the active element. This command is similar to the send keys command in every aspect except the implicit termination: The modifiers are not released at the end of the call. Rather, the state of the modifier keys is kept between calls, so mouse interactions can be performed while modifier keys are depressed.
+//
+func (s *Wire) Keys(value []string) *Wire {
 
-//   var req *http.Request
-//   if req, err = s.PostRequest("/session/:sessionid/keys", &Params{"value": value}); err == nil {
+  var req *http.Request
+  if req, s.Error = s.PostRequest("/session/:sessionid/keys", &Params{"value": value}); s.Error == nil {
 
-//     wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
-//   }
+  }
 
-//   return wireResponse, err
-// }
+  return s
+}
 
 // GET /session/:sessionId/location
 //
@@ -310,7 +311,6 @@ func (s *Wire) SetLocation(value *Location) *Wire {
 
   return s
 }
-
 
 // POST  /session/:sessionId/refresh
 //
@@ -478,6 +478,16 @@ func (s *Wire) StringValue() (value string, err error) {
 
   if s.Success() && s.Response.Value != nil {
     value = string(bytes.Trim(s.Response.Value, "{}\""))
+  }
+
+  return value, s.Error
+}
+
+// Convenience method to unmarshal the json.RawMessage Value to a Cookie.
+func (s *Wire) Cookies() (value []*Cookie, err error) {
+
+  if s.Success() && s.Response.Value != nil {
+    s.Error = json.Unmarshal(s.Response.Value, &value)
   }
 
   return value, s.Error
