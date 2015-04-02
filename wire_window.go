@@ -1,6 +1,7 @@
 package webdriver
 
 import (
+  "encoding/json"
   "fmt"
   "net/http"
 )
@@ -47,7 +48,7 @@ func (s *Wire) Frame(id string) *Wire {
 func (s *Wire) FrameParent() *Wire {
 
   var req *http.Request
-  if req, s.Error = s.PostRequest("/session/:sessionid/parent", nil); s.Error == nil {
+  if req, s.Error = s.PostRequest("/session/:sessionid/frame/parent", nil); s.Error == nil {
 
     s.Response, s.Error = s.Do(req)
 
@@ -209,7 +210,29 @@ func (s *Wire) WindowHandles() *Wire {
   return s
 }
 
+// Convenience method to unmarshal the json.RawMessage Value to a Point.
+func (s *Wire) GetPoint() (value *Point, err error) {
 
+  value = &Point{}
+
+  if s.Success() && s.Response.Value != nil {
+    s.Error = json.Unmarshal(s.Response.Value, value)
+  }
+
+  return value, s.Error
+}
+
+// Convenience method to unmarshal the json.RawMessage Value to a Size.
+func (s *Wire) GetSize() (value *Size, err error) {
+
+  value = &Size{}
+
+  if s.Success() && s.Response.Value != nil {
+    s.Error = json.Unmarshal(s.Response.Value, value)
+  }
+
+  return value, s.Error
+}
 
 
 

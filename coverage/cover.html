@@ -58,15 +58,17 @@
 				
 				<option value="file1">github.com/webdriver/firefox.go (100.0%)</option>
 				
-				<option value="file2">github.com/webdriver/firefox_extension.go (100.0%)</option>
+				<option value="file2">github.com/webdriver/firefox_extension.go (89.6%)</option>
 				
 				<option value="file3">github.com/webdriver/firefox_profile.go (100.0%)</option>
 				
 				<option value="file4">github.com/webdriver/tcp.go (100.0%)</option>
 				
-				<option value="file5">github.com/webdriver/wire.go (100.0%)</option>
+				<option value="file5">github.com/webdriver/wire.go (88.3%)</option>
 				
 				<option value="file6">github.com/webdriver/wire_http.go (100.0%)</option>
+				
+				<option value="file7">github.com/webdriver/wire_window.go (50.0%)</option>
 				
 				</select>
 			</div>
@@ -563,7 +565,7 @@ func (s *Firefox) verifyExtensionsPath() (err error) <span class="cov8" title="1
     // attempt to create it with MkdirAll.  That way, the ProfileDir
     // will be created as well if it does not exist (two birds one stone)
     err = os.MkdirAll(s.Extension.BaseDir, s.DirPermissions)
-    if err != nil </span><span class="cov8" title="1">{
+    if err != nil </span><span class="cov0" title="0">{
       buffer := fmt.Sprintf("verifyExtensionsPath() =&gt; %v DOES NOT exist and unable to create\n", s.Extension.BaseDir)
       buffer = fmt.Sprint("%v%v", buffer, err.Error())
       err = errors.New(buffer)
@@ -595,7 +597,7 @@ func (s *Firefox) extractExtensionContents() (err error) <span class="cov8" titl
 
       for _, f := range zipFile.File </span><span class="cov8" title="1">{
 
-        if err = s.writeExtensionFile(f); err != nil </span><span class="cov8" title="1">{
+        if err = s.writeExtensionFile(f); err != nil </span><span class="cov0" title="0">{
           break</span>
         }
 
@@ -704,7 +706,7 @@ func (s *Firefox) prepareExtensionTarget() (err error) <span class="cov8" title=
   <span class="cov8" title="1">if err == nil </span><span class="cov8" title="1">{
 
     err = os.MkdirAll(s.Extension.TargetPath, s.DirPermissions)
-    if err != nil </span><span class="cov8" title="1">{
+    if err != nil </span><span class="cov0" title="0">{
       buffer := fmt.Sprintf("prepareExtensionTarget() =&gt; %v unable to create extension target directory\n", s.Extension.TargetPath)
       buffer = fmt.Sprint("%v%v", buffer, err.Error())
       err = errors.New(buffer)
@@ -1181,9 +1183,32 @@ import (
 
 type (
 
+  // Represents a cookie.
+  Cookie struct {
+    Domain string `json:"domain"`
+    Expiry uint   `json:"expiry"`
+    Name   string `json:"name"`
+    Path   string `json:"path"`
+    Secure bool   `json:"secure"`
+    Value  string `json:"value"`
+  }
+
+  // Geo location.
+  Location struct {
+    Altitude        int `json:"altitude"`
+    Latitude        int `json:"latitude"`
+    Longitude       int `json:"longitude"`
+  }
+
   // used primarilty as a convenience to construct maps being passed
   // to the http get, post, methods.
   Params map[string]interface{}
+
+  // Represents an X,Y coordinate.
+  Point struct {
+    X     int `json:"x"`
+    Y     int `json:"y"`
+  }
 
   Session struct {
 
@@ -1191,6 +1216,12 @@ type (
 
     *Wire
 
+  }
+
+  // Represents an X,Y coordinate.
+  Size struct {
+    Height      int `json:"height"`
+    Width       int `json:"width"`
   }
 
   // Represents all of the data and methods for the JsonWireProtocol API.
@@ -1243,23 +1274,23 @@ func (s *Wire) BuildFullUrl(url string) string <span class="cov8" title="1">{
   return fmt.Sprintf("%v%v", s.BaseUrl, strings.Replace(url, ":sessionid", s.SessionID, -1))
 }</span>
 
-// // POST  /session/:sessionId/back
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/back
-// //
-// // Navigate forwards in the browser history, if possible.
-// //
-// func (s *Wire) Back() (wireResponse *WireResponse, err error) {
+// POST  /session/:sessionId/back
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/back
+//
+// Navigate forwards in the browser history, if possible.
+//
+func (s *Wire) Back() *Wire <span class="cov8" title="1">{
 
-//   var req *http.Request
-//   if req, err = s.PostRequest("/session/:sessionid/back", nil); err == nil {
+  var req *http.Request
+  if req, s.Error = s.PostRequest("/session/:sessionid/back", nil); s.Error == nil </span><span class="cov8" title="1">{
 
-//     wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
-//   }
+  }</span>
 
-//   return wireResponse, err
-// }
+  <span class="cov8" title="1">return s</span>
+}
 
 // Closes all of the active sessions.
 func (s *Wire) CloseSessions() *Wire <span class="cov8" title="1">{
@@ -1271,77 +1302,90 @@ func (s *Wire) CloseSessions() *Wire <span class="cov8" title="1">{
   <span class="cov8" title="1">return s</span>
 }
 
-// // GET /session/:sessionId/cookie
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie
-// //
-// // Retrieve all cookies visible to the current page.
-// //
-// func (s *Wire) Cookie() (wireResponse *WireResponse, err error) {
+// GET /session/:sessionId/cookie
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie
+//
+// Retrieve all cookies visible to the current page.
+//
+func (s *Wire) Cookie() *Wire <span class="cov8" title="1">{
 
-//   var req *http.Request
-//   if req, err = s.GetRequest("/session/:sessionid/cookie", nil); err == nil {
+  // TODO: ALL of the cookie related code needs to be fully tested.
+  // will revisit later.
+  var req *http.Request
+  if req, s.Error = s.GetRequest("/session/:sessionid/cookie", nil); s.Error == nil </span><span class="cov8" title="1">{
 
-//     wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
-//   }
+  }</span>
 
-//   return wireResponse, err
-// }
+  <span class="cov8" title="1">return s</span>
+}
 
-// // DELETE /session/:sessionId/cookie/:name
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie/:name
-// //
-// // Delete the cookie with the given name. This command should be a no-op if there is no such cookie visible to the current page.
-// //
-// func (s *Wire) DeleteCookie(name string) (wireResponse *WireResponse, err error) {
+// Convenience method to unmarshal the json.RawMessage Value to a Cookie.
+func (s *Wire) GetCookies() (value []*Cookie, err error) <span class="cov8" title="1">{
 
-//   var req *http.Request
-//   if req, err = s.DeleteRequest(fmt.Sprintf("/session/:sessionid/cookie/%v", name), nil); err == nil {
+  if s.Success() &amp;&amp; s.Response.Value != nil </span><span class="cov8" title="1">{
+    s.Error = json.Unmarshal(s.Response.Value, &amp;value)
+  }</span>
 
-//     wireResponse, err = s.Do(req)
+  <span class="cov8" title="1">return value, s.Error</span>
+}
 
-//   }
+// DELETE /session/:sessionId/cookie/:name
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie/:name
+//
+// Delete the cookie with the given name. This command should be a no-op if there is no such cookie visible to the current page.
+//
+func (s *Wire) DeleteCookie(name string) *Wire <span class="cov0" title="0">{
 
-//   return wireResponse, err
-// }
+  var req *http.Request
+  if req, s.Error = s.DeleteRequest(fmt.Sprintf("/session/:sessionid/cookie/%v", name), nil); s.Error == nil </span><span class="cov0" title="0">{
 
-// // DELETE /session/:sessionId/cookie
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie
-// //
-// // Delete all cookies visible to the current page.
-// //
-// func (s *Wire) DeleteCookies() (wireResponse *WireResponse, err error) {
+    s.Response, s.Error = s.Do(req)
 
-//   var req *http.Request
-//   if req, err = s.DeleteRequest("/session/:sessionid/cookie", nil); err == nil {
+  }</span>
 
-//     wireResponse, err = s.Do(req)
+  <span class="cov0" title="0">return s</span>
+}
 
-//   }
+// DELETE /session/:sessionId/cookie
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie
+//
+// Delete all cookies visible to the current page.
+//
+func (s *Wire) DeleteCookies() *Wire <span class="cov0" title="0">{
 
-//   return wireResponse, err
-// }
+  var req *http.Request
+  if req, s.Error = s.DeleteRequest("/session/:sessionid/cookie", nil); s.Error == nil </span><span class="cov0" title="0">{
 
-// // POST /session/:sessionId/cookie
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie
-// //
-// // Set a cookie. If the cookie path is not specified, it should be set to "/". Likewise, if the domain is omitted, it should default to the current page's domain.
-// //
-// func (s *Wire) SetCookie(value *Cookie) (wireResponse *WireResponse, err error) {
+    s.Response, s.Error = s.Do(req)
 
-//   var req *http.Request
-//   if req, err = s.PostRequest("/session/:sessionid/cookie", &amp;Params{"cookie": value}); err == nil {
+  }</span>
 
-//     wireResponse, err = s.Do(req)
+  <span class="cov0" title="0">return s</span>
+}
 
-//   }
 
-//   return wireResponse, err
-// }
+// POST /session/:sessionId/cookie
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/cookie
+//
+// Set a cookie. If the cookie path is not specified, it should be set to "/". Likewise, if the domain is omitted, it should default to the current page's domain.
+//
+func (s *Wire) SetCookie(value *Cookie) *Wire <span class="cov0" title="0">{
+
+  var req *http.Request
+  if req, s.Error = s.PostRequest("/session/:sessionid/cookie", &amp;Params{"cookie": value}); s.Error == nil </span><span class="cov0" title="0">{
+
+    s.Response, s.Error = s.Do(req)
+
+  }</span>
+
+  <span class="cov0" title="0">return s</span>
+}
 
 // DELETE /session/:sessionid
 //
@@ -1361,115 +1405,127 @@ func (s *Wire) DeleteSession() *Wire <span class="cov8" title="1">{
   <span class="cov8" title="1">return s</span>
 }
 
-// // GET /session/:sessionid
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId
-// //
-// // Retrieve the capabilities of the specified session.
-// //
-// //    Returns:
-// //    {object} An object describing the session's capabilities.
-// func (s *Wire) GetSession() (wireResponse *WireResponse, err error) {
+// GET /session/:sessionid
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId
+//
+// Retrieve the capabilities of the specified session.
+//
+//    Returns:
+//    {object} An object describing the session's capabilities.
+func (s *Wire) GetSession() *Wire <span class="cov8" title="1">{
 
-//   if req, err := s.GetRequest("/session/:sessionid", nil); err == nil {
+  var req *http.Request
+  if req, s.Error = s.GetRequest("/session/:sessionid", nil); s.Error == nil </span><span class="cov8" title="1">{
 
-//     wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
-//   }
+  }</span>
 
-//   return wireResponse, err
-// }
+  <span class="cov8" title="1">return s</span>
+}
 
-// // POST  /session/:sessionId/forward
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/forward
-// //
-// // Navigate forwards in the browser history, if possible.
-// //
-// func (s *Wire) Forward() (wireResponse *WireResponse, err error) {
+// POST  /session/:sessionId/forward
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/forward
+//
+// Navigate forwards in the browser history, if possible.
+//
+func (s *Wire) Forward() *Wire <span class="cov8" title="1">{
 
-//   var req *http.Request
-//   if req, err = s.PostRequest("/session/:sessionid/forward", nil); err == nil {
+  var req *http.Request
+  if req, s.Error = s.PostRequest("/session/:sessionid/forward", nil); s.Error == nil </span><span class="cov8" title="1">{
 
-//     wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
-//   }
+  }</span>
 
-//   return wireResponse, err
-// }
+  <span class="cov8" title="1">return s</span>
+}
 
-// // POST /session/:sessionId/keys
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/keys
-// //
-// // Send a sequence of key strokes to the active element. This command is similar to the send keys command in every aspect except the implicit termination: The modifiers are not released at the end of the call. Rather, the state of the modifier keys is kept between calls, so mouse interactions can be performed while modifier keys are depressed.
-// //
-// func (s *Wire) Keys(value []string) (wireResponse *WireResponse, err error) {
+// POST /session/:sessionId/keys
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/keys
+//
+// Send a sequence of key strokes to the active element. This command is similar to the send keys command in every aspect except the implicit termination: The modifiers are not released at the end of the call. Rather, the state of the modifier keys is kept between calls, so mouse interactions can be performed while modifier keys are depressed.
+//
+func (s *Wire) Keys(value []string) *Wire <span class="cov8" title="1">{
 
-//   var req *http.Request
-//   if req, err = s.PostRequest("/session/:sessionid/keys", &amp;Params{"value": value}); err == nil {
+  var req *http.Request
+  if req, s.Error = s.PostRequest("/session/:sessionid/keys", &amp;Params{"value": value}); s.Error == nil </span><span class="cov8" title="1">{
 
-//     wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
-//   }
+  }</span>
 
-//   return wireResponse, err
-// }
+  <span class="cov8" title="1">return s</span>
+}
 
-// // GET /session/:sessionId/location
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/location
-// //
-// // Get the current geo location.
-// //
-// func (s *Wire) Location() (wireResponse *WireResponse, err error) {
+// GET /session/:sessionId/location
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/location
+//
+// Get the current geo location.
+//
+func (s *Wire) Location() *Wire <span class="cov8" title="1">{
 
-//   var req *http.Request
-//   if req, err = s.GetRequest("/session/:sessionid/location", nil); err == nil {
+  var req *http.Request
+  if req, s.Error = s.GetRequest("/session/:sessionid/location", nil); s.Error == nil </span><span class="cov8" title="1">{
 
-//     wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
-//   }
+  }</span>
 
-//   return wireResponse, err
-// }
+  <span class="cov8" title="1">return s</span>
+}
 
-// // POST /session/:sessionId/location
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/location
-// //
-// // Set the current geo location.
-// //
-// func (s *Wire) SetLocation(value *Location) (wireResponse *WireResponse, err error) {
+// Convenience method to unmarshal the json.RawMessage Value to a Location.
+func (s *Wire) GetLocation() (value *Location, err error) <span class="cov8" title="1">{
 
-//   var req *http.Request
-//   if req, err = s.PostRequest("/session/:sessionid/location", &amp;Params{"location": value}); err == nil {
+  value = &amp;Location{}
 
-//     wireResponse, err = s.Do(req)
+  if s.Success() &amp;&amp; s.Response.Value != nil </span><span class="cov8" title="1">{
+    s.Error = json.Unmarshal(s.Response.Value, value)
+  }</span>
 
-//   }
+  <span class="cov8" title="1">return value, s.Error</span>
+}
 
-//   return wireResponse, err
-// }
+// POST /session/:sessionId/location
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/location
+//
+// Set the current geo location.
+//
+func (s *Wire) SetLocation(value *Location) *Wire <span class="cov8" title="1">{
 
-// // POST  /session/:sessionId/refresh
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/refresh
-// //
-// // Refresh the current page.
-// //
-// func (s *Wire) Refresh() (wireResponse *WireResponse, err error) {
+  var req *http.Request
+  if req, s.Error = s.PostRequest("/session/:sessionid/location", &amp;Params{"location": value}); s.Error == nil </span><span class="cov8" title="1">{
 
-//   var req *http.Request
-//   if req, err = s.PostRequest("/session/:sessionid/refresh", nil); err == nil {
+    s.Response, s.Error = s.Do(req)
 
-//     wireResponse, err = s.Do(req)
+  }</span>
 
-//   }
+  <span class="cov8" title="1">return s</span>
+}
 
-//   return wireResponse, err
-// }
+// POST  /session/:sessionId/refresh
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/refresh
+//
+// Refresh the current page.
+//
+func (s *Wire) Refresh() *Wire <span class="cov8" title="1">{
 
+  var req *http.Request
+  if req, s.Error = s.PostRequest("/session/:sessionid/refresh", nil); s.Error == nil </span><span class="cov8" title="1">{
+
+    s.Response, s.Error = s.Do(req)
+
+  }</span>
+
+  <span class="cov8" title="1">return s</span>
+}
 
 // POST /session
 //
@@ -1548,50 +1604,53 @@ func (s *Wire) Session(values ...*Capabilities) (session *Session, err error) <s
   <span class="cov8" title="1">return session, s.Error</span>
 }
 
-// // GET /sessions
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/sessions
-// //
-// // Returns a list of the currently active sessions. Each session will be returned as a list of JSON objects with the following keys:
-// //
-// //    Key              Type      Description
-// //    id               string    The session ID.
-// //    capabilities     object    An object describing the session's capabilities.
-// //
-// //    Returns:
-// //    {Array.&lt;Object&gt;} A list of the currently active sessions.
-// func (s *Wire) Sessions() (wireResponse *WireResponse, err error) {
+// GET /sessions
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/sessions
+//
+// Returns a list of the currently active sessions. Each session will be returned as a list of JSON objects with the following keys:
+//
+//    Key              Type      Description
+//    id               string    The session ID.
+//    capabilities     object    An object describing the session's capabilities.
+//
+//    Returns:
+//    {Array.&lt;Object&gt;} A list of the currently active sessions.
+func (s *Wire) WireSessions() *Wire <span class="cov8" title="1">{
 
-//   if req, err := s.GetRequest("/sessions", nil); err == nil {
+  var req *http.Request
+  if req, s.Error = s.GetRequest("/sessions", nil); s.Error == nil </span><span class="cov8" title="1">{
 
-//     wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
-//   }
+  }</span>
 
-//   return wireResponse, err
-// }
+  <span class="cov8" title="1">return s</span>
+}
 
-// // GET /session/:sessionId/source
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#GET_/session/:sessionId/source
-// //
-// // Get and return the browser's current page source as HTML.
-// // wireResponse.StringValue() will contain the entire source as HTML.
-// //
-// // Source will return a wireResponse struct.  Value will contain a json.RawMessage value
-// // returned from the server.  Firefox and chrome return different encodings, so, the raw
-// // bytes are left "as is" from the server.  You can use wireResponse.UnmarshalValue() to attempt
-// // to decode the value into a normal string.
-// func (s *Wire) Source() (wireResponse *WireResponse, err error) {
 
-//   if req, err := s.GetRequest("/session/:sessionid/source", nil); err == nil {
+// GET /session/:sessionId/source
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#GET_/session/:sessionId/source
+//
+// Get and return the browser's current page source as HTML.
+// wireResponse.StringValue() will contain the entire source as HTML.
+//
+// Source will return a wireResponse struct.  Value will contain a json.RawMessage value
+// returned from the server.  Firefox and chrome return different encodings, so, the raw
+// bytes are left "as is" from the server.  You can use wireResponse.UnmarshalValue() to attempt
+// to decode the value into a normal string.
+func (s *Wire) Source() *Wire <span class="cov8" title="1">{
 
-//     wireResponse, err = s.Do(req)
+  var req *http.Request
+  if req, s.Error = s.GetRequest("/session/:sessionid/source", nil); s.Error == nil </span><span class="cov8" title="1">{
 
-//   }
+    s.Response, s.Error = s.Do(req)
 
-//   return wireResponse, err
-// }
+  }</span>
+
+  <span class="cov8" title="1">return s</span>
+}
 
 // GET /status
 //
@@ -1616,6 +1675,16 @@ func (s *Wire) StringValue() (value string, err error) <span class="cov8" title=
 
   if s.Success() &amp;&amp; s.Response.Value != nil </span><span class="cov8" title="1">{
     value = string(bytes.Trim(s.Response.Value, "{}\""))
+  }</span>
+
+  <span class="cov8" title="1">return value, s.Error</span>
+}
+
+// Convenience method to unmarshal the json.RawMessage Value to a string.
+func (s *Wire) UnmarshalValue() (value string, err error) <span class="cov8" title="1">{
+
+  if s.Success() &amp;&amp; s.Response.Value != nil </span><span class="cov8" title="1">{
+    s.Error = json.Unmarshal(s.Response.Value, &amp;value)
   }</span>
 
   <span class="cov8" title="1">return value, s.Error</span>
@@ -1774,6 +1843,244 @@ func (s *Wire) Do(req *http.Request) (wireResponse *WireResponse, err error) <sp
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package webdriver
+
+import (
+  "encoding/json"
+  "fmt"
+  "net/http"
+)
+
+// DELETE /session/:sessionId/window
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window
+//
+// Close the current window.
+func (s *Wire) DeleteWindow() *Wire <span class="cov0" title="0">{
+
+  var req *http.Request
+  if req, s.Error = s.DeleteRequest("/session/:sessionid/window", nil); s.Error == nil </span><span class="cov0" title="0">{
+
+    s.Response, s.Error = s.Do(req)
+
+  }</span>
+
+  <span class="cov0" title="0">return s</span>
+}
+
+// POST /session/:sessionId/frame
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/frame
+//
+// Change focus to another frame on the page. If the frame id is null, the server should switch to the page's default content.
+func (s *Wire) Frame(id string) *Wire <span class="cov0" title="0">{
+
+  var req *http.Request
+  if req, s.Error = s.PostRequest("/session/:sessionid/frame", &amp;Params{"id": id}); s.Error == nil </span><span class="cov0" title="0">{
+
+    s.Response, s.Error = s.Do(req)
+
+  }</span>
+
+  <span class="cov0" title="0">return s</span>
+}
+
+// POST /session/:sessionId/frame/parent
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/frame/parent
+//
+// Change focus to the parent context. If the current context is the top level browsing context, the context remains unchanged.
+func (s *Wire) FrameParent() *Wire <span class="cov0" title="0">{
+
+  var req *http.Request
+  if req, s.Error = s.PostRequest("/session/:sessionid/parent", nil); s.Error == nil </span><span class="cov0" title="0">{
+
+    s.Response, s.Error = s.Do(req)
+
+  }</span>
+
+  <span class="cov0" title="0">return s</span>
+}
+
+// POST /session/:sessionId/window/:windowHandle/maximize
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window/:windowHandle/maximize
+//
+// Maximize the specified window if not already maximized. If the :windowHandle URL parameter is "current", the currently active window will be maximized.
+func (s *Wire) Maximize(windowHandle string) *Wire <span class="cov8" title="1">{
+
+  var req *http.Request
+  if req, s.Error = s.PostRequest(fmt.Sprintf("/session/:sessionid/window/%v/maximize", windowHandle), nil); s.Error == nil </span><span class="cov8" title="1">{
+
+    s.Response, s.Error = s.Do(req)
+
+  }</span>
+
+  <span class="cov8" title="1">return s</span>
+}
+
+// GET /session/:sessionId/window/:windowHandle/position
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window/:windowHandle/position
+//
+// Get the position of the specified window. If the :windowHandle URL parameter is "current", the position of the currently active window will be returned.
+//
+//     Returns:
+//       {x: number, y: number} The X and Y coordinates for the window, relative to the upper left corner of the screen.
+func (s *Wire) Position(windowHandle string) *Wire <span class="cov0" title="0">{
+
+  var req *http.Request
+  if req, s.Error = s.GetRequest(fmt.Sprintf("/session/:sessionid/window/%v/position", windowHandle), nil); s.Error == nil </span><span class="cov0" title="0">{
+
+    s.Response, s.Error = s.Do(req)
+
+  }</span>
+
+  <span class="cov0" title="0">return s</span>
+}
+
+// POST /session/:sessionId/window/:windowHandle/position
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window/:windowHandle/position
+//
+// Change the position of the specified window. If the :windowHandle URL parameter is "current", the currently active window will be moved.
+func (s *Wire) SetPosition(windowHandle string, point *Point) *Wire <span class="cov0" title="0">{
+
+  var req *http.Request
+  if req, s.Error = s.PostRequest(fmt.Sprintf("/session/:sessionid/window/%v/position", windowHandle),
+                                  &amp;Params{"x": point.X, "y": point.Y}); s.Error == nil </span><span class="cov0" title="0">{
+
+    s.Response, s.Error = s.Do(req)
+
+  }</span>
+
+  <span class="cov0" title="0">return s</span>
+}
+
+// POST /session/:sessionId/window/:windowHandle/size
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window/:windowHandle/size
+//
+// Change the size of the specified window. If the :windowHandle URL parameter is "current", the currently active window will be resized.
+func (s *Wire) SetSize(windowHandle string, size *Size) *Wire <span class="cov8" title="1">{
+
+  var req *http.Request
+  if req, s.Error = s.PostRequest(fmt.Sprintf("/session/:sessionid/window/%v/size", windowHandle),
+                                  &amp;Params{"height": size.Height, "width": size.Width}); s.Error == nil </span><span class="cov8" title="1">{
+
+    s.Response, s.Error = s.Do(req)
+
+  }</span>
+
+  <span class="cov8" title="1">return s</span>
+}
+
+// GET /session/:sessionId/window/:windowHandle/size
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window/:windowHandle/size
+//
+// Get the size of the specified window. If the :windowHandle URL parameter is "current", the size of the currently active window will be returned.
+//
+//     Returns:
+//       {width: number, height: number} The size of the window.
+func (s *Wire) Size(windowHandle string) *Wire <span class="cov8" title="1">{
+
+  var req *http.Request
+  if req, s.Error = s.GetRequest(fmt.Sprintf("/session/:sessionid/window/%v/size", windowHandle), nil); s.Error == nil </span><span class="cov8" title="1">{
+
+    s.Response, s.Error = s.Do(req)
+
+  }</span>
+
+  <span class="cov8" title="1">return s</span>
+}
+
+// POST /session/:sessionId/window
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window
+//
+// Change focus to another window. The window to change focus to may be specified by its server assigned window handle, or by the value of its name attribute.
+//
+//     JSON Parameters:
+//       name - {string} The window to change focus to.
+func (s *Wire) Window(name string) *Wire <span class="cov0" title="0">{
+
+  var req *http.Request
+  if req, s.Error = s.PostRequest("/session/:sessionid/window", &amp;Params{"name": name}); s.Error == nil </span><span class="cov0" title="0">{
+
+    s.Response, s.Error = s.Do(req)
+
+  }</span>
+
+  <span class="cov0" title="0">return s</span>
+}
+
+// GET /session/:sessionId/window_handle
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window_handle
+//
+// Retrieve the current window handle.
+//
+//      Returns:
+//        {string} The current window handle.
+func (s *Wire) WindowHandle() *Wire <span class="cov8" title="1">{
+
+  var req *http.Request
+  if req, s.Error = s.GetRequest("/session/:sessionid/window_handle", nil); s.Error == nil </span><span class="cov8" title="1">{
+
+    s.Response, s.Error = s.Do(req)
+
+  }</span>
+
+  <span class="cov8" title="1">return s</span>
+}
+
+// GET /session/:sessionId/window_handles
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/window_handles
+//
+// Retrieve the list of all window handles available to the session.
+//
+//      Returns:
+//        {Array.&lt;string&gt;} A list of window handles.
+func (s *Wire) WindowHandles() *Wire <span class="cov8" title="1">{
+
+  var req *http.Request
+  if req, s.Error = s.GetRequest("/session/:sessionid/window_handles", nil); s.Error == nil </span><span class="cov8" title="1">{
+
+    s.Response, s.Error = s.Do(req)
+
+  }</span>
+
+  <span class="cov8" title="1">return s</span>
+}
+
+// Convenience method to unmarshal the json.RawMessage Value to a Size.
+func (s *Wire) GetSize() (value *Size, err error) <span class="cov8" title="1">{
+
+  value = &amp;Size{}
+
+  if s.Success() &amp;&amp; s.Response.Value != nil </span><span class="cov8" title="1">{
+    s.Error = json.Unmarshal(s.Response.Value, value)
+  }</span>
+
+  <span class="cov8" title="1">return value, s.Error</span>
+}
 
 
 

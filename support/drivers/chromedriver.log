@@ -1,12 +1,12 @@
-[3.001][INFO]: COMMAND InitSession {
+[0.999][INFO]: COMMAND InitSession {
    "desiredCapabilities": {
-
+      "Platform": "Linux"
    },
    "requiredCapabilities": {
-
+      "Platform": "Linux"
    }
 }
-[3.002][INFO]: Populating Preferences file: {
+[1.000][INFO]: Populating Preferences file: {
    "alternate_error_pages": {
       "enabled": false
    },
@@ -57,7 +57,7 @@
       "enabled": false
    }
 }
-[3.002][INFO]: Populating Local State file: {
+[1.000][INFO]: Populating Local State file: {
    "background_mode": {
       "enabled": false
    },
@@ -67,284 +67,106 @@
       }
    }
 }
-[3.003][INFO]: Launching chrome: /usr/bin/chromium-browser --disable-background-networking --disable-client-side-phishing-detection --disable-component-update --disable-default-apps --disable-hang-monitor --disable-prompt-on-repost --disable-sync --disable-web-resources --enable-logging --ignore-certificate-errors --load-extension=/tmp/.com.google.Chrome.N0MJoF/internal --log-level=0 --metrics-recording-only --no-first-run --password-store=basic --remote-debugging-port=12004 --safebrowsing-disable-auto-update --safebrowsing-disable-download-protection --test-type=webdriver --use-mock-keychain --user-data-dir=/tmp/.com.google.Chrome.08Y2Yo data:,
-[3.003][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
-[3.086][DEBUG]: DevTools request failed
-[3.136][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
-[3.136][DEBUG]: DevTools request failed
-[3.186][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
-[3.187][DEBUG]: DevTools request failed
-[3.239][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
-[3.240][DEBUG]: DevTools request failed
-[3.290][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
-[3.290][DEBUG]: DevTools request failed
-[3.341][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
-[3.341][DEBUG]: DevTools request failed
-[3.391][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
-[3.392][DEBUG]: DevTools request failed
-[3.442][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
-[3.443][DEBUG]: DevTools request failed
-[3.493][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
-[3.494][DEBUG]: DevTools request failed
-[3.544][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
-[3.545][DEBUG]: DevTools request failed
-[3.595][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
-[3.595][DEBUG]: DevTools request failed
-[3.645][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
-[3.646][DEBUG]: DevTools request failed
-[3.696][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
-[3.696][DEBUG]: DevTools request failed
-[3.746][DEBUG]: DevTools request: http://127.0.0.1:12004/json/version
-[3.819][DEBUG]: DevTools response: {
+[1.001][INFO]: Launching chrome: /usr/bin/chromium-browser --disable-background-networking --disable-client-side-phishing-detection --disable-component-update --disable-default-apps --disable-hang-monitor --disable-prompt-on-repost --disable-sync --disable-web-resources --enable-logging --ignore-certificate-errors --load-extension=/tmp/.com.google.Chrome.TD6fz2/internal --log-level=0 --metrics-recording-only --no-first-run --password-store=basic --remote-debugging-port=12181 --safebrowsing-disable-auto-update --safebrowsing-disable-download-protection --test-type=webdriver --use-mock-keychain --user-data-dir=/tmp/.com.google.Chrome.gL2SlL data:,
+[1.002][DEBUG]: DevTools request: http://127.0.0.1:12181/json/version
+[1.072][DEBUG]: DevTools request failed
+[1.122][DEBUG]: DevTools request: http://127.0.0.1:12181/json/version
+[1.122][DEBUG]: DevTools request failed
+[1.172][DEBUG]: DevTools request: http://127.0.0.1:12181/json/version
+[1.173][DEBUG]: DevTools request failed
+[1.223][DEBUG]: DevTools request: http://127.0.0.1:12181/json/version
+[1.223][DEBUG]: DevTools request failed
+[1.273][DEBUG]: DevTools request: http://127.0.0.1:12181/json/version
+[1.274][DEBUG]: DevTools request failed
+[1.324][DEBUG]: DevTools request: http://127.0.0.1:12181/json/version
+[1.324][DEBUG]: DevTools request failed
+[1.374][DEBUG]: DevTools request: http://127.0.0.1:12181/json/version
+[1.375][DEBUG]: DevTools request failed
+[1.425][DEBUG]: DevTools request: http://127.0.0.1:12181/json/version
+[1.426][DEBUG]: DevTools request failed
+[1.476][DEBUG]: DevTools request: http://127.0.0.1:12181/json/version
+[1.477][DEBUG]: DevTools request failed
+[1.527][DEBUG]: DevTools request: http://127.0.0.1:12181/json/version
+[1.528][DEBUG]: DevTools request failed
+[1.578][DEBUG]: DevTools request: http://127.0.0.1:12181/json/version
+[1.579][DEBUG]: DevTools request failed
+[1.629][DEBUG]: DevTools request: http://127.0.0.1:12181/json/version
+[1.629][DEBUG]: DevTools request failed
+[1.679][DEBUG]: DevTools request: http://127.0.0.1:12181/json/version
+[1.679][DEBUG]: DevTools request failed
+[1.729][DEBUG]: DevTools request: http://127.0.0.1:12181/json/version
+[1.839][DEBUG]: DevTools response: {
    "Browser": "Chrome/41.0.2272.76",
    "Protocol-Version": "1.1",
    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/41.0.2272.76 Chrome/41.0.2272.76 Safari/537.36",
    "WebKit-Version": "537.36 (@191030)"
 }
 
-[3.819][DEBUG]: DevTools request: http://127.0.0.1:12004/json
-[3.824][DEBUG]: DevTools response: [ {
+[1.839][DEBUG]: DevTools request: http://127.0.0.1:12181/json
+[1.844][DEBUG]: DevTools response: [ {
    "description": "",
-   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=127.0.0.1:12004/devtools/page/19064913-83BA-4495-9DAD-B17B4A10C891",
+   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=127.0.0.1:12181/devtools/page/08E6F0D9-481E-49A5-A893-3D409AEC64EA",
    "faviconUrl": "chrome://extension-icon/aapnijgdinlhnhlmodcfapnahmbfebeb/24/1",
-   "id": "19064913-83BA-4495-9DAD-B17B4A10C891",
+   "id": "08E6F0D9-481E-49A5-A893-3D409AEC64EA",
    "title": "Chrome Automation Extension",
    "type": "background_page",
    "url": "chrome-extension://aapnijgdinlhnhlmodcfapnahmbfebeb/_generated_background_page.html",
-   "webSocketDebuggerUrl": "ws://127.0.0.1:12004/devtools/page/19064913-83BA-4495-9DAD-B17B4A10C891"
+   "webSocketDebuggerUrl": "ws://127.0.0.1:12181/devtools/page/08E6F0D9-481E-49A5-A893-3D409AEC64EA"
 }, {
    "description": "",
-   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=127.0.0.1:12004/devtools/page/F1065105-029D-47E6-8C60-B1BB9CF77123",
-   "id": "F1065105-029D-47E6-8C60-B1BB9CF77123",
+   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=127.0.0.1:12181/devtools/page/8753AF32-655E-4BEB-BCA0-5B48A474B4E0",
+   "id": "8753AF32-655E-4BEB-BCA0-5B48A474B4E0",
    "title": "",
    "type": "page",
    "url": "data:,",
-   "webSocketDebuggerUrl": "ws://127.0.0.1:12004/devtools/page/F1065105-029D-47E6-8C60-B1BB9CF77123"
+   "webSocketDebuggerUrl": "ws://127.0.0.1:12181/devtools/page/8753AF32-655E-4BEB-BCA0-5B48A474B4E0"
 } ]
 
-[3.824][DEBUG]: DevTools request: http://127.0.0.1:12004/json
-[3.825][DEBUG]: DevTools response: [ {
+[1.844][DEBUG]: DevTools request: http://127.0.0.1:12181/json
+[1.845][DEBUG]: DevTools response: [ {
    "description": "",
-   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=127.0.0.1:12004/devtools/page/19064913-83BA-4495-9DAD-B17B4A10C891",
+   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=127.0.0.1:12181/devtools/page/08E6F0D9-481E-49A5-A893-3D409AEC64EA",
    "faviconUrl": "chrome://extension-icon/aapnijgdinlhnhlmodcfapnahmbfebeb/24/1",
-   "id": "19064913-83BA-4495-9DAD-B17B4A10C891",
+   "id": "08E6F0D9-481E-49A5-A893-3D409AEC64EA",
    "title": "Chrome Automation Extension",
    "type": "background_page",
    "url": "chrome-extension://aapnijgdinlhnhlmodcfapnahmbfebeb/_generated_background_page.html",
-   "webSocketDebuggerUrl": "ws://127.0.0.1:12004/devtools/page/19064913-83BA-4495-9DAD-B17B4A10C891"
+   "webSocketDebuggerUrl": "ws://127.0.0.1:12181/devtools/page/08E6F0D9-481E-49A5-A893-3D409AEC64EA"
 }, {
    "description": "",
-   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=127.0.0.1:12004/devtools/page/F1065105-029D-47E6-8C60-B1BB9CF77123",
-   "id": "F1065105-029D-47E6-8C60-B1BB9CF77123",
+   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=127.0.0.1:12181/devtools/page/8753AF32-655E-4BEB-BCA0-5B48A474B4E0",
+   "id": "8753AF32-655E-4BEB-BCA0-5B48A474B4E0",
    "title": "",
    "type": "page",
    "url": "data:,",
-   "webSocketDebuggerUrl": "ws://127.0.0.1:12004/devtools/page/F1065105-029D-47E6-8C60-B1BB9CF77123"
+   "webSocketDebuggerUrl": "ws://127.0.0.1:12181/devtools/page/8753AF32-655E-4BEB-BCA0-5B48A474B4E0"
 } ]
 
-[3.830][DEBUG]: DEVTOOLS COMMAND Console.enable (id=1) {
+[1.846][DEBUG]: DEVTOOLS COMMAND Console.enable (id=1) {
 
 }
-[3.836][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=2) {
+[1.846][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=2) {
 
 }
-[3.837][DEBUG]: DEVTOOLS COMMAND Runtime.enable (id=3) {
+[1.846][DEBUG]: DEVTOOLS COMMAND Runtime.enable (id=3) {
 
 }
-[3.837][DEBUG]: DEVTOOLS COMMAND Page.enable (id=4) {
+[1.846][DEBUG]: DEVTOOLS COMMAND Page.enable (id=4) {
 
 }
-[3.837][DEBUG]: DEVTOOLS COMMAND Page.enable (id=5) {
+[1.846][DEBUG]: DEVTOOLS COMMAND Page.enable (id=5) {
 
 }
-ATTENTION: default value of option force_s3tc_enable overridden by environment.
-[11821:11821:0402/042658:ERROR:sandbox_linux.cc(325)] InitializeSandbox() called with multiple threads in process gpu-process
-[3.947][DEBUG]: DEVTOOLS RESPONSE Console.enable (id=1) {
+[1.852][DEBUG]: DEVTOOLS RESPONSE Console.enable (id=1) {
 
 }
-[3.948][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=2) {
-   "root": {
-      "baseURL": "data:,",
-      "childNodeCount": 1,
-      "children": [ {
-         "attributes": [  ],
-         "childNodeCount": 2,
-         "children": [ {
-            "attributes": [  ],
-            "childNodeCount": 0,
-            "localName": "head",
-            "nodeId": 3,
-            "nodeName": "HEAD",
-            "nodeType": 1,
-            "nodeValue": ""
-         }, {
-            "attributes": [  ],
-            "childNodeCount": 1,
-            "localName": "body",
-            "nodeId": 4,
-            "nodeName": "BODY",
-            "nodeType": 1,
-            "nodeValue": ""
-         } ],
-         "localName": "html",
-         "nodeId": 2,
-         "nodeName": "HTML",
-         "nodeType": 1,
-         "nodeValue": ""
-      } ],
-      "documentURL": "data:,",
-      "localName": "",
-      "nodeId": 1,
-      "nodeName": "#document",
-      "nodeType": 9,
-      "nodeValue": "",
-      "xmlVersion": ""
-   }
-}
-[3.948][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
-   "context": {
-      "frameId": "4.1",
-      "id": 1,
-      "isPageContext": true,
-      "name": "",
-      "origin": "://"
-   }
-}
-[3.948][DEBUG]: DEVTOOLS RESPONSE Runtime.enable (id=3) {
+[1.852][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
 
 }
-[3.948][DEBUG]: DEVTOOLS RESPONSE Page.enable (id=4) {
+[1.852][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=6) {
 
 }
-[3.948][DEBUG]: DEVTOOLS RESPONSE Page.enable (id=5) {
-
-}
-[3.948][DEBUG]: DEVTOOLS COMMAND Page.enable (id=6) {
-
-}
-[3.949][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
-   "timestamp": 1427966818.77094
-}
-[3.949][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
-   "frameId": "4.1"
-}
-[3.949][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
-
-}
-[3.949][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=7) {
-
-}
-[3.949][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
-   "timestamp": 1427966818.77138
-}
-[3.954][DEBUG]: DEVTOOLS RESPONSE Page.enable (id=6) {
-
-}
-[3.954][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=7) {
-   "root": {
-      "baseURL": "data:,",
-      "childNodeCount": 1,
-      "children": [ {
-         "attributes": [  ],
-         "childNodeCount": 2,
-         "children": [ {
-            "attributes": [  ],
-            "childNodeCount": 0,
-            "localName": "head",
-            "nodeId": 7,
-            "nodeName": "HEAD",
-            "nodeType": 1,
-            "nodeValue": ""
-         }, {
-            "attributes": [  ],
-            "childNodeCount": 1,
-            "localName": "body",
-            "nodeId": 8,
-            "nodeName": "BODY",
-            "nodeType": 1,
-            "nodeValue": ""
-         } ],
-         "localName": "html",
-         "nodeId": 6,
-         "nodeName": "HTML",
-         "nodeType": 1,
-         "nodeValue": ""
-      } ],
-      "documentURL": "data:,",
-      "localName": "",
-      "nodeId": 5,
-      "nodeName": "#document",
-      "nodeType": 9,
-      "nodeValue": "",
-      "xmlVersion": ""
-   }
-}
-[3.954][DEBUG]: DEVTOOLS COMMAND Runtime.evaluate (id=8) {
-   "expression": "(function() { // Copyright (c) 2012 The Chromium Authors. All rights reserved.\n// Use of this source code is governed by a BSD-style license that can be\n// found in the LICENSE file.\n\n/**\n * Enum f...",
-   "returnByValue": true
-}
-[3.960][DEBUG]: DEVTOOLS RESPONSE Runtime.evaluate (id=8) {
-   "result": {
-      "type": "object",
-      "value": {
-         "status": 0,
-         "value": 1
-      }
-   },
-   "wasThrown": false
-}
-[3.960][INFO]: RESPONSE InitSession {
-   "acceptSslCerts": true,
-   "applicationCacheEnabled": false,
-   "browserConnectionEnabled": false,
-   "browserName": "chrome",
-   "chrome": {
-      "userDataDir": "/tmp/.com.google.Chrome.08Y2Yo"
-   },
-   "cssSelectorsEnabled": true,
-   "databaseEnabled": false,
-   "handlesAlerts": true,
-   "javascriptEnabled": true,
-   "locationContextEnabled": true,
-   "mobileEmulationEnabled": false,
-   "nativeEvents": true,
-   "platform": "Linux",
-   "rotatable": false,
-   "takesHeapSnapshot": true,
-   "takesScreenshot": true,
-   "version": "41.0.2272.76",
-   "webStorageEnabled": true
-}
-[3.961][INFO]: COMMAND Navigate {
-   "url": "http://localhost:8080/index.html"
-}
-[3.961][INFO]: Waiting for pending navigations...
-[3.961][INFO]: Done waiting for pending navigations
-[3.961][DEBUG]: DEVTOOLS COMMAND Page.navigate (id=9) {
-   "url": "http://localhost:8080/index.html"
-}
-[3.991][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
-
-}
-[3.991][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=10) {
-
-}
-[3.991][DEBUG]: DEVTOOLS EVENT Runtime.executionContextsCleared {
-
-}
-[3.991][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
-
-}
-[3.992][DEBUG]: DEVTOOLS RESPONSE Page.navigate (id=9) {
-   "frameId": "18.1"
-}
-[3.992][DEBUG]: DEVTOOLS COMMAND Runtime.evaluate (id=11) {
-   "expression": "document.URL"
-}
-[3.992][DEBUG]: DEVTOOLS EVENT Page.frameStartedLoading {
-   "frameId": "18.1"
-}
-[3.995][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=10) {
+[1.852][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=2) {
    "root": {
       "baseURL": "",
       "childNodeCount": 1,
@@ -383,51 +205,282 @@ ATTENTION: default value of option force_s3tc_enable overridden by environment.
       "xmlVersion": ""
    }
 }
-[4.008][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
+[1.852][DEBUG]: DEVTOOLS RESPONSE Runtime.enable (id=3) {
+
+}
+[1.852][DEBUG]: DEVTOOLS RESPONSE Page.enable (id=4) {
+
+}
+[1.852][DEBUG]: DEVTOOLS RESPONSE Page.enable (id=5) {
+
+}
+[1.875][DEBUG]: DEVTOOLS EVENT Page.frameNavigated {
+   "frame": {
+      "id": "4.2",
+      "loaderId": "4.1",
+      "mimeType": "text/plain",
+      "securityOrigin": "://",
+      "url": "data:,"
+   }
+}
+[1.876][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
+
+}
+[1.876][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
    "context": {
-      "frameId": "18.1",
+      "frameId": "4.2",
       "id": 1,
       "isPageContext": true,
       "name": "",
       "origin": "://"
    }
 }
-[4.008][DEBUG]: DEVTOOLS RESPONSE Runtime.evaluate (id=11) {
+[1.876][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=6) {
+   "root": {
+      "baseURL": "data:,",
+      "childNodeCount": 1,
+      "children": [ {
+         "attributes": [  ],
+         "childNodeCount": 2,
+         "children": [ {
+            "attributes": [  ],
+            "childNodeCount": 0,
+            "localName": "head",
+            "nodeId": 7,
+            "nodeName": "HEAD",
+            "nodeType": 1,
+            "nodeValue": ""
+         }, {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "body",
+            "nodeId": 8,
+            "nodeName": "BODY",
+            "nodeType": 1,
+            "nodeValue": ""
+         } ],
+         "localName": "html",
+         "nodeId": 6,
+         "nodeName": "HTML",
+         "nodeType": 1,
+         "nodeValue": ""
+      } ],
+      "documentURL": "data:,",
+      "localName": "",
+      "nodeId": 5,
+      "nodeName": "#document",
+      "nodeType": 9,
+      "nodeValue": "",
+      "xmlVersion": ""
+   }
+}
+[1.876][DEBUG]: DEVTOOLS COMMAND Page.enable (id=7) {
+
+}
+ATTENTION: default value of option force_s3tc_enable overridden by environment.
+[21719:21719:0402/074855:ERROR:sandbox_linux.cc(325)] InitializeSandbox() called with multiple threads in process gpu-process
+[1.948][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
+   "timestamp": 1427978935.19808
+}
+[1.948][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
+   "frameId": "4.2"
+}
+[1.948][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
+
+}
+[1.948][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=8) {
+
+}
+[1.949][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
+   "timestamp": 1427978935.19845
+}
+[1.949][DEBUG]: DEVTOOLS RESPONSE Page.enable (id=7) {
+
+}
+[1.955][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=8) {
+   "root": {
+      "baseURL": "data:,",
+      "childNodeCount": 1,
+      "children": [ {
+         "attributes": [  ],
+         "childNodeCount": 2,
+         "children": [ {
+            "attributes": [  ],
+            "childNodeCount": 0,
+            "localName": "head",
+            "nodeId": 11,
+            "nodeName": "HEAD",
+            "nodeType": 1,
+            "nodeValue": ""
+         }, {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "body",
+            "nodeId": 12,
+            "nodeName": "BODY",
+            "nodeType": 1,
+            "nodeValue": ""
+         } ],
+         "localName": "html",
+         "nodeId": 10,
+         "nodeName": "HTML",
+         "nodeType": 1,
+         "nodeValue": ""
+      } ],
+      "documentURL": "data:,",
+      "localName": "",
+      "nodeId": 9,
+      "nodeName": "#document",
+      "nodeType": 9,
+      "nodeValue": "",
+      "xmlVersion": ""
+   }
+}
+[1.955][DEBUG]: DEVTOOLS COMMAND Runtime.evaluate (id=9) {
+   "expression": "(function() { // Copyright (c) 2012 The Chromium Authors. All rights reserved.\n// Use of this source code is governed by a BSD-style license that can be\n// found in the LICENSE file.\n\n/**\n * Enum f...",
+   "returnByValue": true
+}
+[1.962][DEBUG]: DEVTOOLS RESPONSE Runtime.evaluate (id=9) {
+   "result": {
+      "type": "object",
+      "value": {
+         "status": 0,
+         "value": 1
+      }
+   },
+   "wasThrown": false
+}
+[1.962][INFO]: RESPONSE InitSession {
+   "acceptSslCerts": true,
+   "applicationCacheEnabled": false,
+   "browserConnectionEnabled": false,
+   "browserName": "chrome",
+   "chrome": {
+      "userDataDir": "/tmp/.com.google.Chrome.gL2SlL"
+   },
+   "cssSelectorsEnabled": true,
+   "databaseEnabled": false,
+   "handlesAlerts": true,
+   "javascriptEnabled": true,
+   "locationContextEnabled": true,
+   "mobileEmulationEnabled": false,
+   "nativeEvents": true,
+   "p[17.836][INFO]: COMMAND Navigate {
+   "url": "http://localhost:8080/index.html"
+}
+[17.836][DEBUG]: DEVTOOLS EVENT Page.frameResized {
+
+}
+[17.836][INFO]: Waiting for pending navigations...
+[17.836][INFO]: Done waiting for pending navigations
+[17.836][DEBUG]: DEVTOOLS COMMAND Page.navigate (id=10) {
+   "url": "http://localhost:8080/index.html"
+}
+[17.875][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
+
+}
+[17.875][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=11) {
+
+}
+[17.875][DEBUG]: DEVTOOLS EVENT Runtime.executionContextsCleared {
+
+}
+[17.875][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
+
+}
+[17.876][DEBUG]: DEVTOOLS RESPONSE Page.navigate (id=10) {
+   "frameId": "20.1"
+}
+[17.876][DEBUG]: DEVTOOLS COMMAND Runtime.evaluate (id=12) {
+   "expression": "document.URL"
+}
+[17.876][DEBUG]: DEVTOOLS EVENT Page.frameStartedLoading {
+   "frameId": "20.1"
+}
+[17.876][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=11) {
+   "root": {
+      "baseURL": "",
+      "childNodeCount": 1,
+      "children": [ {
+         "attributes": [  ],
+         "childNodeCount": 2,
+         "children": [ {
+            "attributes": [  ],
+            "childNodeCount": 0,
+            "localName": "head",
+            "nodeId": 3,
+            "nodeName": "HEAD",
+            "nodeType": 1,
+            "nodeValue": ""
+         }, {
+            "attributes": [  ],
+            "childNodeCount": 0,
+            "localName": "body",
+            "nodeId": 4,
+            "nodeName": "BODY",
+            "nodeType": 1,
+            "nodeValue": ""
+         } ],
+         "localName": "html",
+         "nodeId": 2,
+         "nodeName": "HTML",
+         "nodeType": 1,
+         "nodeValue": ""
+      } ],
+      "documentURL": "",
+      "localName": "",
+      "nodeId": 1,
+      "nodeName": "#document",
+      "nodeType": 9,
+      "nodeValue": "",
+      "xmlVersion": ""
+   }
+}
+[17.890][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
+   "context": {
+      "frameId": "20.1",
+      "id": 1,
+      "isPageContext": true,
+      "name": "",
+      "origin": "://"
+   }
+}
+[17.890][DEBUG]: DEVTOOLS RESPONSE Runtime.evaluate (id=12) {
    "result": {
       "type": "string",
       "value": ""
    },
    "wasThrown": false
 }
-[4.008][INFO]: Waiting for pending navigations...
-[4.015][DEBUG]: DEVTOOLS EVENT Page.frameNavigated {
+[17.890][INFO]: Waiting for pending navigations...
+[17.896][DEBUG]: DEVTOOLS EVENT Page.frameNavigated {
    "frame": {
-      "id": "18.1",
-      "loaderId": "18.2",
+      "id": "20.1",
+      "loaderId": "20.2",
       "mimeType": "text/html",
       "securityOrigin": "http://localhost:8080",
       "url": "http://localhost:8080/index.html"
    }
 }
-[4.015][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
+[17.896][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
 
 }
-[4.025][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
-   "timestamp": 1427966818.84427
+[17.908][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
+   "timestamp": 1427978943.4779
 }
-[4.025][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
-   "frameId": "18.1"
+[17.908][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
+   "frameId": "20.1"
 }
-[4.025][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
+[17.908][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
 
 }
-[4.025][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=12) {
+[17.908][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=13) {
 
 }
-[4.025][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
-   "timestamp": 1427966818.85303
+[17.908][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
+   "timestamp": 1427978943.48994
 }
-[4.026][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=12) {
+[17.910][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=13) {
    "root": {
       "baseURL": "http://localhost:8080/index.html",
       "childNodeCount": 1,
@@ -466,40 +519,1746 @@ ATTENTION: default value of option force_s3tc_enable overridden by environment.
       "xmlVersion": ""
    }
 }
-[4.026][INFO]: Done waiting for pending navigations
-[4.026][INFO]: RESPONSE Navigate
-[5.027][INFO]: COMMAND SetGeolocation {
+[17.910][INFO]: Done waiting for pending navigations
+[17.910][INFO]: RESPONSE Navigate
+[17.914][INFO]: COMMAND GetTitle {
+
+}
+[17.914][INFO]: Waiting for pending navigations...
+[17.914][INFO]: Done waiting for pending navigations
+[17.914][DEBUG]: DEVTOOLS COMMAND Runtime.evaluate (id=14) {
+   "expression": "(function() { // Copyright (c) 2012 The Chromium Authors. All rights reserved.\n// Use of this source code is governed by a BSD-style license that can be\n// found in the LICENSE file.\n\n/**\n * Enum f...",
+   "returnByValue": true
+}
+[17.916][DEBUG]: DEVTOOLS RESPONSE Runtime.evaluate (id=14) {
+   "result": {
+      "type": "object",
+      "value": {
+         "status": 0,
+         "value": "index"
+      }
+   },
+   "wasThrown": false
+}
+[17.916][INFO]: Waiting for pending navigations...
+[17.917][INFO]: Done waiting for pending navigations
+[17.917][INFO]: RESPONSE GetTitle "index"
+[18.998][INFO]: COMMAND GetSessions {
+
+}
+[18.998][INFO]: RESPONSE GetSessions {
+   "acceptSslCerts": true,
+   "applicationCacheEnabled": false,
+   "browserConnectionEnabled": false,
+   "browserName": "chrome",
+   "chrome": {
+      "userDataDir": "/tmp/.com.google.Chrome.dsXusG"
+   },
+   "cssSelectorsEnabled": true,
+   "databaseEnabled": false,
+   "handlesAlerts": true,
+   "javascriptEnabled": true,
+   "locationContextEnabled": true,
+   "mobileEmulationEnabled": false,
+   "nativeEvents": true,
+   "platform": "Linux",
+   "rotatable": false,
+   "takesHeapSnapshot": true,
+   "takesScreenshot": true,
+   "version": "41.0.2272.76",
+   "webStorageEnabled": true
+}
+[20.004][INFO]: COMMAND GetSessionCapabilities {
+
+}
+[20.004][INFO]: RESPONSE GetSessionCapabilities {
+   "acceptSslCerts": true,
+   "applicationCacheEnabled": false,
+   "browserConnectionEnabled": false,
+   "browserName": "chrome",
+   "chrome": {
+      "userDataDir": "/tmp/.com.google.Chrome.dsXusG"
+   },
+   "cssSelectorsEnabled": true,
+   "databaseEnabled": false,
+   "handlesAlerts": true,
+   "javascriptEnabled": true,
+   "locationContextEnabled": true,
+   "mobileEmulationEnabled": false,
+   "nativeEvents": true,
+   "platform": "Linux",
+   "rotatable": false,
+   "takesHeapSnapshot": true,
+   "takesScreenshot": true,
+   "version": "41.0.2272.76",
+   "webStorageEnabled": true
+}
+[20.049][INFO]: COMMAND Navigate {
+   "url": "http://localhost:8080/step01.html"
+}
+[20.049][INFO]: Waiting for pending navigations...
+[20.049][INFO]: Done waiting for pending navigations
+[20.049][DEBUG]: DEVTOOLS COMMAND Page.navigate (id=15) {
+   "url": "http://localhost:8080/step01.html"
+}
+[20.053][DEBUG]: DEVTOOLS EVENT Page.frameStartedLoading {
+   "frameId": "20.1"
+}
+[20.053][DEBUG]: DEVTOOLS RESPONSE Page.navigate (id=15) {
+   "frameId": "20.1"
+}
+[20.053][INFO]: Waiting for pending navigations...
+[20.065][DEBUG]: DEVTOOLS EVENT Runtime.executionContextDestroyed {
+   "executionContextId": 1
+}
+[20.065][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
+   "context": {
+      "frameId": "20.1",
+      "id": 2,
+      "isPageContext": true,
+      "name": "",
+      "origin": "http://localhost:8080"
+   }
+}
+[20.065][DEBUG]: DEVTOOLS EVENT Page.frameNavigated {
+   "frame": {
+      "id": "20.1",
+      "loaderId": "20.3",
+      "mimeType": "text/html",
+      "securityOrigin": "http://localhost:8080",
+      "url": "http://localhost:8080/step01.html"
+   }
+}
+[20.065][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
+
+}
+[20.068][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
+   "timestamp": 1427978945.64494
+}
+[20.068][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
+   "frameId": "20.1"
+}
+[20.068][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
+
+}
+[20.068][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=16) {
+
+}
+[20.068][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
+   "timestamp": 1427978945.64559
+}
+[20.101][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=16) {
+   "root": {
+      "baseURL": "http://localhost:8080/step01.html",
+      "childNodeCount": 1,
+      "children": [ {
+         "attributes": [  ],
+         "childNodeCount": 2,
+         "children": [ {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "head",
+            "nodeId": 11,
+            "nodeName": "HEAD",
+            "nodeType": 1,
+            "nodeValue": ""
+         }, {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "body",
+            "nodeId": 12,
+            "nodeName": "BODY",
+            "nodeType": 1,
+            "nodeValue": ""
+         } ],
+         "localName": "html",
+         "nodeId": 10,
+         "nodeName": "HTML",
+         "nodeType": 1,
+         "nodeValue": ""
+      } ],
+      "documentURL": "http://localhost:8080/step01.html",
+      "localName": "",
+      "nodeId": 9,
+      "nodeName": "#document",
+      "nodeType": 9,
+      "nodeValue": "",
+      "xmlVersion": ""
+   }
+}
+[20.101][INFO]: Done waiting for pending navigations
+[20.101][INFO]: RESPONSE Navigate
+[20.103][INFO]: COMMAND GetTitle {
+
+}
+[20.103][INFO]: Waiting for pending navigations...
+[20.103][INFO]: Done waiting for pending navigations
+[20.103][DEBUG]: DEVTOOLS COMMAND Runtime.evaluate (id=17) {
+   "expression": "(function() { // Copyright (c) 2012 The Chromium Authors. All rights reserved.\n// Use of this source code is governed by a BSD-style license that can be\n// found in the LICENSE file.\n\n/**\n * Enum f...",
+   "returnByValue": true
+}
+[20.114][DEBUG]: DEVTOOLS RESPONSE Runtime.evaluate (id=17) {
+   "result": {
+      "type": "object",
+      "value": {
+         "status": 0,
+         "value": "step 01"
+      }
+   },
+   "wasThrown": false
+}
+[20.114][INFO]: Waiting for pending navigations...
+[20.114][INFO]: Done waiting for pending navigations
+[20.114][INFO]: RESPONSE GetTitle "step 01"
+[21.116][INFO]: COMMAND Navigate {
+   "url": "http://localhost:8080/step02.html"
+}
+[21.116][INFO]: Waiting for pending navigations...
+[21.116][INFO]: Done waiting for pending navigations
+[21.116][DEBUG]: DEVTOOLS COMMAND Page.navigate (id=18) {
+   "url": "http://localhost:8080/step02.html"
+}
+[21.121][DEBUG]: DEVTOOLS EVENT Page.frameStartedLoading {
+   "frameId": "20.1"
+}
+[21.121][DEBUG]: DEVTOOLS RESPONSE Page.navigate (id=18) {
+   "frameId": "20.1"
+}
+[21.121][INFO]: Waiting for pending navigations...
+[21.139][DEBUG]: DEVTOOLS EVENT Runtime.executionContextDestroyed {
+   "executionContextId": 2
+}
+[21.139][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
+   "context": {
+      "frameId": "20.1",
+      "id": 3,
+      "isPageContext": true,
+      "name": "",
+      "origin": "http://localhost:8080"
+   }
+}
+[21.139][DEBUG]: DEVTOOLS EVENT Page.frameNavigated {
+   "frame": {
+      "id": "20.1",
+      "loaderId": "20.4",
+      "mimeType": "text/html",
+      "securityOrigin": "http://localhost:8080",
+      "url": "http://localhost:8080/step02.html"
+   }
+}
+[21.139][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
+
+}
+[21.143][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
+   "timestamp": 1427978946.71782
+}
+[21.143][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
+   "frameId": "20.1"
+}
+[21.143][INFO]: Done waiting for pending navigations
+[21.143][INFO]: RESPONSE Navigate
+[21.144][INFO]: COMMAND GetTitle {
+
+}
+[21.144][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
+
+}
+[21.144][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=19) {
+
+}
+[21.144][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
+   "timestamp": 1427978946.7181
+}
+[21.146][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=19) {
+   "root": {
+      "baseURL": "http://localhost:8080/step02.html",
+      "childNodeCount": 1,
+      "children": [ {
+         "attributes": [  ],
+         "childNodeCount": 2,
+         "children": [ {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "head",
+            "nodeId": 15,
+            "nodeName": "HEAD",
+            "nodeType": 1,
+            "nodeValue": ""
+         }, {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "body",
+            "nodeId": 16,
+            "nodeName": "BODY",
+            "nodeType": 1,
+            "nodeValue": ""
+         } ],
+         "localName": "html",
+         "nodeId": 14,
+         "nodeName": "HTML",
+         "nodeType": 1,
+         "nodeValue": ""
+      } ],
+      "documentURL": "http://localhost:8080/step02.html",
+      "localName": "",
+      "nodeId": 13,
+      "nodeName": "#document",
+      "nodeType": 9,
+      "nodeValue": "",
+      "xmlVersion": ""
+   }
+}
+[21.146][INFO]: Waiting for pending navigations...
+[21.146][INFO]: Done waiting for pending navigations
+[21.146][DEBUG]: DEVTOOLS COMMAND Runtime.evaluate (id=20) {
+   "expression": "(function() { // Copyright (c) 2012 The Chromium Authors. All rights reserved.\n// Use of this source code is governed by a BSD-style license that can be\n// found in the LICENSE file.\n\n/**\n * Enum f...",
+   "returnByValue": true
+}
+[21.149][DEBUG]: DEVTOOLS RESPONSE Runtime.evaluate (id=20) {
+   "result": {
+      "type": "object",
+      "value": {
+         "status": 0,
+         "value": "step 02"
+      }
+   },
+   "wasThrown": false
+}
+[21.149][INFO]: Waiting for pending navigations...
+[21.149][INFO]: Done waiting for pending navigations
+[21.150][INFO]: RESPONSE GetTitle "step 02"
+[22.151][INFO]: COMMAND Navigate {
+   "url": "http://localhost:8080/step03.html"
+}
+[22.151][INFO]: Waiting for pending navigations...
+[22.151][INFO]: Done waiting for pending navigations
+[22.151][DEBUG]: DEVTOOLS COMMAND Page.navigate (id=21) {
+   "url": "http://localhost:8080/step03.html"
+}
+[22.156][DEBUG]: DEVTOOLS EVENT Page.frameStartedLoading {
+   "frameId": "20.1"
+}
+[22.156][DEBUG]: DEVTOOLS RESPONSE Page.navigate (id=21) {
+   "frameId": "20.1"
+}
+[22.156][INFO]: Waiting for pending navigations...
+[22.173][DEBUG]: DEVTOOLS EVENT Runtime.executionContextDestroyed {
+   "executionContextId": 3
+}
+[22.173][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
+   "context": {
+      "frameId": "20.1",
+      "id": 4,
+      "isPageContext": true,
+      "name": "",
+      "origin": "http://localhost:8080"
+   }
+}
+[22.173][DEBUG]: DEVTOOLS EVENT Page.frameNavigated {
+   "frame": {
+      "id": "20.1",
+      "loaderId": "20.5",
+      "mimeType": "text/html",
+      "securityOrigin": "http://localhost:8080",
+      "url": "http://localhost:8080/step03.html"
+   }
+}
+[22.173][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
+
+}
+[22.178][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
+   "timestamp": 1427978947.75095
+}
+[22.178][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
+   "frameId": "20.1"
+}
+[22.178][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
+
+}
+[22.178][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=22) {
+
+}
+[22.178][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
+   "timestamp": 1427978947.75125
+}
+[22.181][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=22) {
+   "root": {
+      "baseURL": "http://localhost:8080/step03.html",
+      "childNodeCount": 1,
+      "children": [ {
+         "attributes": [  ],
+         "childNodeCount": 2,
+         "children": [ {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "head",
+            "nodeId": 19,
+            "nodeName": "HEAD",
+            "nodeType": 1,
+            "nodeValue": ""
+         }, {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "body",
+            "nodeId": 20,
+            "nodeName": "BODY",
+            "nodeType": 1,
+            "nodeValue": ""
+         } ],
+         "localName": "html",
+         "nodeId": 18,
+         "nodeName": "HTML",
+         "nodeType": 1,
+         "nodeValue": ""
+      } ],
+      "documentURL": "http://localhost:8080/step03.html",
+      "localName": "",
+      "nodeId": 17,
+      "nodeName": "#document",
+      "nodeType": 9,
+      "nodeValue": "",
+      "xmlVersion": ""
+   }
+}
+[22.181][INFO]: Done waiting for pending navigations
+[22.181][INFO]: RESPONSE Navigate
+[22.182][INFO]: COMMAND GetTitle {
+
+}
+[22.182][INFO]: Waiting for pending navigations...
+[22.182][INFO]: Done waiting for pending navigations
+[22.182][DEBUG]: DEVTOOLS COMMAND Runtime.evaluate (id=23) {
+   "expression": "(function() { // Copyright (c) 2012 The Chromium Authors. All rights reserved.\n// Use of this source code is governed by a BSD-style license that can be\n// found in the LICENSE file.\n\n/**\n * Enum f...",
+   "returnByValue": true
+}
+[22.186][DEBUG]: DEVTOOLS RESPONSE Runtime.evaluate (id=23) {
+   "result": {
+      "type": "object",
+      "value": {
+         "status": 0,
+         "value": "step 03"
+      }
+   },
+   "wasThrown": false
+}
+[22.186][INFO]: Waiting for pending navigations...
+[22.186][INFO]: Done waiting for pending navigations
+[22.186][INFO]: RESPONSE GetTitle "step 03"
+[23.188][INFO]: COMMAND GoBack {
+
+}
+[23.188][INFO]: Waiting for pending navigations...
+[23.188][INFO]: Done waiting for pending navigations
+[23.188][DEBUG]: DEVTOOLS COMMAND Page.getNavigationHistory (id=24) {
+
+}
+[23.189][DEBUG]: DEVTOOLS RESPONSE Page.getNavigationHistory (id=24) {
+   "currentIndex": 4,
+   "entries": [ {
+      "id": 1,
+      "title": "",
+      "url": "data:,"
+   }, {
+      "id": 3,
+      "title": "index",
+      "url": "http://localhost:8080/index.html"
+   }, {
+      "id": 4,
+      "title": "step 01",
+      "url": "http://localhost:8080/step01.html"
+   }, {
+      "id": 5,
+      "title": "step 02",
+      "url": "http://localhost:8080/step02.html"
+   }, {
+      "id": 6,
+      "title": "step 03",
+      "url": "http://localhost:8080/step03.html"
+   } ]
+}
+[23.189][DEBUG]: DEVTOOLS COMMAND Page.navigateToHistoryEntry (id=25) {
+   "entryId": 5
+}
+[23.191][DEBUG]: DEVTOOLS RESPONSE Page.navigateToHistoryEntry (id=25) {
+
+}
+[23.191][INFO]: Waiting for pending navigations...
+[23.191][INFO]: Done waiting for pending navigations
+[23.191][INFO]: RESPONSE GoBack
+[24.193][INFO]: COMMAND GetTitle {
+
+}
+[24.193][DEBUG]: DEVTOOLS EVENT Page.frameStartedLoading {
+   "frameId": "20.1"
+}
+[24.195][DEBUG]: DEVTOOLS EVENT Runtime.executionContextDestroyed {
+   "executionContextId": 4
+}
+[24.195][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
+   "context": {
+      "frameId": "20.1",
+      "id": 5,
+      "isPageContext": true,
+      "name": "",
+      "origin": "http://localhost:8080"
+   }
+}
+[24.195][DEBUG]: DEVTOOLS EVENT Page.frameNavigated {
+   "frame": {
+      "id": "20.1",
+      "loaderId": "20.6",
+      "mimeType": "text/html",
+      "securityOrigin": "http://localhost:8080",
+      "url": "http://localhost:8080/step02.html"
+   }
+}
+[24.195][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
+
+}
+[24.195][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
+   "timestamp": 1427978948.78393
+}
+[24.195][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
+   "frameId": "20.1"
+}
+[24.195][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
+
+}
+[24.195][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=26) {
+
+}
+[24.196][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
+   "timestamp": 1427978948.78425
+}
+[24.197][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=26) {
+   "root": {
+      "baseURL": "http://localhost:8080/step02.html",
+      "childNodeCount": 1,
+      "children": [ {
+         "attributes": [  ],
+         "childNodeCount": 2,
+         "children": [ {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "head",
+            "nodeId": 23,
+            "nodeName": "HEAD",
+            "nodeType": 1,
+            "nodeValue": ""
+         }, {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "body",
+            "nodeId": 24,
+            "nodeName": "BODY",
+            "nodeType": 1,
+            "nodeValue": ""
+         } ],
+         "localName": "html",
+         "nodeId": 22,
+         "nodeName": "HTML",
+         "nodeType": 1,
+         "nodeValue": ""
+      } ],
+      "documentURL": "http://localhost:8080/step02.html",
+      "localName": "",
+      "nodeId": 21,
+      "nodeName": "#document",
+      "nodeType": 9,
+      "nodeValue": "",
+      "xmlVersion": ""
+   }
+}
+[24.197][INFO]: Waiting for pending navigations...
+[24.197][INFO]: Done waiting for pending navigations
+[24.197][DEBUG]: DEVTOOLS COMMAND Runtime.evaluate (id=27) {
+   "expression": "(function() { // Copyright (c) 2012 The Chromium Authors. All rights reserved.\n// Use of this source code is governed by a BSD-style license that can be\n// found in the LICENSE file.\n\n/**\n * Enum f...",
+   "returnByValue": true
+}
+[24.202][DEBUG]: DEVTOOLS RESPONSE Runtime.evaluate (id=27) {
+   "result": {
+      "type": "object",
+      "value": {
+         "status": 0,
+         "value": "step 02"
+      }
+   },
+   "wasThrown": false
+}
+[24.202][INFO]: Waiting for pending navigations...
+[24.202][INFO]: Done waiting for pending navigations
+[24.202][INFO]: RESPONSE GetTitle "step 02"
+[25.204][INFO]: COMMAND GoBack {
+
+}
+[25.204][INFO]: Waiting for pending navigations...
+[25.204][INFO]: Done waiting for pending navigations
+[25.204][DEBUG]: DEVTOOLS COMMAND Page.getNavigationHistory (id=28) {
+
+}
+[25.205][DEBUG]: DEVTOOLS RESPONSE Page.getNavigationHistory (id=28) {
+   "currentIndex": 3,
+   "entries": [ {
+      "id": 1,
+      "title": "",
+      "url": "data:,"
+   }, {
+      "id": 3,
+      "title": "index",
+      "url": "http://localhost:8080/index.html"
+   }, {
+      "id": 4,
+      "title": "step 01",
+      "url": "http://localhost:8080/step01.html"
+   }, {
+      "id": 5,
+      "title": "step 02",
+      "url": "http://localhost:8080/step02.html"
+   }, {
+      "id": 6,
+      "title": "step 03",
+      "url": "http://localhost:8080/step03.html"
+   } ]
+}
+[25.205][DEBUG]: DEVTOOLS COMMAND Page.navigateToHistoryEntry (id=29) {
+   "entryId": 4
+}
+[25.207][DEBUG]: DEVTOOLS RESPONSE Page.navigateToHistoryEntry (id=29) {
+
+}
+[25.207][INFO]: Waiting for pending navigations...
+[25.207][INFO]: Done waiting for pending navigations
+[25.207][INFO]: RESPONSE GoBack
+[26.209][INFO]: COMMAND GetTitle {
+
+}
+[26.209][DEBUG]: DEVTOOLS EVENT Page.frameStartedLoading {
+   "frameId": "20.1"
+}
+[26.209][DEBUG]: DEVTOOLS EVENT Runtime.executionContextDestroyed {
+   "executionContextId": 5
+}
+[26.209][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
+   "context": {
+      "frameId": "20.1",
+      "id": 6,
+      "isPageContext": true,
+      "name": "",
+      "origin": "http://localhost:8080"
+   }
+}
+[26.209][DEBUG]: DEVTOOLS EVENT Page.frameNavigated {
+   "frame": {
+      "id": "20.1",
+      "loaderId": "20.7",
+      "mimeType": "text/html",
+      "securityOrigin": "http://localhost:8080",
+      "url": "http://localhost:8080/step01.html"
+   }
+}
+[26.209][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
+
+}
+[26.209][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
+   "timestamp": 1427978950.79892
+}
+[26.209][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
+   "frameId": "20.1"
+}
+[26.209][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
+
+}
+[26.209][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=30) {
+
+}
+[26.209][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
+   "timestamp": 1427978950.79921
+}
+[26.211][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=30) {
+   "root": {
+      "baseURL": "http://localhost:8080/step01.html",
+      "childNodeCount": 1,
+      "children": [ {
+         "attributes": [  ],
+         "childNodeCount": 2,
+         "children": [ {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "head",
+            "nodeId": 27,
+            "nodeName": "HEAD",
+            "nodeType": 1,
+            "nodeValue": ""
+         }, {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "body",
+            "nodeId": 28,
+            "nodeName": "BODY",
+            "nodeType": 1,
+            "nodeValue": ""
+         } ],
+         "localName": "html",
+         "nodeId": 26,
+         "nodeName": "HTML",
+         "nodeType": 1,
+         "nodeValue": ""
+      } ],
+      "documentURL": "http://localhost:8080/step01.html",
+      "localName": "",
+      "nodeId": 25,
+      "nodeName": "#document",
+      "nodeType": 9,
+      "nodeValue": "",
+      "xmlVersion": ""
+   }
+}
+[26.211][INFO]: Waiting for pending navigations...
+[26.211][INFO]: Done waiting for pending navigations
+[26.211][DEBUG]: DEVTOOLS COMMAND Runtime.evaluate (id=31) {
+   "expression": "(function() { // Copyright (c) 2012 The Chromium Authors. All rights reserved.\n// Use of this source code is governed by a BSD-style license that can be\n// found in the LICENSE file.\n\n/**\n * Enum f...",
+   "returnByValue": true
+}
+[26.218][DEBUG]: DEVTOOLS RESPONSE Runtime.evaluate (id=31) {
+   "result": {
+      "type": "object",
+      "value": {
+         "status": 0,
+         "value": "step 01"
+      }
+   },
+   "wasThrown": false
+}
+[26.218][INFO]: Waiting for pending navigations...
+[26.218][INFO]: Done waiting for pending navigations
+[26.218][INFO]: RESPONSE GetTitle "step 01"
+[27.219][INFO]: COMMAND GoForward {
+
+}
+[27.219][INFO]: Waiting for pending navigations...
+[27.219][INFO]: Done waiting for pending navigations
+[27.219][DEBUG]: DEVTOOLS COMMAND Page.getNavigationHistory (id=32) {
+
+}
+[27.220][DEBUG]: DEVTOOLS RESPONSE Page.getNavigationHistory (id=32) {
+   "currentIndex": 2,
+   "entries": [ {
+      "id": 1,
+      "title": "",
+      "url": "data:,"
+   }, {
+      "id": 3,
+      "title": "index",
+      "url": "http://localhost:8080/index.html"
+   }, {
+      "id": 4,
+      "title": "step 01",
+      "url": "http://localhost:8080/step01.html"
+   }, {
+      "id": 5,
+      "title": "step 02",
+      "url": "http://localhost:8080/step02.html"
+   }, {
+      "id": 6,
+      "title": "step 03",
+      "url": "http://localhost:8080/step03.html"
+   } ]
+}
+[27.220][DEBUG]: DEVTOOLS COMMAND Page.navigateToHistoryEntry (id=33) {
+   "entryId": 5
+}
+[27.222][DEBUG]: DEVTOOLS RESPONSE Page.navigateToHistoryEntry (id=33) {
+
+}
+[27.222][INFO]: Waiting for pending navigations...
+[27.222][INFO]: Done waiting for pending navigations
+[27.222][INFO]: RESPONSE GoForward
+[28.227][INFO]: COMMAND GetTitle {
+
+}
+[28.227][DEBUG]: DEVTOOLS EVENT Page.frameStartedLoading {
+   "frameId": "20.1"
+}
+[28.227][DEBUG]: DEVTOOLS EVENT Runtime.executionContextDestroyed {
+   "executionContextId": 6
+}
+[28.227][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
+   "context": {
+      "frameId": "20.1",
+      "id": 7,
+      "isPageContext": true,
+      "name": "",
+      "origin": "http://localhost:8080"
+   }
+}
+[28.227][DEBUG]: DEVTOOLS EVENT Page.frameNavigated {
+   "frame": {
+      "id": "20.1",
+      "loaderId": "20.8",
+      "mimeType": "text/html",
+      "securityOrigin": "http://localhost:8080",
+      "url": "http://localhost:8080/step02.html"
+   }
+}
+[28.227][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
+
+}
+[28.227][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
+   "timestamp": 1427978952.81457
+}
+[28.227][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
+   "frameId": "20.1"
+}
+[28.227][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
+
+}
+[28.227][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=34) {
+
+}
+[28.228][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
+   "timestamp": 1427978952.81486
+}
+[28.229][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=34) {
+   "root": {
+      "baseURL": "http://localhost:8080/step02.html",
+      "childNodeCount": 1,
+      "children": [ {
+         "attributes": [  ],
+         "childNodeCount": 2,
+         "children": [ {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "head",
+            "nodeId": 31,
+            "nodeName": "HEAD",
+            "nodeType": 1,
+            "nodeValue": ""
+         }, {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "body",
+            "nodeId": 32,
+            "nodeName": "BODY",
+            "nodeType": 1,
+            "nodeValue": ""
+         } ],
+         "localName": "html",
+         "nodeId": 30,
+         "nodeName": "HTML",
+         "nodeType": 1,
+         "nodeValue": ""
+      } ],
+      "documentURL": "http://localhost:8080/step02.html",
+      "localName": "",
+      "nodeId": 29,
+      "nodeName": "#document",
+      "nodeType": 9,
+      "nodeValue": "",
+      "xmlVersion": ""
+   }
+}
+[28.229][INFO]: Waiting for pending navigations...
+[28.229][INFO]: Done waiting for pending navigations
+[28.229][DEBUG]: DEVTOOLS COMMAND Runtime.evaluate (id=35) {
+   "expression": "(function() { // Copyright (c) 2012 The Chromium Authors. All rights reserved.\n// Use of this source code is governed by a BSD-style license that can be\n// found in the LICENSE file.\n\n/**\n * Enum f...",
+   "returnByValue": true
+}
+[28.235][DEBUG]: DEVTOOLS RESPONSE Runtime.evaluate (id=35) {
+   "result": {
+      "type": "object",
+      "value": {
+         "status": 0,
+         "value": "step 02"
+      }
+   },
+   "wasThrown": false
+}
+[28.235][INFO]: Waiting for pending navigations...
+[28.235][INFO]: Done waiting for pending navigations
+[28.235][INFO]: RESPONSE GetTitle "step 02"
+[29.237][INFO]: COMMAND GoForward {
+
+}
+[29.237][INFO]: Waiting for pending navigations...
+[29.237][INFO]: Done waiting for pending navigations
+[29.237][DEBUG]: DEVTOOLS COMMAND Page.getNavigationHistory (id=36) {
+
+}
+[29.238][DEBUG]: DEVTOOLS RESPONSE Page.getNavigationHistory (id=36) {
+   "currentIndex": 3,
+   "entries": [ {
+      "id": 1,
+      "title": "",
+      "url": "data:,"
+   }, {
+      "id": 3,
+      "title": "index",
+      "url": "http://localhost:8080/index.html"
+   }, {
+      "id": 4,
+      "title": "step 01",
+      "url": "http://localhost:8080/step01.html"
+   }, {
+      "id": 5,
+      "title": "step 02",
+      "url": "http://localhost:8080/step02.html"
+   }, {
+      "id": 6,
+      "title": "step 03",
+      "url": "http://localhost:8080/step03.html"
+   } ]
+}
+[29.238][DEBUG]: DEVTOOLS COMMAND Page.navigateToHistoryEntry (id=37) {
+   "entryId": 6
+}
+[29.239][DEBUG]: DEVTOOLS RESPONSE Page.navigateToHistoryEntry (id=37) {
+
+}
+[29.240][INFO]: Waiting for pending navigations...
+[29.240][INFO]: Done waiting for pending navigations
+[29.240][INFO]: RESPONSE GoForward
+[30.241][INFO]: COMMAND GetTitle {
+
+}
+[30.241][DEBUG]: DEVTOOLS EVENT Page.frameStartedLoading {
+   "frameId": "20.1"
+}
+[30.241][DEBUG]: DEVTOOLS EVENT Runtime.executionContextDestroyed {
+   "executionContextId": 7
+}
+[30.241][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
+   "context": {
+      "frameId": "20.1",
+      "id": 8,
+      "isPageContext": true,
+      "name": "",
+      "origin": "http://localhost:8080"
+   }
+}
+[30.241][DEBUG]: DEVTOOLS EVENT Page.frameNavigated {
+   "frame": {
+      "id": "20.1",
+      "loaderId": "20.9",
+      "mimeType": "text/html",
+      "securityOrigin": "http://localhost:8080",
+      "url": "http://localhost:8080/step03.html"
+   }
+}
+[30.241][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
+
+}
+[30.241][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
+   "timestamp": 1427978954.83629
+}
+[30.241][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
+   "frameId": "20.1"
+}
+[30.241][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
+
+}
+[30.241][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=38) {
+
+}
+[30.241][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
+   "timestamp": 1427978954.83676
+}
+[30.242][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=38) {
+   "root": {
+      "baseURL": "http://localhost:8080/step03.html",
+      "childNodeCount": 1,
+      "children": [ {
+         "attributes": [  ],
+         "childNodeCount": 2,
+         "children": [ {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "head",
+            "nodeId": 35,
+            "nodeName": "HEAD",
+            "nodeType": 1,
+            "nodeValue": ""
+         }, {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "body",
+            "nodeId": 36,
+            "nodeName": "BODY",
+            "nodeType": 1,
+            "nodeValue": ""
+         } ],
+         "localName": "html",
+         "nodeId": 34,
+         "nodeName": "HTML",
+         "nodeType": 1,
+         "nodeValue": ""
+      } ],
+      "documentURL": "http://localhost:8080/step03.html",
+      "localName": "",
+      "nodeId": 33,
+      "nodeName": "#document",
+      "nodeType": 9,
+      "nodeValue": "",
+      "xmlVersion": ""
+   }
+}
+[30.242][INFO]: Waiting for pending navigations...
+[30.242][INFO]: Done waiting for pending navigations
+[30.242][DEBUG]: DEVTOOLS COMMAND Runtime.evaluate (id=39) {
+   "expression": "(function() { // Copyright (c) 2012 The Chromium Authors. All rights reserved.\n// Use of this source code is governed by a BSD-style license that can be\n// found in the LICENSE file.\n\n/**\n * Enum f...",
+   "returnByValue": true
+}
+[30.246][DEBUG]: DEVTOOLS RESPONSE Runtime.evaluate (id=39) {
+   "result": {
+      "type": "object",
+      "value": {
+         "status": 0,
+         "value": "step 03"
+      }
+   },
+   "wasThrown": false
+}
+[30.246][INFO]: Waiting for pending navigations...
+[30.246][INFO]: Done waiting for pending navigations
+[30.246][INFO]: RESPONSE GetTitle "step 03"
+[30.247][INFO]: COMMAND Refresh {
+
+}
+[30.247][INFO]: Waiting for pending navigations...
+[30.247][INFO]: Done waiting for pending navigations
+[30.247][DEBUG]: DEVTOOLS COMMAND Page.reload (id=40) {
+   "ignoreCache": false
+}
+[30.252][DEBUG]: DEVTOOLS EVENT Page.frameStartedLoading {
+   "frameId": "20.1"
+}
+[30.252][DEBUG]: DEVTOOLS RESPONSE Page.reload (id=40) {
+
+}
+[30.252][INFO]: Waiting for pending navigations...
+[30.259][DEBUG]: DEVTOOLS EVENT Runtime.executionContextDestroyed {
+   "executionContextId": 8
+}
+[30.259][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
+   "context": {
+      "frameId": "20.1",
+      "id": 9,
+      "isPageContext": true,
+      "name": "",
+      "origin": "http://localhost:8080"
+   }
+}
+[30.259][DEBUG]: DEVTOOLS EVENT Page.frameNavigated {
+   "frame": {
+      "id": "20.1",
+      "loaderId": "20.10",
+      "mimeType": "text/html",
+      "securityOrigin": "http://localhost:8080",
+      "url": "http://localhost:8080/step03.html"
+   }
+}
+[30.259][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
+
+}
+[30.260][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
+   "timestamp": 1427978955.83857
+}
+[30.260][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
+   "frameId": "20.1"
+}
+[30.260][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
+
+}
+[30.260][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=41) {
+
+}
+[30.261][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
+   "timestamp": 1427978955.83883
+}
+[30.263][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=41) {
+   "root": {
+      "baseURL": "http://localhost:8080/step03.html",
+      "childNodeCount": 1,
+      "children": [ {
+         "attributes": [  ],
+         "childNodeCount": 2,
+         "children": [ {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "head",
+            "nodeId": 39,
+            "nodeName": "HEAD",
+            "nodeType": 1,
+            "nodeValue": ""
+         }, {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "body",
+            "nodeId": 40,
+            "nodeName": "BODY",
+            "nodeType": 1,
+            "nodeValue": ""
+         } ],
+         "localName": "html",
+         "nodeId": 38,
+         "nodeName": "HTML",
+         "nodeType": 1,
+         "nodeValue": ""
+      } ],
+      "documentURL": "http://localhost:8080/step03.html",
+      "localName": "",
+      "nodeId": 37,
+      "nodeName": "#document",
+      "nodeType": 9,
+      "nodeValue": "",
+      "xmlVersion": ""
+   }
+}
+[30.263][INFO]: Done waiting for pending navigations
+[30.263][INFO]: RESPONSE Refresh
+[31.264][INFO]: COMMAND GetTitle {
+
+}
+[31.264][INFO]: Waiting for pending navigations...
+[31.264][INFO]: Done waiting for pending navigations
+[31.265][DEBUG]: DEVTOOLS COMMAND Runtime.evaluate (id=42) {
+   "expression": "(function() { // Copyright (c) 2012 The Chromium Authors. All rights reserved.\n// Use of this source code is governed by a BSD-style license that can be\n// found in the LICENSE file.\n\n/**\n * Enum f...",
+   "returnByValue": true
+}
+[31.270][DEBUG]: DEVTOOLS RESPONSE Runtime.evaluate (id=42) {
+   "result": {
+      "type": "object",
+      "value": {
+         "status": 0,
+         "value": "step 03"
+      }
+   },
+   "wasThrown": false
+}
+[31.270][INFO]: Waiting for pending navigations...
+[31.270][INFO]: Done waiting for pending navigations
+[31.270][INFO]: RESPONSE GetTitle "step 03"
+[42.710][INFO]: COMMAND Navigate {
+   "url": "http://localhost:8080/index.html"
+}
+[42.710][INFO]: Waiting for pending navigations...
+[42.711][INFO]: Done waiting for pending navigations
+[42.711][DEBUG]: DEVTOOLS COMMAND Page.navigate (id=43) {
+   "url": "http://localhost:8080/index.html"
+}
+[42.716][DEBUG]: DEVTOOLS EVENT Page.frameStartedLoading {
+   "frameId": "20.1"
+}
+[42.716][DEBUG]: DEVTOOLS RESPONSE Page.navigate (id=43) {
+   "frameId": "20.1"
+}
+[42.716][INFO]: Waiting for pending navigations...
+[42.730][DEBUG]: DEVTOOLS EVENT Runtime.executionContextDestroyed {
+   "executionContextId": 9
+}
+[42.730][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
+   "context": {
+      "frameId": "20.1",
+      "id": 10,
+      "isPageContext": true,
+      "name": "",
+      "origin": "http://localhost:8080"
+   }
+}
+[42.730][DEBUG]: DEVTOOLS EVENT Page.frameNavigated {
+   "frame": {
+      "id": "20.1",
+      "loaderId": "20.11",
+      "mimeType": "text/html",
+      "securityOrigin": "http://localhost:8080",
+      "url": "http://localhost:8080/index.html"
+   }
+}
+[42.730][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
+
+}
+[42.732][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
+   "timestamp": 1427978968.30804
+}
+[42.732][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
+   "frameId": "20.1"
+}
+[42.732][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
+
+}
+[42.732][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=44) {
+
+}
+[42.732][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
+   "timestamp": 1427978968.30839
+}
+[42.734][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=44) {
+   "root": {
+      "baseURL": "http://localhost:8080/index.html",
+      "childNodeCount": 1,
+      "children": [ {
+         "attributes": [  ],
+         "childNodeCount": 2,
+         "children": [ {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "head",
+            "nodeId": 43,
+            "nodeName": "HEAD",
+            "nodeType": 1,
+            "nodeValue": ""
+         }, {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "body",
+            "nodeId": 44,
+            "nodeName": "BODY",
+            "nodeType": 1,
+            "nodeValue": ""
+         } ],
+         "localName": "html",
+         "nodeId": 42,
+         "nodeName": "HTML",
+         "nodeType": 1,
+         "nodeValue": ""
+      } ],
+      "documentURL": "http://localhost:8080/index.html",
+      "localName": "",
+      "nodeId": 41,
+      "nodeName": "#document",
+      "nodeType": 9,
+      "nodeValue": "",
+      "xmlVersion": ""
+   }
+}
+[42.734][INFO]: Done waiting for pending navigations
+[42.734][INFO]: RESPONSE Navigate
+[43.737][INFO]: COMMAND GetSource {
+
+}
+[43.737][INFO]: Waiting for pending navigations...
+[43.737][INFO]: Done waiting for pending navigations
+[43.738][DEBUG]: DEVTOOLS COMMAND Runtime.evaluate (id=45) {
+   "expression": "(function() { // Copyright (c) 2012 The Chromium Authors. All rights reserved.\n// Use of this source code is governed by a BSD-style license that can be\n// found in the LICENSE file.\n\n/**\n * Enum f...",
+   "returnByValue": true
+}
+[43.745][DEBUG]: DEVTOOLS RESPONSE Runtime.evaluate (id=45) {
+   "result": {
+      "type": "object",
+      "value": {
+         "status": 0,
+         "value": "\u003Chtml xmlns=\"http://www.w3.org/1999/xhtml\">\u003Chead>\n    \u003Ctitle>index\u003C/title>\n  \u003C/head>\n  \u003Cbody>\n\n    \u003Cdiv>this is a test\u003C/div>\n\n  \n\u003C/body>\u003C/html>"
+      }
+   },
+   "wasThrown": false
+}
+[43.745][INFO]: Waiting for pending navigations...
+[43.745][INFO]: Done waiting for pending navigations
+[43.745][INFO]: RESPONSE GetSource "\u003Chtml xmlns=\"http://www.w3.org/1999/xhtml\">\u003Chead>\n    \u003Ctitle>index\u003C/title>\n  \u003C/head>\n  \u003Cbody>\n\n    \u003Cdiv>this is a test\u003C/div>\n\n  \n\u003C/body>\u003C/html>"
+[44.790][INFO]: COMMAND Navigate {
+   "url": "http://localhost:8080/index.html"
+}
+[44.790][INFO]: Waiting for pending navigations...
+[44.790][INFO]: Done waiting for pending navigations
+[44.790][DEBUG]: DEVTOOLS COMMAND Page.navigate (id=46) {
+   "url": "http://localhost:8080/index.html"
+}
+[44.794][DEBUG]: DEVTOOLS EVENT Page.frameStartedLoading {
+   "frameId": "20.1"
+}
+[44.794][DEBUG]: DEVTOOLS RESPONSE Page.navigate (id=46) {
+   "frameId": "20.1"
+}
+[44.794][INFO]: Waiting for pending navigations...
+[44.812][DEBUG]: DEVTOOLS EVENT Runtime.executionContextDestroyed {
+   "executionContextId": 10
+}
+[44.812][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
+   "context": {
+      "frameId": "20.1",
+      "id": 11,
+      "isPageContext": true,
+      "name": "",
+      "origin": "http://localhost:8080"
+   }
+}
+[44.812][DEBUG]: DEVTOOLS EVENT Page.frameNavigated {
+   "frame": {
+      "id": "20.1",
+      "loaderId": "20.12",
+      "mimeType": "text/html",
+      "securityOrigin": "http://localhost:8080",
+      "url": "http://localhost:8080/index.html"
+   }
+}
+[44.812][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
+
+}
+[44.814][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
+   "timestamp": 1427978970.39352
+}
+[44.814][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
+   "frameId": "20.1"
+}
+[44.814][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
+
+}
+[44.814][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=47) {
+
+}
+[44.814][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
+   "timestamp": 1427978970.39383
+}
+[44.817][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=47) {
+   "root": {
+      "baseURL": "http://localhost:8080/index.html",
+      "childNodeCount": 1,
+      "children": [ {
+         "attributes": [  ],
+         "childNodeCount": 2,
+         "children": [ {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "head",
+            "nodeId": 47,
+            "nodeName": "HEAD",
+            "nodeType": 1,
+            "nodeValue": ""
+         }, {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "body",
+            "nodeId": 48,
+            "nodeName": "BODY",
+            "nodeType": 1,
+            "nodeValue": ""
+         } ],
+         "localName": "html",
+         "nodeId": 46,
+         "nodeName": "HTML",
+         "nodeType": 1,
+         "nodeValue": ""
+      } ],
+      "documentURL": "http://localhost:8080/index.html",
+      "localName": "",
+      "nodeId": 45,
+      "nodeName": "#document",
+      "nodeType": 9,
+      "nodeValue": "",
+      "xmlVersion": ""
+   }
+}
+[44.817][INFO]: Done waiting for pending navigations
+[44.817][INFO]: RESPONSE Navigate
+[21470:21470:0402/074930:ERROR:navigation_entry_screenshot_manager.cc(153)] Invalid entry with unique id: 8
+[45.819][INFO]: COMMAND SetGeolocation {
    "location": {
       "altitude": 0,
       "latitude": 50,
       "longitude": 70
    }
 }
-[5.027][INFO]: Waiting for pending navigations...
-[5.027][INFO]: Done waiting for pending navigations
-[5.027][DEBUG]: DEVTOOLS COMMAND Page.setGeolocationOverride (id=13) {
+[45.819][INFO]: Waiting for pending navigations...
+[45.819][INFO]: Done waiting for pending navigations
+[45.819][DEBUG]: DEVTOOLS COMMAND Page.setGeolocationOverride (id=48) {
    "accuracy": 100.0,
    "latitude": 50.0,
    "longitude": 70.0
 }
-[5.028][DEBUG]: DEVTOOLS RESPONSE Page.setGeolocationOverride (id=13) {
+[45.820][DEBUG]: DEVTOOLS RESPONSE Page.setGeolocationOverride (id=48) {
 
 }
-[5.028][INFO]: Waiting for pending navigations...
-[5.028][INFO]: Done waiting for pending navigations
-[5.028][INFO]: RESPONSE SetGeolocation
-[6.030][INFO]: COMMAND GetGeolocation {
+[45.820][INFO]: Waiting for pending navigations...
+[45.820][INFO]: Done waiting for pending navigations
+[45.820][INFO]: RESPONSE SetGeolocation
+[46.821][INFO]: COMMAND GetGeolocation {
 
 }
-[6.030][INFO]: RESPONSE GetGeolocation {
+[46.821][INFO]: RESPONSE GetGeolocation {
    "accuracy": 100.0,
    "altitude": 0.0,
    "latitude": 50.0,
    "longitude": 70.0
 }
-[6.031][INFO]: COMMAND Quit {
+[46.822][INFO]: COMMAND Navigate {
+   "url": "http://localhost:8080/longpage.html"
+}
+[46.822][INFO]: Waiting for pending navigations...
+[46.822][INFO]: Done waiting for pending navigations
+[46.822][DEBUG]: DEVTOOLS COMMAND Page.navigate (id=49) {
+   "url": "http://localhost:8080/longpage.html"
+}
+[46.825][DEBUG]: DEVTOOLS EVENT Page.frameStartedLoading {
+   "frameId": "20.1"
+}
+[46.825][DEBUG]: DEVTOOLS RESPONSE Page.navigate (id=49) {
+   "frameId": "20.1"
+}
+[46.825][INFO]: Waiting for pending navigations...
+[46.840][DEBUG]: DEVTOOLS EVENT Runtime.executionContextDestroyed {
+   "executionContextId": 11
+}
+[46.840][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
+   "context": {
+      "frameId": "20.1",
+      "id": 12,
+      "isPageContext": true,
+      "name": "",
+      "origin": "http://localhost:8080"
+   }
+}
+[46.840][DEBUG]: DEVTOOLS EVENT Page.frameNavigated {
+   "frame": {
+      "id": "20.1",
+      "loaderId": "20.13",
+      "mimeType": "text/html",
+      "securityOrigin": "http://localhost:8080",
+      "url": "http://localhost:8080/longpage.html"
+   }
+}
+[46.840][DEBUG]: DEVTOOLS COMMAND Page.setGeolocationOverride (id=50) {
+   "accuracy": 100.0,
+   "latitude": 50.0,
+   "longitude": 70.0
+}
+[46.840][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
 
 }
-[6.081][INFO]: RESPONSE Quit
-[6.081][DEBUG]: Log type 'driver' lost 0 entries on destruction
-[6.081][DEBUG]: Log type 'browser' lost 0 entries on destruction
+[46.840][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
+   "timestamp": 1427978972.41536
+}
+[46.840][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
+   "frameId": "20.1"
+}
+[46.840][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
+
+}
+[46.840][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=51) {
+
+}
+[46.840][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
+   "timestamp": 1427978972.41596
+}
+[46.841][DEBUG]: DEVTOOLS RESPONSE Page.setGeolocationOverride (id=50) {
+
+}
+[46.842][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=51) {
+   "root": {
+      "baseURL": "http://localhost:8080/longpage.html",
+      "childNodeCount": 1,
+      "children": [ {
+         "attributes": [  ],
+         "childNodeCount": 2,
+         "children": [ {
+            "attributes": [  ],
+            "childNodeCount": 2,
+            "localName": "head",
+            "nodeId": 51,
+            "nodeName": "HEAD",
+            "nodeType": 1,
+            "nodeValue": ""
+         }, {
+            "attributes": [  ],
+            "childNodeCount": 32,
+            "localName": "body",
+            "nodeId": 52,
+            "nodeName": "BODY",
+            "nodeType": 1,
+            "nodeValue": ""
+         } ],
+         "localName": "html",
+         "nodeId": 50,
+         "nodeName": "HTML",
+         "nodeType": 1,
+         "nodeValue": ""
+      } ],
+      "documentURL": "http://localhost:8080/longpage.html",
+      "localName": "",
+      "nodeId": 49,
+      "nodeName": "#document",
+      "nodeType": 9,
+      "nodeValue": "",
+      "xmlVersion": ""
+   }
+}
+[46.843][INFO]: Done waiting for pending navigations
+[46.843][INFO]: RESPONSE Navigate
+[47.844][INFO]: COMMAND Type {
+   "value": [ "", "" ]
+}
+[47.845][INFO]: Waiting for pending navigations...
+[47.845][INFO]: Done waiting for pending navigations
+[47.845][DEBUG]: DEVTOOLS COMMAND Input.dispatchKeyEvent (id=52) {
+   "modifiers": 2,
+   "nativeVirtualKeyCode": 17,
+   "text": "",
+   "type": "rawKeyDown",
+   "unmodifiedText": "",
+   "windowsVirtualKeyCode": 17
+}
+[47.846][DEBUG]: DEVTOOLS RESPONSE Input.dispatchKeyEvent (id=52) {
+
+}
+[47.846][DEBUG]: DEVTOOLS COMMAND Input.dispatchKeyEvent (id=53) {
+   "modifiers": 2,
+   "nativeVirtualKeyCode": 35,
+   "text": "",
+   "type": "rawKeyDown",
+   "unmodifiedText": "",
+   "windowsVirtualKeyCode": 35
+}
+[47.847][DEBUG]: DEVTOOLS RESPONSE Input.dispatchKeyEvent (id=53) {
+
+}
+[47.847][DEBUG]: DEVTOOLS COMMAND Input.dispatchKeyEvent (id=54) {
+   "modifiers": 2,
+   "nativeVirtualKeyCode": 35,
+   "text": "",
+   "type": "keyUp",
+   "unmodifiedText": "",
+   "windowsVirtualKeyCode": 35
+}
+[47.848][DEBUG]: DEVTOOLS RESPONSE Input.dispatchKeyEvent (id=54) {
+
+}
+[47.848][INFO]: Waiting for pending navigations...
+[47.848][INFO]: Done waiting for pending navigations
+[47.848][INFO]: RESPONSE Type
+[52.965][INFO]: COMMAND Navigate {
+   "url": "http://localhost:8080/index.html"
+}
+[52.965][INFO]: Waiting for pending navigations...
+[52.965][INFO]: Done waiting for pending navigations
+[52.965][DEBUG]: DEVTOOLS COMMAND Page.navigate (id=55) {
+   "url": "http://localhost:8080/index.html"
+}
+[52.970][DEBUG]: DEVTOOLS EVENT Page.frameStartedLoading {
+   "frameId": "20.1"
+}
+[52.970][DEBUG]: DEVTOOLS RESPONSE Page.navigate (id=55) {
+   "frameId": "20.1"
+}
+[52.971][INFO]: Waiting for pending navigations...
+[52.988][DEBUG]: DEVTOOLS EVENT Runtime.executionContextDestroyed {
+   "executionContextId": 12
+}
+[52.988][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
+   "context": {
+      "frameId": "20.1",
+      "id": 13,
+      "isPageContext": true,
+      "name": "",
+      "origin": "http://localhost:8080"
+   }
+}
+[52.988][DEBUG]: DEVTOOLS EVENT Page.frameNavigated {
+   "frame": {
+      "id": "20.1",
+      "loaderId": "20.14",
+      "mimeType": "text/html",
+      "securityOrigin": "http://localhost:8080",
+      "url": "http://localhost:8080/index.html"
+   }
+}
+[52.988][DEBUG]: DEVTOOLS COMMAND Page.setGeolocationOverride (id=56) {
+   "accuracy": 100.0,
+   "latitude": 50.0,
+   "longitude": 70.0
+}
+[52.988][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
+
+}
+[52.990][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
+   "timestamp": 1427978978.56451
+}
+[52.990][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
+   "frameId": "20.1"
+}
+[52.990][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
+
+}
+[52.990][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=57) {
+
+}
+[52.990][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
+   "timestamp": 1427978978.56477
+}
+[52.991][DEBUG]: DEVTOOLS RESPONSE Page.setGeolocationOverride (id=56) {
+
+}
+[52.994][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=57) {
+   "root": {
+      "baseURL": "http://localhost:8080/index.html",
+      "childNodeCount": 1,
+      "children": [ {
+         "attributes": [  ],
+         "childNodeCount": 2,
+         "children": [ {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "head",
+            "nodeId": 55,
+            "nodeName": "HEAD",
+            "nodeType": 1,
+            "nodeValue": ""
+         }, {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "body",
+            "nodeId": 56,
+            "nodeName": "BODY",
+            "nodeType": 1,
+            "nodeValue": ""
+         } ],
+         "localName": "html",
+         "nodeId": 54,
+         "nodeName": "HTML",
+         "nodeType": 1,
+         "nodeValue": ""
+      } ],
+      "documentURL": "http://localhost:8080/index.html",
+      "localName": "",
+      "nodeId": 53,
+      "nodeName": "#document",
+      "nodeType": 9,
+      "nodeValue": "",
+      "xmlVersion": ""
+   }
+}
+[52.994][INFO]: Done waiting for pending navigations
+[52.994][INFO]: RESPONSE Navigate
+[53.995][INFO]: COMMAND GetWindow {
+
+}
+[53.996][INFO]: RESPONSE GetWindow "CDwindow-F81991B2-BE1C-40D0-8601-8A2082D89992"
+[55.035][INFO]: COMMAND Navigate {
+   "url": "http://localhost:8080/index.html"
+}
+[55.035][INFO]: Waiting for pending navigations...
+[55.035][INFO]: Done waiting for pending navigations
+[55.035][DEBUG]: DEVTOOLS COMMAND Page.navigate (id=58) {
+   "url": "http://localhost:8080/index.html"
+}
+[55.040][DEBUG]: DEVTOOLS EVENT Page.frameStartedLoading {
+   "frameId": "20.1"
+}
+[55.040][DEBUG]: DEVTOOLS RESPONSE Page.navigate (id=58) {
+   "frameId": "20.1"
+}
+[55.040][INFO]: Waiting for pending navigations...
+[55.054][DEBUG]: DEVTOOLS EVENT Runtime.executionContextDestroyed {
+   "executionContextId": 13
+}
+[55.054][DEBUG]: DEVTOOLS EVENT Runtime.executionContextCreated {
+   "context": {
+      "frameId": "20.1",
+      "id": 14,
+      "isPageContext": true,
+      "name": "",
+      "origin": "http://localhost:8080"
+   }
+}
+[55.054][DEBUG]: DEVTOOLS EVENT Page.frameNavigated {
+   "frame": {
+      "id": "20.1",
+      "loaderId": "20.15",
+      "mimeType": "text/html",
+      "securityOrigin": "http://localhost:8080",
+      "url": "http://localhost:8080/index.html"
+   }
+}
+[55.054][DEBUG]: DEVTOOLS COMMAND Page.setGeolocationOverride (id=59) {
+   "accuracy": 100.0,
+   "latitude": 50.0,
+   "longitude": 70.0
+}
+[55.054][DEBUG]: DEVTOOLS EVENT Console.messagesCleared {
+
+}
+[55.055][DEBUG]: DEVTOOLS EVENT Page.loadEventFired {
+   "timestamp": 1427978980.63561
+}
+[55.055][DEBUG]: DEVTOOLS EVENT Page.frameStoppedLoading {
+   "frameId": "20.1"
+}
+[55.055][DEBUG]: DEVTOOLS EVENT DOM.documentUpdated {
+
+}
+[55.055][DEBUG]: DEVTOOLS COMMAND DOM.getDocument (id=60) {
+
+}
+[55.055][DEBUG]: DEVTOOLS EVENT Page.domContentEventFired {
+   "timestamp": 1427978980.63593
+}
+[55.055][DEBUG]: DEVTOOLS RESPONSE Page.setGeolocationOverride (id=59) {
+
+}
+[55.056][DEBUG]: DEVTOOLS RESPONSE DOM.getDocument (id=60) {
+   "root": {
+      "baseURL": "http://localhost:8080/index.html",
+      "childNodeCount": 1,
+      "children": [ {
+         "attributes": [  ],
+         "childNodeCount": 2,
+         "children": [ {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "head",
+            "nodeId": 59,
+            "nodeName": "HEAD",
+            "nodeType": 1,
+            "nodeValue": ""
+         }, {
+            "attributes": [  ],
+            "childNodeCount": 1,
+            "localName": "body",
+            "nodeId": 60,
+            "nodeName": "BODY",
+            "nodeType": 1,
+            "nodeValue": ""
+         } ],
+         "localName": "html",
+         "nodeId": 58,
+         "nodeName": "HTML",
+         "nodeType": 1,
+         "nodeValue": ""
+      } ],
+      "documentURL": "http://localhost:8080/index.html",
+      "localName": "",
+      "nodeId": 57,
+      "nodeName": "#document",
+      "nodeType": 9,
+      "nodeValue": "",
+      "xmlVersion": ""
+   }
+}
+[55.056][INFO]: Done waiting for pending navigations
+[55.056][INFO]: RESPONSE Navigate
+[21470:21470:0402/074940:ERROR:navigation_entry_screenshot_manager.cc(153)] Invalid entry with unique id: 11
+[56.058][INFO]: COMMAND GetWindows {
+
+}
+[56.058][DEBUG]: DevTools request: http://127.0.0.1:12188/json
+[56.059][DEBUG]: DevTools response: [ {
+   "description": "",
+   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=127.0.0.1:12188/devtools/page/29D9B288-4CD2-47A6-8283-FB11D838D79B",
+   "faviconUrl": "chrome://extension-icon/aapnijgdinlhnhlmodcfapnahmbfebeb/24/1",
+   "id": "29D9B288-4CD2-47A6-8283-FB11D838D79B",
+   "title": "Chrome Automation Extension",
+   "type": "background_page",
+   "url": "chrome-extension://aapnijgdinlhnhlmodcfapnahmbfebeb/_generated_background_page.html",
+   "webSocketDebuggerUrl": "ws://127.0.0.1:12188/devtools/page/29D9B288-4CD2-47A6-8283-FB11D838D79B"
+}, {
+   "description": "",
+   "id": "F81991B2-BE1C-40D0-8601-8A2082D89992",
+   "title": "index",
+   "type": "page",
+   "url": "http://localhost:8080/index.html"
+} ]
+
+[56.059][INFO]: RESPONSE GetWindows [ "CDwindow-F81991B2-BE1C-40D0-8601-8A2082D89992" ]
+[57.097][INFO]: COMMAND Quit {
+
+}
+[57.148][INFO]: RESPONSE Quit
+[57.148][DEBUG]: Log type 'driver' lost 0 entries on destruction
+[57.148][DEBUG]: Log type 'browser' lost 0 entries on destruction

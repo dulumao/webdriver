@@ -72,19 +72,6 @@ type (
 //   return value, err
 // }
 
-// // Convenience method to unmarshal the json.RawMessage Value to a Size.
-// func (s *WireResponse) Size() (value *Size, err error) {
-
-//   value = &Size{}
-
-//   if s.Value != nil {
-//     err = json.Unmarshal(s.Value, value)
-//   } else {
-//     err = errors.New("WireResponse.Value is nil")
-//   }
-
-//   return value, err
-// }
 
 
 
