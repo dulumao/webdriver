@@ -18,5 +18,9 @@ general:
 
 machine:
   environment:
-    ENV_CIRCLECI: true
-    VOLATILE: true
+#    ENV_CIRCLECI: true
+#    VOLATILE: true
+
+test:
+  override:
+    - sudo go test -v
