@@ -36,48 +36,6 @@ func TestKeys(t *testing.T) {
 
 }
 
-////////////////////////////////////////////////////////////////
-func TestGeoLocation(t *testing.T) {
-
-  var err error
-  var location *Location
-  var wireResponse *WireResponse
-
-  // TODO: revisit
-  // looks like firefox not supporting this very well.
-
-  t.Skip()
-
-  for _, v := range sessions {
-    if _, err = v.Url("http://localhost:8080/index.html"); err == nil {
-
-      sleepForSeconds(1)
-
-      if wireResponse, err = v.SetLocation(&Location{Altitude: 0, Latitude: 50, Longitude: 70}); err == nil && wireResponse.Success() {
-
-        if wireResponse, err = v.Location(); err == nil && wireResponse.Success() {
-
-          if location, err = wireResponse.Location(); err == nil {
-
-            // TODO: should compare the values here
-            t.Log("location: ", location)
-
-          } else {
-            t.Error(err, wireResponse.StringValue())
-          }
-
-        } else {
-          t.Error(err, wireResponse.StringValue())
-        }
-
-      } else {
-        t.Error(err, wireResponse.StringValue())
-      }
-
-    }
-  }
-
-}
 
 
 ////////////////////////////////////////////////////////////////

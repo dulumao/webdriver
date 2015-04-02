@@ -288,6 +288,51 @@ func TestGetSource(t *testing.T) {
 
 }
 
+////////////////////////////////////////////////////////////////
+func TestGeoLocation(t *testing.T) {
+
+  // firefox doesn't support this command very well (maybe not at all.  did not look)
+
+  for _, session := range getSessions("chrome") {
+    if session.Url("http://localhost:8080/index.html"); session.Success() {
+
+      sleepForSeconds(1)
+
+      if session.SetLocation(&Location{Altitude: 0, Latitude: 50, Longitude: 70}); session.Success() {
+
+        sleepForSeconds(1)
+
+        if session.Location(); session.Success() {
+
+          var location *Location
+          if err := json.Unmarshal(session.Response.Value, &location); err == nil {
+            if location.Altitude != 0 {
+              t.Error("Altitude should be zero: ", location.Altitude)
+            }
+            if location.Latitude != 50 {
+              t.Error("Latitude should be zero: ", location.Latitude)
+            }
+            if location.Longitude != 70 {
+              t.Error("Longitude should be zero: ", location.Longitude)
+            }
+          } else {
+            t.Error("could not get location: ", err)
+          }
+
+        } else {
+          t.Error("could not get location: ", session.Error)
+        }
+
+      } else {
+        t.Error("could not get location: ", session.Error)
+      }
+
+    } else {
+      t.Error("could not get location: ", session.Error)
+    }
+  }
+
+}
 
 
 

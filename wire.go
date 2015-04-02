@@ -10,6 +10,35 @@ import (
 
 type (
 
+//   // Represents a cookie.
+//   Cookie struct {
+//     Domain string `json:"domain"`
+//     Expiry uint   `json:"expiry"`
+//     Name   string `json:"name"`
+//     Path   string `json:"path"`
+//     Secure bool   `json:"secure"`
+//     Value  string `json:"value"`
+//   }
+
+//   // Represents an X,Y coordinate.
+//   Point struct {
+//     X     int `json:"x"`
+//     Y     int `json:"y"`
+//   }
+
+//   // Represents an X,Y coordinate.
+//   Size struct {
+//     Height      int `json:"height"`
+//     Width       int `json:"width"`
+//   }
+
+  // Geo location.
+  Location struct {
+    Altitude        int `json:"altitude"`
+    Latitude        int `json:"latitude"`
+    Longitude       int `json:"longitude"`
+  }
+
   // used primarilty as a convenience to construct maps being passed
   // to the http get, post, methods.
   Params map[string]interface{}
@@ -246,41 +275,42 @@ func (s *Wire) Forward() *Wire {
 //   return wireResponse, err
 // }
 
-// // GET /session/:sessionId/location
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/location
-// //
-// // Get the current geo location.
-// //
-// func (s *Wire) Location() (wireResponse *WireResponse, err error) {
+// GET /session/:sessionId/location
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/location
+//
+// Get the current geo location.
+//
+func (s *Wire) Location() *Wire {
 
-//   var req *http.Request
-//   if req, err = s.GetRequest("/session/:sessionid/location", nil); err == nil {
+  var req *http.Request
+  if req, s.Error = s.GetRequest("/session/:sessionid/location", nil); s.Error == nil {
 
-//     wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
-//   }
+  }
 
-//   return wireResponse, err
-// }
+  return s
+}
 
-// // POST /session/:sessionId/location
-// //
-// // https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/location
-// //
-// // Set the current geo location.
-// //
-// func (s *Wire) SetLocation(value *Location) (wireResponse *WireResponse, err error) {
+// POST /session/:sessionId/location
+//
+// https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/location
+//
+// Set the current geo location.
+//
+func (s *Wire) SetLocation(value *Location) *Wire {
 
-//   var req *http.Request
-//   if req, err = s.PostRequest("/session/:sessionid/location", &Params{"location": value}); err == nil {
+  var req *http.Request
+  if req, s.Error = s.PostRequest("/session/:sessionid/location", &Params{"location": value}); s.Error == nil {
 
-//     wireResponse, err = s.Do(req)
+    s.Response, s.Error = s.Do(req)
 
-//   }
+  }
 
-//   return wireResponse, err
-// }
+  return s
+}
+
 
 // POST  /session/:sessionId/refresh
 //

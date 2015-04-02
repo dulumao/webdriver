@@ -10,35 +10,6 @@ import (
 
 type (
 
-//   // Represents a cookie.
-//   Cookie struct {
-//     Domain string `json:"domain"`
-//     Expiry uint   `json:"expiry"`
-//     Name   string `json:"name"`
-//     Path   string `json:"path"`
-//     Secure bool   `json:"secure"`
-//     Value  string `json:"value"`
-//   }
-
-//   // Geo location.
-//   Location struct {
-//     Altitude        int `json:"altitude"`
-//     Latitude        int `json:"latitude"`
-//     Longitude       int `json:"longitude"`
-//   }
-
-//   // Represents an X,Y coordinate.
-//   Point struct {
-//     X     int `json:"x"`
-//     Y     int `json:"y"`
-//   }
-
-//   // Represents an X,Y coordinate.
-//   Size struct {
-//     Height      int `json:"height"`
-//     Width       int `json:"width"`
-//   }
-
   // the standard Json returned from a server
   WireResponse struct {
 
